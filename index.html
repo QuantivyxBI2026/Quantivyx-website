@@ -253,7 +253,7 @@
         <nav>
             <a href="#services">Services</a>
             <a href="#contact">Contact</a>
-	    <a href="#About Us">About Us</a>
+            <a href="#About Us">About Us</a>
         </nav>
     </header>
 
@@ -270,10 +270,9 @@
         <div class="services-grid">
             
             <div class="service-card">
-    <h3> Advanced Query & ETL</h3>
-    <p>Expert ingestion of raw CSV files, localized data files, and relational SQL databases. We engineer clean data and robust semantic modeling without the overhead of massive cloud architectures.</p>
-</div>
-
+                <h3> Advanced Query & ETL</h3>
+                <p>Expert ingestion of raw CSV files, localized data files, and relational SQL databases. We engineer clean data and robust semantic modeling without the overhead of massive cloud architectures.</p>
+            </div>
 
             <div class="service-card">
                 <h3>Power BI Specialist Deployments</h3>
@@ -288,58 +287,65 @@
         </div>
     </section>
 
-        <!-- Contact & Payments Area -->
+    <!-- Contact & Payments Area -->
     <div id="contact" class="contact-payment-container">
         
         <div class="info-box">
             <h2>Let's Discuss Your Data</h2>
             <p>Ready to deploy high-tier analytics or optimize legacy reporting layers? Reach out instantly to map out a data architecture tailored to your operational scope.</p>
-            <p style="margin-top: 2.5rem;"><strong>Secure Email:</strong> <a href="mailto:Hernandezanalytics@outlook.com">Hernandezanalytics@outlook.com</a></p>
+            
+            <!-- Email Styled as Action Button -->
+            <p style="margin-top: 2.5rem; margin-bottom: 1.5rem;">
+                <a href="mailto:Hernandezanalytics@outlook.com" class="btn">Email: Hernandezanalytics@outlook.com</a>
+            </p>
+            
             <p><strong>Direct Line:</strong> <a href="tel:210-605-1214">210-605-1214</a></p>
         </div>
 
-       <div class="payment-box">
-    <h3>Accepted Settlement Channels</h3>
-    <p style="margin-bottom: 2rem; color: var(--text-muted);">To keep integration and project deployment frictionless, Quantivyx securely clears accounting via standard transaction layers:</p>
-    
-    <!-- Clean column layout with no extra nested rows -->
-    <div class="badge-container" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
-    <!-- Removed border and background styles from the Wise span below -->
-    <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">🌐 Wise Business Settlement</span>
-    <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">🏦 ACH & Wire Transfer</span>
-    <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">📱 Venmo Business</span>
-    <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">💳 Stripe Network</span>
-    <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">💸 CashApp Mobile</span>
-</div>
-
-</div>
-
-    </div> <!-- Keeps your previous section safely closed -->
-</section> <!-- Keeps your previous section safely closed -->
-
-<!-- New About Us Section Container -->
-<section id="About Us" style="padding: 6rem 10%; background-color: rgba(17, 24, 39, 0.4); border-top: 1px solid rgba(0, 242, 254, 0.1);">
-    <h2 style="font-size: 2.2rem; margin-bottom: 3rem; text-align: center; color: #f3f4f6; letter-spacing: 0.5px;">About <span>Us</span></h2>
-    
-    <div class="about-container" style="display: flex; align-items: center; gap: 4rem; max-width: 1100px; margin: 0 auto; flex-wrap: wrap;">
-        
-        <!-- Founder Image Wrapper Container -->
-<div class="founder-image-wrapper" style="flex-shrink: 0; margin: 0 auto;">
-    <img src="profile.jpg" alt="Quantivyx Founder Headshot" class="founder-img" style="width: 240px; height: 240px; border-radius: 16px; object-fit: cover; border: 2px solid #00f2fe; box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);">
-</div>
-
-<!-- Text Box Wrapper Container -->
-<div class="founder-text-wrapper" style="flex: 1; min-width: 300px;">
-    <h3 style="font-size: 1.8rem; color: #f3f4f6; margin-bottom: 0.2rem;">Herman Hernandez</h3>
-    <div style="color: #00f2fe; font-weight: 600; font-size: 1.1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px;">CEO and Founder</div>
-    
-    <!-- Professional Quote Block -->
-    <div class="founder-quote-container" style="font-style: italic; border-left: 2px solid #00f2fe; padding: 1.25rem 1.5rem; color: #f3f4f6; background: rgba(9, 13, 22, 0.6); border-radius: 0 8px 8px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-        "We specialize in automating the manual workflows that trap teams in data assembly, drastically reducing time-to-insight. Our mission is to put you firmly in the driver’s seat of your business, shifting focus from baseline maintenance to real-time, real-world strategic decisions."
-    </div>
-</div>
-
+        <div class="payment-box">
+            <h3>Accepted Settlement Channels</h3>
+            <p style="margin-bottom: 2rem; color: var(--text-muted);">To keep integration and project deployment frictionless, Quantivyx securely clears accounting via standard transaction layers:</p>
+            
+            <div class="badge-container" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">🌐 Wise Business Settlement</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">🏦 ACH & Wire Transfer</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">📱 Venmo Business</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">💳 Stripe Network</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">💸 CashApp Mobile</span>
+            </div>
         </div>
+
+    </div> 
+
+    <!-- New About Us Section Container -->
+    <section id="About Us" style="padding: 6rem 10%; background-color: rgba(17, 24, 39, 0.4); border-top: 1px solid rgba(0, 242, 254, 0.1);">
+        <h2 style="font-size: 2.2rem; margin-bottom: 3rem; text-align: center; color: #f3f4f6; letter-spacing: 0.5px;">About <span>Us</span></h2>
         
-    </div>
-</section>
+        <div class="about-container" style="display: flex; align-items: center; gap: 4rem; max-width: 1100px; margin: 0 auto; flex-wrap: wrap;">
+            
+            <!-- Founder Image Wrapper Container -->
+            <div class="founder-image-wrapper" style="flex-shrink: 0; margin: 0 auto;">
+                <img src="profile.jpg" alt="Quantivyx Founder Headshot" class="founder-img" style="width: 240px; height: 240px; border-radius: 16px; object-fit: cover; border: 2px solid #00f2fe; box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);">
+            </div>
+
+            <!-- Text Box Wrapper Container -->
+            <div class="founder-text-wrapper" style="flex: 1; min-width: 300px;">
+                <h3 style="font-size: 1.8rem; color: #f3f4f6; margin-bottom: 0.2rem;">Herman Hernandez</h3>
+                <div style="color: #00f2fe; font-weight: 600; font-size: 1.1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px;">CEO and Founder</div>
+                
+                <!-- Professional Quote Block -->
+                <div class="founder-quote-container" style="font-style: italic; border-left: 2px solid #00f2fe; padding: 1.25rem 1.5rem; color: #f3f4f6; background: rgba(9, 13, 22, 0.6); border-radius: 0 8px 8px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                    "We specialize in automating the manual workflows that trap teams in data assembly, drastically reducing time-to-insight. Our mission is to put you firmly in the driver’s seat of your business, shifting focus from baseline maintenance to real-time, real-world strategic decisions."
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Quantivyx. All rights reserved.
+    </footer>
+
+</body>
+</html>
