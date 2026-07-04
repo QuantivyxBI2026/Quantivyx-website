@@ -198,6 +198,28 @@
             text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
         }
 
+        /* Specific Email Button Override for Dark Theme Visibility */
+        .email-btn {
+            background: rgba(17, 24, 37, 0.8);
+            color: var(--text-main) !important;
+            padding: 0.85rem 2.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            display: inline-block;
+            border: 1px solid var(--accent-neon);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 242, 254, 0.1);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.3);
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+        }
+
         .payment-box {
             background-color: var(--card-bg);
             padding: 3rem;
@@ -294,9 +316,9 @@
             <h2>Let's Discuss Your Data</h2>
             <p>Ready to deploy high-tier analytics or optimize legacy reporting layers? Reach out instantly to map out a data architecture tailored to your operational scope.</p>
             
-            <!-- Email Styled as Action Button -->
+            <!-- Dark Theme Visibility Email Button -->
             <p style="margin-top: 2.5rem; margin-bottom: 1.5rem;">
-                <a href="mailto:Hernandezanalytics@outlook.com" class="btn">Email: Hernandezanalytics@outlook.com</a>
+                <a href="mailto:Hernandezanalytics@outlook.com" class="email-btn">Email: Hernandezanalytics@outlook.com</a>
             </p>
             
             <p><strong>Direct Line:</strong> <a href="tel:210-605-1214">210-605-1214</a></p>
