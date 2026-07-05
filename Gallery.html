@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Quantivyx BI in Title (as directed) -->
+    <title>Gallery | Quantivyx BI - Data Architecture & Executive Intelligence</title>
+    <style>
+        /* Modern Cyber Professional Color Palette (CLONED FROM HOME PAGE) */
+        :root {
+            --primary-bg: #090d16;    /* Deep Cyber Obsidian Space */
+            --card-bg: #111827;       /* Sleek Dark Slate / Matte Black */
+            --accent-neon: #00f2fe;   /* High-Tech Electric Cyan */
+            --accent-purple: #9d4edd; /* Matrix / Power BI Purple Shift */
+            --text-main: #f3f4f6;     /* Crisp Silver / White */
+            --text-muted: #9ca3af;    /* Cyber Gray */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-main);
+            line-height: 1.6;
+            background-color: var(--primary-bg);
+            padding-bottom: 5rem; /* Space for the footer */
+        }
+
+        /* Simplified Header (For Gallery Context) */
+        header {
+            background-color: rgba(9, 13, 22, 0.95);
+            padding: 1.5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--accent-neon);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-neon);
+        }
+
+        /* Main Content Styling */
+        .content {
+            padding: 7rem 10% 4rem 10%; /* Account for sticky header */
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 3.5rem;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Gallery Dashboard Grid (Cloned from Service Cards) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .gallery-card {
+            background-color: var(--card-bg);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05);
+        }
+
+        .gallery-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            color: var(--accent-neon);
+            font-weight: 700;
+        }
+
+        .gallery-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* KPI / Small Metric Block (Nested in Card) */
+        .card-metrics {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Cloned Button Styling */
+        .btn {
+            background: linear-gradient(135deg, #00cdac, var(--accent-neon));
+            color: #090d16;
+            padding: 0.85rem 2.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation (Cloned and Integrated) -->
+    <header>
+        <div class="logo">Quanti<span>vyx</span></div>
+        <nav>
+            <!-- Essential Interlinking (Leave gallery.html, load index.html) -->
+            <a href="index.html">Home</a>
+            <a href="#samples">Samples</a>
+            <a href="#matrix">BI Matrix</a>
+        </nav>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content">
+        <h1 class="section-title">Gallery: Quantivyx Executive <span>BI Summary</span></h1>
+        <p style="margin-bottom: 3rem; color: var(--text-muted);">Quantivyx specializes in transforming localized, raw CSV or localized SQL data architectures into high-tier, enterprise-grade semantic engineering. This matrix showcases our design capabilities, ranging from complex regional intelligence mapping to automated DAX forecasting models. Explore sample BI analytics reports below.</p>
+
+        <!-- Gallery Dashboard Grid (Cloned Structurally) -->
+        <div id="samples" class="gallery-grid">
+            
+            <div class="gallery-card">
+                <h3>Unified Sales Intelligence</h3>
+                <p>Designed for rapid, geospatial regional intelligence, this sample map visualizes localized sales data and variance against optimized target models. It engineering immediate operational clarity.</p>
+                <!-- Cloned Button Style -->
+                <a href="#matrix" class="btn">Analyze Logic</a>
+                <div class="card-metrics">
+                    <p><strong>Key Insight:</strong> Revenue Variance & Target Variance</p>
+                    <p><strong>Complexity:</strong> Complex Regional Mapping & Custom DAX</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <h3>Pipeline Integration Summary</h3>
+                <p>A unified infrastructure health view detailing the back-end data architecture. This panel visualizes critical data pipeline statuses, semantic model health, and processing latency trends.</p>
+                <a href="#matrix" class="btn">View Architecture</a>
+                <div class="card-metrics">
+                    <p><strong>Key Insight:</strong> Semantic Engineering Health & Status</p>
+                    <p><strong>Complexity:</strong> Processing Latency & Refresh Metrics</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <h3>Revenue Forecasting Engine</h3>
+                <p>An automated trend variance matrix optimized for C-suite strategic intelligence. It maps 12-month revenue trends against target forecasting models with high-level contextual metrics.</p>
+                <a href="#matrix" class="btn">Run Forecast</a>
+                <div class="card-metrics">
+                    <p><strong>Key Insight:</strong> Automated Trend Variance & Forecasting</p>
+                    <p><strong>Complexity:</strong> Advanced DAX Time Intelligence</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+</body>
+</html>
