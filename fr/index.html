@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantivyx | Analyse de Données & Tableaux de Bord Power BI</title>
+    
+    <!-- SEO Language Linking -->
+    <link rel="alternate" hreflang="en" href="https://quantivyxbi.com/" />
+    <link rel="alternate" hreflang="fr" href="https://quantivyxbi.com/fr/" />
+    <link rel="alternate" hreflang="x-default" href="https://quantivyxbi.com/" />
+
+    <style>
+        /* Modern Cyber Professional Color Palette */
+        :root {
+            --primary-bg: #090d16;    
+            --card-bg: #111827;        
+            --accent-neon: #00f2fe;    
+            --accent-purple: #9d4edd; 
+            --text-main: #f3f4f6;      
+            --text-muted: #9ca3af;    
+            --glass-fill: rgba(17, 24, 39, 0.55);
+            --glass-fill-strong: rgba(9, 13, 22, 0.72);
+            --glass-border: rgba(0, 242, 254, 0.16);
+            --glass-border-purple: rgba(157, 78, 221, 0.22);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            background-color: var(--primary-bg);
+            background-image:
+                linear-gradient(180deg, rgba(9,13,22,0.86) 0%, rgba(9,13,22,0.80) 40%, rgba(6,9,16,0.92) 100%),
+                url('../Wallpaper.png'); /* Note: pointed up one level to root for the wallpaper image */
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body {
+            color: var(--text-main);
+            line-height: 1.6;
+            background: transparent;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(9, 13, 22, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 1.5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+        }
+
+        .logo {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--accent-neon);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-neon);
+        }
+
+        .hero {
+            background: radial-gradient(circle at top right, rgba(157, 78, 221, 0.18), transparent 55%);
+            padding: 9rem 10% 7rem 10%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem auto;
+            color: var(--text-main);
+            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00cdac, var(--accent-neon));
+            color: #090d16;
+            padding: 0.85rem 2.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
+        }
+
+        .services {
+            padding: 6rem 10%;
+            background: transparent;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 3.5rem;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+        }
+
+        .section-title span {
+            color: var(--accent-purple);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            background: var(--glass-fill);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.4);
+            box-shadow: 0 10px 34px rgba(0, 242, 254, 0.12);
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+            color: var(--accent-neon);
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+        }
+
+        .contact-payment-container {
+            background: linear-gradient(180deg, rgba(9,13,22,0.35) 0%, rgba(6,9,16,0.55) 100%);
+            padding: 6rem 10%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            border-top: 1px solid rgba(157, 78, 221, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .contact-payment-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-box h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+        }
+
+        .info-box p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .email-btn {
+            background: rgba(17, 24, 37, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-main) !important;
+            padding: 0.85rem 2.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            display: inline-block;
+            border: 1px solid var(--accent-neon);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 242, 254, 0.15);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .payment-box {
+            background: var(--glass-fill-strong);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border-purple);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .payment-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .badge {
+            background-color: rgba(9, 13, 22, 0.5);
+            color: var(--text-main);
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .about-section {
+            padding: 6rem 10%;
+            background: var(--glass-fill);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 242, 254, 0.1);
+        }
+
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .founder-image-wrapper {
+            flex-shrink: 0;
+            margin: 0 auto;
+        }
+
+        .founder-img {
+            width: 240px;
+            height: 240px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 2px solid var(--accent-neon);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+        }
+
+        .founder-text-wrapper {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .founder-name {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+        }
+
+        .founder-title {
+            color: var(--accent-neon);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .founder-quote-container {
+            font-style: italic;
+            border-left: 2px solid var(--accent-neon);
+            padding: 1.25rem 1.5rem;
+            color: var(--text-main);
+            background: rgba(9, 13, 22, 0.5);
+            border-radius: 0 8px 8px 0;
+        }
+
+        footer {
+            background-color: rgba(5, 7, 13, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #4b5563;
+            text-align: center;
+            padding: 2.5rem;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo">Quanti<span>vyx</span></div>
+        <nav>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+            <a href="#About Us">À Propos</a>
+            <a href="../gallery.html">Galerie</a>
+            <a href="/" style="color: var(--accent-neon); font-weight: 700;">English</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Infrastructure de Données & Intelligence</h1>
+        <p>Chez Quantivyx, nous transformons les systèmes complexes en stratégies claires et exploitables. De l'intégration de flux de données aux architectures de visualisation sur mesure, nous construisons la pile technologique qui alimente vos décisions.</p>
+        <a href="#contact" class="btn">Lancer le Projet</a>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <h2 class="section-title">Compétences <span>Clés</span></h2>
+        <div class="services-grid">
+
+            <div class="service-card">
+                <h3>Requêtes Avancées & ETL</h3>
+                <p>Intégration experte de fichiers CSV bruts, de données localisées et de bases de données SQL relationnelles. Nous concevons des données propres et des modèles sémantiques robustes sans la lourdeur des architectures cloud massives.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>Déploiements Spécialisés Power BI</h3>
+                <p>Grande expertise dans la création de modèles sémantiques Power BI robustes et personnalisés, de moteurs DAX évolutifs avancés et de structures de données sous-jacentes à faible latence.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>Tableaux de Bord Exécutifs & Visualisation</h3>
+                <p>Moteurs analytiques sur mesure conçus pour la clarté organisationnelle. Nous adaptons vos indicateurs analytiques de manière transparente, des entités locales aux entreprises mondiales.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Contact & Payments Area -->
+    <div id="contact" class="contact-payment-container">
+
+        <div class="info-box">
+            <h2>Discutons de vos Données</h2>
+            <p>Prêt à déployer des analyses de haut niveau ou à optimiser vos rapports existants ? Contactez-nous instantanément pour concevoir une architecture de données adaptée à votre envergure opérationnelle.</p>
+
+            <p style="margin-top: 2.5rem; margin-bottom: 1.5rem;">
+                <a href="mailto:Hernandezanalytics@outlook.com" class="email-btn">Email : Hernandezanalytics@outlook.com</a>
+            </p>
+
+            <p><strong>Ligne Directe :</strong> <a href="tel:210-605-1214">210-605-1214</a></p>
+        </div>
+
+        <div class="payment-box">
+            <h3>Canaux de Règlement Acceptés</h3>
+            <p style="margin-bottom: 2rem; color: var(--text-muted);">Pour fluidifier l'intégration et le déploiement des projets, Quantivyx gère les règlements via des couches de transaction sécurisées standard :</p>
+
+            <div class="badge-container" style="flex-direction: column; width: 100%;">
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">🌐 Règlement Wise Business</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">🏦 Virement ACH & Bancaire</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">📱 Venmo Pro</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">💳 Réseau Stripe</span>
+                <span class="badge" style="display: block; width: 100%; padding: 0.8rem 1.5rem; text-align: left;">💸 CashApp Mobile</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- About Us Section -->
+    <section id="About Us" class="about-section">
+        <h2 class="section-title">À Propos de <span>Nous</span></h2>
+
+        <div class="about-container">
+
+            <div class="founder-image-wrapper">
+                <img src="../profile.jpg" alt="Fondateur de Quantivyx" class="founder-img">
+            </div>
+
+            <div class="founder-text-wrapper">
+                <h3 class="founder-name">Herman Hernandez</h3>
+                <div class="founder-title">PDG et Fondateur</div>
+
+                <div class="founder-quote-container">
+                    "Nous nous spécialisons dans l'automatisation des flux de travail manuels qui piègent les équipes dans la collecte de données, réduisant considérablement le délai d'obtention des informations. Notre mission est de vous placer fermement aux commandes de votre entreprise."
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Quantivyx. Tous droits réservés.
+    </li>
+
+</body>
+</html>
