@@ -1,0 +1,2 @@
+# Automatically redirect French browser requests to the French version, but only on the root page
+/    /fr/    302    Language=fr
