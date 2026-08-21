@@ -1,2 +1,5 @@
-# Automatically redirect French browser requests to the French version, but only on the root page
+# Route Spanish browser requests to the Spanish section
+/    /es/    302    Language=es
+
+# Route French browser requests to the French section
 /    /fr/    302    Language=fr
