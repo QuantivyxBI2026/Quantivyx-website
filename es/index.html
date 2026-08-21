@@ -12,14 +12,13 @@
     <link rel="alternate" hreflang="x-default" href="https://quantivyxbi.com/" />
 
     <style>
-        /* Modern Cyber Professional Color Palette */
         :root {
-            --primary-bg: #090d16;    /* Deep Cyber Obsidian Space */
-            --card-bg: #111827;       /* Sleek Dark Slate / Matte Black */
-            --accent-neon: #00f2fe;   /* High-Tech Electric Cyan */
-            --accent-purple: #9d4edd; /* Matrix / Power BI Purple Shift */
-            --text-main: #f3f4f6;     /* Crisp Silver / White */
-            --text-muted: #9ca3af;    /* Cyber Gray */
+            --primary-bg: #090d16;
+            --card-bg: #111827;
+            --accent-neon: #00f2fe;
+            --accent-purple: #9d4edd;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
 
         * {
@@ -63,16 +62,41 @@
             text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
         nav a {
             color: var(--text-muted);
             text-decoration: none;
-            margin-left: 2rem;
             font-weight: 500;
             transition: color 0.3s;
         }
 
         nav a:hover {
             color: var(--accent-neon);
+        }
+
+        /* Language Switcher Dropdown/Links */
+        .lang-selector {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: 1rem;
+            padding-left: 1rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .lang-selector a {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .lang-selector a.active {
+            color: var(--accent-neon);
+            text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
         }
 
         /* Hero Section */
@@ -118,18 +142,74 @@
             transform: translateY(-2px);
             box-shadow: 0 0 30px rgba(0, 242, 254, 0.7);
         }
+
+        /* Services & Contact Section Blocks */
+        .section-container {
+            padding: 6rem 10%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            padding: 2.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-neon);
+        }
+
+        .service-card h3 {
+            color: var(--accent-neon);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background-color: #05070d;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
+    <!-- Header Navigation with Language Switcher -->
     <header>
         <div class="logo">Quanti<span>vyx</span></div>
         <nav>
             <a href="#services">Servicios</a>
-            <a href="#contact">Contacto</a>
             <a href="gallery.html">Galería</a>
-            <a href="../index.html" style="color: var(--accent-neon); font-weight: 700;">English</a>
+            <a href="#contact">Contacto</a>
+            
+            <div class="lang-selector">
+                <a href="../index.html">EN</a>
+                <a href="../fr/index.html">FR</a>
+                <a href="index.html" class="active">ES</a>
+            </div>
         </nav>
     </header>
 
@@ -139,6 +219,37 @@
         <p>En Quantivyx transformamos sistemas complejos en estrategias claras y procesables. Desde la integración de flujos de datos hasta arquitecturas de visualización a medida, construimos la pila tecnológica que impulsa sus decisiones.</p>
         <a href="#contact" class="btn-primary">Iniciar Proyecto</a>
     </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section-container">
+        <h2 class="section-title">Nuestras Capacidades Clave</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Arquitectura de Datos Corporativa</h3>
+                <p>Unificamos fuentes de datos fragmentadas en almacenes limpios y escalables que sirven como única fuente de verdad operativa para su organización.</p>
+            </div>
+            <div class="service-card">
+                <h3>Paneles Ejecutivos de BI</h3>
+                <p>Diseñamos tableros de control avanzados y atractivos (Power BI / Tableau) optimizados para que la alta dirección evalúe métricas clave al instante.</p>
+            </div>
+            <div class="service-card">
+                <h3>Optimización de Flujos</h3>
+                <p>Automatizamos pipelines complejos para eliminar cuellos de botella manuales, asegurando que sus informes reflejen datos en tiempo real con total precisión.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-container" style="text-align: center;">
+        <h2 class="section-title">¿Listo para Elevar su Estrategia de Datos?</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.1rem;">Conéctese con nuestro equipo de arquitectura para discutir sus necesidades de inteligencia empresarial.</p>
+        <a href="mailto:contact@quantivyxbi.com" class="btn-primary">Contactar con Arquitectura</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Quantivyx BI. Todos los derechos reservados.</p>
+    </footer>
 
 </body>
 </html>
