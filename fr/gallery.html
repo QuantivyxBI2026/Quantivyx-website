@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie | Quantivyx BI - Architecture de Données & Intelligence Exécutive</title>
+    
+    <!-- SEO Language Linking -->
+    <link rel="alternate" hreflang="en" href="https://quantivyxbi.com/gallery.html" />
+    <link rel="alternate" hreflang="fr" href="https://quantivyxbi.com/fr/gallery.html" />
+    <link rel="alternate" hreflang="x-default" href="https://quantivyxbi.com/gallery.html" />
+
+    <style>
+        /* Modern Cyber Professional Color Palette (CLONED FROM HOME PAGE) */
+        :root {
+            --primary-bg: #090d16;    /* Deep Cyber Obsidian Space */
+            --card-bg: #111827;       /* Sleek Dark Slate / Matte Black */
+            --accent-neon: #00f2fe;   /* High-Tech Electric Cyan */
+            --accent-purple: #9d4edd; /* Matrix / Power BI Purple Shift */
+            --text-main: #f3f4f6;     /* Crisp Silver / White */
+            --text-muted: #9ca3af;    /* Cyber Gray */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-main);
+            line-height: 1.6;
+            background-color: var(--primary-bg);
+            padding-bottom: 5rem;
+            overflow-x: hidden;
+        }
+
+        /* Simplified Header (For Gallery Context) */
+        header {
+            background-color: rgba(9, 13, 22, 0.95);
+            padding: 1.5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--accent-neon);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-neon);
+        }
+
+        /* Main Content Styling */
+        .content {
+            padding: 5rem 10% 2rem 10%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-desc {
+            max-width: 850px;
+            margin: 0 auto 4rem auto;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .section-desc strong {
+            color: var(--accent-neon);
+        }
+
+        /* --- PORTFOLIO SLIDER STYLES --- */
+        .slider-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+            max-height: 550px;
+            object-fit: contain;
+            background-color: #05070d;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .slide-info {
+            padding: 2.5rem;
+            background-color: var(--card-bg);
+            text-align: left;
+        }
+
+        .slide-info h3 {
+            font-size: 1.6rem;
+            color: var(--accent-neon);
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-info p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Navigation Arrows */
+        .arrow {
+            position: absolute;
+            top: 40%;
+            transform: translateY(-50%);
+            background: rgba(9, 13, 22, 0.85);
+            color: var(--text-main);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+            user-select: none;
+        }
+
+        .arrow:hover {
+            color: var(--accent-neon);
+            border-color: var(--accent-neon);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .prev-arrow { left: 20px; }
+        .next-arrow { right: 20px; }
+
+        /* Slide Indicator Dots */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--accent-neon);
+            box-shadow: 0 0 8px var(--accent-neon);
+            width: 28px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo">Quanti<span>vyx</span></div>
+        <nav>
+            <a href="/fr/">Accueil</a>
+            <a href="/fr/#services">Services</a>
+            <a href="/fr/#contact">Contact</a>
+            <a href="../gallery.html" style="color: var(--accent-neon); font-weight: 700;">English</a>
+        </nav>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content">
+        <h1 class="section-title">Centre d'Intelligence <span>Exécutive</span></h1>
+        <p class="section-desc">
+            La plupart des entreprises modernes ne souffrent pas d'un problème de collecte de données, mais d'un <strong>problème de visibilité stratégique</strong>. Les opportunités de croissance vitales restent piégées dans des feuilles de calcul fragmentées et des systèmes déconnectés. Nous concevons des tableaux de bord exécutifs sur mesure qui transforment des métriques complexes et éparpillées en une source centralisée de vérité opérationnelle, permettant aux dirigeants de prendre des décisions proactives en toute confiance.
+        </p>
+
+        <!-- Dynamic Portfolio Carousel Slider -->
+        <div class="slider-container">
+            <button class="arrow prev-arrow" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="arrow next-arrow" onclick="moveSlide(1)">&#10095;</button>
+
+            <div class="slider-wrapper" id="sliderWrapper">
+                
+                <!-- Slide 1 -->
+                <div class="slide">
+                    <img src="../Dashboard 1.png" alt="Centre de Commandes des Ventes d'Entreprise Quantivyx">
+                    <div class="slide-info">
+                        <h3>Centre de Commandes des Ventes d'Entreprise</h3>
+                        <p>Une matrice complète de revenus nationaux conçue pour les décideurs de la haute direction. Ce tableau de bord consolide les données de performance multirégionales, les trajectoires de croissance d'une année sur l'autre et les projections prospectives dans un espace unique, garantissant que la direction identifie instantanément les secteurs à forte performance et les tendances du marché.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <img src="../Dashboard 2.png" alt="Matrice des KPI des Opérations Commerciales Quantivyx">
+                    <div class="slide-info">
+                        <h3>Matrice de Croissance & Performance d'Entreprise</h3>
+                        <p>Un outil de suivi de santé exécutive intuitif qui évalue les acquisitions mensuelles de clients, l'atteinte des objectifs et les scores opérationnels actifs. Conçue spécifiquement pour éliminer la surcharge de données, cette présentation utilise une typographie claire et contrastée pour mettre en valeur les repères de performance fondamentaux en un coup d'œil.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <img src="../Dashboard 3.png" alt="Résumé des Performances Opérationnelles Quantivyx">
+                    <div class="slide-info">
+                        <h3>Suivi de la Santé Opérationnelle & des Projets</h3>
+                        <p>Un aperçu rationalisé et accessible taillé pour les responsables des opérations. Cette variante met en valeur le suivi critique du pipeline, la répartition régionale des revenus et les métriques de santé organisationnelle grâce à des structures de mise en page équilibrées qui privilégient une analyse mentale rapide et l'absence de frictions techniques.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="slide">
+                    <img src="../Coffee_BI_report.png" alt="Rapport de Vente au Détail Interstellar Coffee Shop">
+                    <div class="slide-info">
+                        <h3>Revenus de Détail & Intelligence Commerciale</h3>
+                        <p>Un aperçu granulaire des points de vente suivant l'activité commerciale localisée. Cette interface montre comment le volume transactionnel, les préférences de paiement et la performance détaillée du menu peuvent être cartographiés sur une période de 12 mois pour révéler des pics de demande saisonniers distincts et les habitudes d'achat des consommateurs.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 5 -->
+                <div class="slide">
+                    <img src="../SuperStore_Dashboard_4.png" alt="Rapport de Ventes Exécutif Superstore">
+                    <div class="slide-info">
+                        <h3>Tableau de Bord Exécutif du Marché à Haute Valeur</h3>
+                        <p>Un panneau d'intelligence financière en mode sombre optimisé pour la révision d'entreprise. Il élimine la complexité technique pour mettre les mesures de performance de plusieurs millions de dollars au premier plan, visualisant instantanément les États très performants, les catégories de produits les plus vendues et les principales tendances de profit régional sur un cycle de six mois.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Carousel Pagination Dots -->
+        <div class="dots-container">
+            <div class="dot active" onclick="setSlide(0)"></div>
+            <div class="dot" onclick="setSlide(1)"></div>
+            <div class="dot" onclick="setSlide(2)"></div>
+            <div class="dot" onclick="setSlide(3)"></div>
+            <div class="dot" onclick="setSlide(4)"></div>
+        </div>
+    </div>
+
+    <!-- Interactive Slider Navigation Engine -->
+    <script>
+        let currentIndex = 0;
+        const wrapper = document.getElementById('sliderWrapper');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function updateSlider() {
+            wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, idx) => {
+                if(idx === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function moveSlide(direction) {
+            currentIndex += direction;
+            if (currentIndex >= totalSlides) {
+                currentIndex = 0;
+            } else if (currentIndex < 0) {
+                currentIndex = totalSlides - 1;
+            }
+            updateSlider();
+        }
+
+        function setSlide(index) {
+            currentIndex = index;
+            updateSlider();
+        }
+    </script>
+    
+</body>
+</html>
