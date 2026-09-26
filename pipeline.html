@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantivyx | Automated Data Pipeline</title>
+<style>
+    :root {
+        --primary-bg: #090d16;
+        --card-bg: #111827;
+        --accent-neon: #00f2fe;
+        --accent-purple: #9d4edd;
+        --text-main: #f3f4f6;
+        --text-muted: #9ca3af;
+        --glass-fill: rgba(17, 24, 39, 0.55);
+        --glass-fill-strong: rgba(9, 13, 22, 0.72);
+        --glass-border: rgba(0, 242, 254, 0.16);
+        --glass-border-purple: rgba(157, 78, 221, 0.22);
+        --warn: #ff6b6b;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body {
+        background: radial-gradient(circle at 15% 0%, rgba(157,78,221,0.14), transparent 45%),
+                    radial-gradient(circle at 85% 100%, rgba(0,242,254,0.10), transparent 50%),
+                    var(--primary-bg);
+        color: var(--text-main);
+        padding: 3.5rem 5% 4rem;
+        line-height: 1.55;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+
+    .eyebrow { color: var(--accent-neon); font-weight:600; font-size:0.95rem; margin-bottom:0.6rem; }
+    h1 { font-size: 2.1rem; font-weight:800; margin-bottom:0.8rem; letter-spacing:-0.3px;
+         background: linear-gradient(135deg, #ffffff 45%, var(--accent-neon));
+         -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .subtitle { color: var(--text-muted); font-size:1.05rem; max-width: 640px; margin-bottom: 3rem; }
+
+    /* Pipeline */
+    .pipeline { display:flex; flex-direction:column; gap:0; }
+    .stage-row { display:flex; align-items:stretch; gap:1.5rem; flex-wrap:wrap; }
+    .stage {
+        flex:1; min-width:220px;
+        background: var(--glass-fill);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 1.6rem 1.5rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+        position: relative;
+    }
+    .stage.wide { flex-basis:100%; }
+    .stage .icon { width:34px; height:34px; margin-bottom:0.9rem; color: var(--accent-neon); }
+    .stage h3 { font-size:1.05rem; margin-bottom:0.4rem; color: var(--text-main); }
+    .stage p { color: var(--text-muted); font-size:0.88rem; }
+    .stage .tag {
+        display:inline-block; margin-top:0.7rem; font-size:0.72rem; font-weight:700;
+        letter-spacing:0.3px; color: var(--accent-purple);
+        background: rgba(157,78,221,0.12); border:1px solid var(--glass-border-purple);
+        padding:0.25rem 0.6rem; border-radius:5px;
+    }
+
+    .connector { display:flex; justify-content:center; padding: 0.8rem 0; }
+    .connector svg { width:22px; height:34px; color: var(--text-muted); }
+
+    .loop-wrap { display:flex; justify-content:center; padding: 0.6rem 0 1rem; }
+    .loop-label {
+        display:flex; align-items:center; gap:0.6rem;
+        color: var(--accent-neon); font-size:0.82rem; font-weight:600;
+        background: rgba(0,242,254,0.07); border:1px solid var(--glass-border);
+        padding:0.5rem 1rem; border-radius:20px;
+    }
+    .loop-label svg { width:16px; height:16px; }
+
+    /* Comparison */
+    .compare-title { margin-top:4rem; margin-bottom:1.5rem; font-size:1.4rem; font-weight:700; }
+    .compare-title span { color: var(--accent-purple); }
+    .compare-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+    @media (max-width:720px){ .compare-grid{ grid-template-columns:1fr; } }
+    .compare-box { border-radius:12px; padding:1.8rem; backdrop-filter: blur(14px); }
+    .compare-box.bad {
+        background: rgba(255,107,107,0.05);
+        border:1px solid rgba(255,107,107,0.25);
+    }
+    .compare-box.good {
+        background: var(--glass-fill-strong);
+        border:1px solid var(--glass-border);
+    }
+    .compare-box h4 { font-size:1rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+    .compare-box.bad h4 { color: var(--warn); }
+    .compare-box.good h4 { color: var(--accent-neon); }
+    .compare-box ul { list-style:none; }
+    .compare-box li { color: var(--text-muted); font-size:0.9rem; padding:0.4rem 0; display:flex; gap:0.6rem; }
+    .compare-box li svg { width:15px; height:15px; flex-shrink:0; margin-top:2px; }
+    .compare-box.bad li svg { color: var(--warn); }
+    .compare-box.good li svg { color: var(--accent-neon); }
+
+    footer { margin-top:3.5rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.06);
+             color:#4b5563; font-size:0.82rem; text-align:center; }
+    footer span { color: var(--accent-neon); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="eyebrow">How it works</div>
+    <h1>From scattered files to a live decision engine</h1>
+    <p class="subtitle">A structured, automated pipeline replaces manual file-hunting and one-off spreadsheets with a repeatable process that refreshes itself.</p>
+
+    <div class="pipeline">
+
+        <!-- Stage 1: Your Data -->
+        <div class="stage-row">
+            <div class="stage wide">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="7" r="0.6" fill="currentColor"/></svg>
+                <h3>Your Data, Wherever It Lives</h3>
+                <p>Files, folders, and systems your team already uses day to day &mdash; nothing new for your staff to learn or maintain.</p>
+                <span class="tag">STAGE 1</span>
+            </div>
+        </div>
+
+        <div class="connector">
+            <svg viewBox="0 0 24 34" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v26M4 22l8 8 8-8"/></svg>
+        </div>
+
+        <!-- Stage 2: Automated Pipeline -->
+        <div class="stage-row">
+            <div class="stage wide">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+                <h3>Automated Pipeline</h3>
+                <p>Data is collected, cleaned, and standardized on a set schedule &mdash; the same repeatable process every time, with no manual copy-paste and no one needing to remember to "pull the latest version."</p>
+                <span class="tag">STAGE 2</span>
+            </div>
+        </div>
+
+        <div class="connector">
+            <svg viewBox="0 0 24 34" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v26M4 22l8 8 8-8"/></svg>
+        </div>
+
+        <!-- Stage 3: Dashboard -->
+        <div class="stage-row">
+            <div class="stage wide">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="12" width="4" height="8"/><rect x="10" y="7" width="4" height="13"/><rect x="17" y="3" width="4" height="17"/></svg>
+                <h3>One Live Dashboard</h3>
+                <p>A single trusted view of the business, always current, available to whoever needs it &mdash; no more chasing down the "right" spreadsheet.</p>
+                <span class="tag">STAGE 3</span>
+            </div>
+        </div>
+
+        <div class="loop-wrap">
+            <div class="loop-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4v5h5M20 20v-5h-5"/><path d="M4 9a8 8 0 0 1 14-5M20 15a8 8 0 0 1-14 5"/></svg>
+                Refreshes automatically &mdash; no manual re-entry, ever
+            </div>
+        </div>
+
+    </div>
+
+    <h2 class="compare-title">The difference clients actually <span>feel</span></h2>
+    <div class="compare-grid">
+        <div class="compare-box bad">
+            <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+                Unstructured spreadsheet process
+            </h4>
+            <ul>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>Someone manually copies data from files into Excel</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>Formulas break silently when a source file changes shape</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>Version confusion &mdash; whose copy is current?</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>Reporting depends on one person's availability</li>
+            </ul>
+        </div>
+        <div class="compare-box good">
+            <h4>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+                Automated Quantivyx pipeline
+            </h4>
+            <ul>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>Data is pulled and refreshed on a schedule, automatically</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>Transformations are consistent and repeatable, every run</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>One trusted model, one dashboard, always current</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>Runs whether or not anyone remembers to touch it</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>Built by <span>Quantivyx</span> &mdash; Data Infrastructure &amp; Intelligence</footer>
+
+</div>
+</body>
+</html>
