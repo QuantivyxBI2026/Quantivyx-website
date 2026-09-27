@@ -408,6 +408,57 @@
             font-size: 0.9rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        /* Mobile responsive fixes */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1.2rem 6%;
+                gap: 0.9rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.6rem 1.1rem;
+            }
+
+            nav a {
+                margin-left: 0;
+                font-size: 0.88rem;
+            }
+
+            .hero {
+                padding: 6rem 6% 4.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.1rem;
+            }
+
+            .hero p {
+                font-size: 1.05rem;
+            }
+
+            .services,
+            section.block {
+                padding: 3.5rem 6%;
+            }
+
+            .section-title {
+                font-size: 1.7rem;
+            }
+
+            .about-section {
+                padding: 3.5rem 6%;
+            }
+        }
     </style>
 </head>
 <body>
