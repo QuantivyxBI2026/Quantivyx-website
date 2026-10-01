@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#090d16">
-    <title>Quantivyx | Power BI & Data Automation for Los Angeles & NYC Businesses</title>
-    <meta name="description" content="Quantivyx builds automated data pipelines and Power BI dashboards for entrepreneurs, ecommerce brands, and growing businesses in Los Angeles and New York City. Replace manual spreadsheets with a live, automated reporting system.">
+    <title>Quantivyx | Automated Business Reporting & Insights</title>
+    <meta name="description" content="Quantivyx replaces manual spreadsheets and weekly report building with clear numbers that update on their own, so owners and executives can make decisions faster.">
     <link rel="canonical" href="https://quantivyxbi.com/">
     <link rel="alternate" hreflang="en" href="https://quantivyxbi.com/">
     <link rel="alternate" hreflang="fr" href="https://quantivyxbi.com/fr/">
@@ -14,16 +14,16 @@
 
     <!-- Open Graph tags: control how this page previews on LinkedIn, Facebook, etc. -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Quantivyx | Power BI & Data Automation for Los Angeles & NYC Businesses">
-    <meta property="og:description" content="Automated data pipelines and Power BI dashboards for businesses in Los Angeles and New York City. Stop running your company on manual spreadsheets.">
+    <meta property="og:title" content="Quantivyx | Automated Business Reporting & Insights">
+    <meta property="og:description" content="Stop running your company on manual spreadsheets. Quantivyx turns the data you already have into clear, automatically updated insights.">
     <meta property="og:url" content="https://quantivyxbi.com/">
     <meta property="og:image" content="https://quantivyxbi.com/Wallpaper.png">
     <meta property="og:site_name" content="Quantivyx">
 
     <!-- Twitter/X card: same purpose as Open Graph, for X previews -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Quantivyx | Power BI & Data Automation for Los Angeles & NYC Businesses">
-    <meta name="twitter:description" content="Automated data pipelines and Power BI dashboards for businesses in Los Angeles and New York City.">
+    <meta name="twitter:title" content="Quantivyx | Automated Business Reporting & Insights">
+    <meta name="twitter:description" content="Clear business numbers that update on their own, built from the data you already have.">
     <meta name="twitter:image" content="https://quantivyxbi.com/Wallpaper.png">
 
     <!-- Structured data: invisible to visitors, tells Google which markets this business serves -->
@@ -199,11 +199,22 @@
         .float-chip svg { width: 16px; height: 16px; color: var(--accent-neon); }
         .float-chip.c1 { left: 6%; top: -22px; } .float-chip.c2 { right: 5%; bottom: -26px; animation-delay: -3s; border-color: var(--glass-border-purple); } .float-chip.c2 svg { color: var(--accent-purple); }
         @keyframes floaty { 50% { transform: translateY(-10px); } }
-        .mock-note { text-align: center; margin-top: 2rem; font-size: .7rem; color: var(--text-muted); letter-spacing: .06em; }
+        .mock-note { text-align: center; margin-top: 3rem; font-size: .7rem; color: var(--text-muted); letter-spacing: .06em; }
 
         /* ================= Shared section styles ================= */
         .section-title { font-size: clamp(1.7rem, 4.6vw, 2.6rem); margin-bottom: 3.2rem; color: var(--text-main); letter-spacing: 0.5px; text-shadow: 0 2px 16px rgba(0,0,0,0.5); text-align: center; line-height: 1.15; }
         .section-title span { color: var(--accent-purple); text-shadow: 0 0 28px rgba(157,78,221,.45); }
+
+
+        /* ================= Plain-language "does this sound familiar" section ================= */
+        .familiar { padding: clamp(3rem, 7vw, 5.5rem) var(--gutter) 0; text-align: center; }
+        .fam-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(1rem, 2.5vw, 1.6rem); }
+        .fam-card { position: relative; text-align: left; padding: 1.6rem 1.5rem 1.6rem; border-radius: var(--radius); background: var(--glass-fill); border: 1px solid var(--line-soft); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: transform .3s, border-color .3s; }
+        .fam-card:hover { transform: translateY(-4px); border-color: var(--glass-border-purple); }
+        .fam-card b { display: block; font-size: .8rem; letter-spacing: .2em; color: var(--accent-purple); margin-bottom: .7rem; }
+        .fam-card p { color: var(--text-main); font-size: 1.05rem; line-height: 1.55; }
+        .fam-close { margin-top: 2rem; color: var(--accent-neon); font-weight: 600; font-size: 1.1rem; }
+        .familiar .section-title { margin-bottom: 2.4rem; }
 
         /* ================= Services ================= */
         .services { padding: clamp(3.5rem, 8vw, 6.5rem) var(--gutter); background: transparent; text-align: center; }
@@ -365,7 +376,7 @@
         <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
         <nav id="nav">
             <a href="#services">Services</a>
-            <a href="#contact">Contact</a>
+            <a href="contact.html">Contact</a>
             <a href="#about-us">About Us</a>
             <a href="gallery.html">Gallery</a>
             <a href="pipeline.html">How It Works</a>
@@ -378,35 +389,35 @@
         <canvas id="net" aria-hidden="true"></canvas>
         <div class="hero-inner">
             <div class="hero-copy">
-                <div class="eyebrow reveal"><i></i> Power BI &middot; Automation &middot; Los Angeles &amp; NYC</div>
+                <div class="eyebrow reveal"><i></i> Business insights, automated</div>
                 <h1 class="reveal" style="--d:80ms">Business Insights. <span class="shine">Fully Automated.</span></h1>
-                <p class="lead reveal" style="--d:160ms">Quantivyx turns the data already sitting in your business &mdash; spreadsheets, sales platforms, folders full of exports &mdash; into clear, automated insights you can actually use. Less time compiling reports. More time making decisions.</p>
+                <p class="lead reveal" style="--d:160ms">Quantivyx turns the information already sitting in your business, like spreadsheets, sales reports and folders full of exports, into clear numbers that update on their own. Less time putting reports together. More time running your company.</p>
                 <div class="cta-row reveal" style="--d:240ms">
                     <a href="#contact" class="btn">Start the Conversation
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-                    <a href="gallery.html" class="btn btn-ghost">See Live Dashboards</a>
+                    <a href="gallery.html" class="btn btn-ghost">See Sample Dashboards</a>
                 </div>
                 <div class="trust reveal" style="--d:320ms">
-                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>No more manual reports</span>
-                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Always-current numbers</span>
-                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Built for executives</span>
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>No more building reports by hand</span>
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Numbers that are always current</span>
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Made for owners and executives</span>
                 </div>
             </div>
 
             <!-- Animated dashboard preview -->
             <div class="mock-wrap reveal" style="--d:200ms">
-                <div class="float-chip c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Spreadsheets &rarr; Automated</div>
-                <div class="float-chip c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>Updated automatically</div>
+                <div class="float-chip c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Your spreadsheets, automated</div>
+                <div class="float-chip c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>Updates by itself</div>
                 <div class="mock" id="mock">
                     <div class="mock-chrome"><i></i><i></i><i></i><em><b></b>Live &middot; <span id="sync">synced just now</span></em></div>
                     <div class="mock-body">
                         <div class="kpis">
                             <div class="kpi"><small>Revenue</small><b data-count="248.6" data-prefix="$" data-suffix="K" data-dec="1">$0K</b><u>&#9650; 12.4%</u></div>
                             <div class="kpi"><small>Orders</small><b data-count="3482" data-dec="0">0</b><u>&#9650; 8.1%</u></div>
-                            <div class="kpi"><small>Conversion</small><b data-count="4.7" data-suffix="%" data-dec="1">0%</b><u>&#9650; 0.6 pts</u></div>
+                            <div class="kpi"><small>Visitors who buy</small><b data-count="4.7" data-suffix="%" data-dec="1">0%</b><u>&#9650; 0.6 pts</u></div>
                         </div>
                         <div class="chart-card">
-                            <div class="chart-head"><span>Revenue trend</span><span>Last 12 months</span></div>
+                            <div class="chart-head"><span>Sales over time</span><span>Last 12 months</span></div>
                             <div class="chart">
                                 <div class="bars" id="bars"></div>
                                 <svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
@@ -416,12 +427,24 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="mock-foot"><span>&#9679; Data refreshed automatically</span><span>No manual exports</span></div>
+                        <div class="mock-foot"><span>&#9679; Updated automatically</span><span>No copying and pasting</span></div>
                     </div>
                 </div>
-                <p class="mock-note">Illustrative preview &mdash; sample data only</p>
+                <p class="mock-note">Illustrative preview. Sample numbers only.</p>
             </div>
         </div>
+    </section>
+
+    <!-- Sound familiar? -->
+    <section class="familiar" aria-labelledby="fam-title">
+        <h2 class="section-title reveal" id="fam-title">Does This <span>Sound Familiar?</span></h2>
+        <div class="fam-grid">
+            <div class="fam-card reveal"><b>01</b><p>Someone on your team spends hours every week building the same report.</p></div>
+            <div class="fam-card reveal" style="--d:100ms"><b>02</b><p>Your numbers live in several places, and they never quite match.</p></div>
+            <div class="fam-card reveal" style="--d:200ms"><b>03</b><p>You hear about problems after they have already cost you time or money.</p></div>
+            <div class="fam-card reveal" style="--d:300ms"><b>04</b><p>You cannot answer "how are we doing?" without asking someone to pull the data.</p></div>
+        </div>
+        <p class="fam-close reveal">If any of that is true, there is a better way to run the numbers.</p>
     </section>
 
     <!-- Services Section -->
@@ -432,22 +455,22 @@
             <div class="service-card reveal">
                 <div class="service-num">01</div>
                 <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
-                <h3>Automated Data Collection</h3>
-                <p>We connect the spreadsheets, folders, and systems your business already runs on and keep them clean and organized behind the scenes &mdash; so you're never manually compiling data again.</p>
+                <h3>Your Data, Collected for You</h3>
+                <p>We connect the spreadsheets, files and software your business already uses and keep everything organized behind the scenes. Nobody has to copy, paste or merge numbers by hand again.</p>
             </div>
 
             <div class="service-card reveal" style="--d:120ms">
                 <div class="service-num">02</div>
                 <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16v-4M12 16V8M17 16v-7"/></svg></div>
-                <h3>Live Business Dashboards</h3>
-                <p>Your numbers, always current. We build a real-time dashboard that shows exactly how your business is performing, updated automatically instead of rebuilt by hand every week.</p>
+                <h3>Numbers You Can See at a Glance</h3>
+                <p>One screen that shows how your business is doing right now. It updates by itself, so you stop rebuilding the same weekly report.</p>
             </div>
 
             <div class="service-card reveal" style="--d:240ms">
                 <div class="service-num">03</div>
                 <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
-                <h3>Insights Built for Decisions</h3>
-                <p>Clear, at-a-glance answers to the questions that actually matter &mdash; built for how executives make decisions, not for people who live in spreadsheets.</p>
+                <h3>Answers, Not Just Charts</h3>
+                <p>Clear answers to the questions owners and executives actually ask, like what is selling, what is slowing down and where to focus next. No spreadsheet skills required.</p>
             </div>
 
         </div>
@@ -459,19 +482,19 @@
 
             <div class="info-box reveal">
                 <h2>Let's Talk About <span>Your Business</span></h2>
-                <p>Ready to spend less time compiling reports and more time using them? Reach out and we'll map out what automated insights could look like for your business.</p>
+                <p>Tell us what takes up the most time in your reporting today, or where your numbers get messy. We will come back with a clear picture of what could be automated for you.</p>
 
                 <div class="ch-list">
                     <div class="ch copyable">
                         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></div>
                         <a class="ch-txt" href="mailto:Hernandezanalytics@outlook.com" style="text-decoration:none"><small>Email</small><b>Hernandezanalytics@outlook.com</b></a>
-                        <button class="copy-btn" type="button" id="copyEmail" aria-label="Copy email address">
+                        <button class="copy-btn" type="button" data-copy-email aria-label="Copy email address">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
                         </button>
                     </div>
-                    <a class="ch" href="tel:210-605-1214">
-                        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></div>
-                        <div class="ch-txt"><small>Direct Line</small><b>210-605-1214</b></div>
+                    <a class="ch" href="contact.html">
+                        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1-4.3A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg></div>
+                        <div class="ch-txt"><small>More ways to reach us</small><b>Visit the contact page</b></div>
                         <span class="ch-arrow">&rarr;</span>
                     </a>
                 </div>
@@ -480,47 +503,47 @@
             <div class="form-card reveal" id="formCard" style="--d:120ms">
                 <div class="form-head">
                     <h3>Tell us what you're working with</h3>
-                    <p class="sub">Two minutes. We'll come back with what automation could look like for you.</p>
+                    <p class="sub">It takes about two minutes. Your message goes straight to our inbox.</p>
                 </div>
-                <form id="contactForm" novalidate>
+                <form data-lead-form="home" novalidate>
                     <div class="row2">
                         <div class="field"><input type="text" id="name" name="name" placeholder=" " autocomplete="name" required><label for="name">Your name</label><span class="msg">Please tell us your name.</span></div>
                         <div class="field"><input type="email" id="email" name="email" placeholder=" " autocomplete="email" inputmode="email" required><label for="email">Your email</label><span class="msg">Enter a valid email address.</span></div>
                     </div>
                     <div class="field"><input type="text" id="company" name="company" placeholder=" " autocomplete="organization"><label for="company">Company (optional)</label></div>
 
-                    <div class="legend" id="lg">I'm interested in</div>
+                    <div class="legend" id="lg">What would help most?</div>
                     <div class="chips" role="radiogroup" aria-labelledby="lg">
-                        <input type="radio" name="interest" id="i1" value="Automating my spreadsheets" checked><label for="i1">Automating spreadsheets</label>
-                        <input type="radio" name="interest" id="i2" value="A live dashboard"><label for="i2">A live dashboard</label>
+                        <input type="radio" name="interest" id="i1" value="Stop building reports by hand" checked><label for="i1">Stop building reports by hand</label>
+                        <input type="radio" name="interest" id="i2" value="See my numbers in one place"><label for="i2">See my numbers in one place</label>
                         <input type="radio" name="interest" id="i3" value="Both"><label for="i3">Both</label>
                         <input type="radio" name="interest" id="i4" value="Not sure yet"><label for="i4">Not sure yet</label>
                     </div>
 
-                    <div class="field"><textarea id="message" name="message" placeholder=" " required></textarea><label for="message">What's slowing your reporting down?</label><span class="msg">A sentence or two is plenty.</span></div>
-                    <div class="hp" aria-hidden="true"><label>Leave blank <input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label></div>
+                    <div class="field"><textarea id="message" name="message" placeholder=" " required></textarea><label for="message">What takes the most time in your reporting today?</label><span class="msg">A sentence or two is plenty.</span></div>
+                    <div class="hp" aria-hidden="true"><label>Leave blank <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
                     <div class="submit-row">
-                        <button type="submit" class="btn" id="sendBtn"><span id="sendLabel">Send message</span>
+                        <button type="submit" class="btn"><span data-label>Send message</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg></button>
                     </div>
-                    <p class="fine">Your details are only used to reply to this message.</p>
+                    <p class="fine">We only use your details to reply to this message.</p>
                 </form>
 
-                <div class="success" id="success" role="status" aria-live="polite">
+                <div class="success" role="status" aria-live="polite">
                     <svg class="tick" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36"/><path d="M25 41l10 10 20-22"/></svg>
-                    <h3 id="okTitle">Message ready</h3>
-                    <p id="okText">Your email app should have opened with everything filled in &mdash; just hit send.</p>
-                    <button class="btn" type="button" id="copyMsg">Copy message</button>
-                    <a class="btn btn-ghost" id="reopen" href="#">Open email again</a>
+                    <h3 data-ok-title>Thank you.</h3>
+                    <p data-ok-text></p>
+                    <button class="btn" type="button" data-copy-msg data-fallback-only>Copy message</button>
+                    <a class="btn btn-ghost" href="#" data-reopen data-fallback-only>Open email again</a>
                 </div>
             </div>
         </div>
 
         <div class="payment-box reveal">
             <div>
-                <h3>Accepted Settlement Channels</h3>
-                <p>To keep integration and project deployment frictionless, Quantivyx securely clears accounting via standard transaction layers:</p>
+                <h3>Easy Ways to Pay</h3>
+                <p>We keep payment simple. Choose whichever method is most convenient for you.</p>
             </div>
             <div class="badge-container">
                 <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Wise Business Settlement</span>
@@ -547,7 +570,7 @@
                 <div class="founder-title">CEO and Founder</div>
 
                 <div class="founder-quote-container">
-                    "We specialize in automating the manual workflows that trap teams in data assembly, drastically reducing time-to-insight. Our mission is to put you firmly in the driver's seat of your business, shifting focus from baseline maintenance to real-time, real-world strategic decisions."
+                    "Most teams lose hours every week putting reports together by hand. We automate that work, so the answers you need are ready when you need them. Our mission is simple: put you firmly in the driver\'s seat of your business, with less time spent on upkeep and more time spent on decisions."
                 </div>
             </div>
 
@@ -557,7 +580,7 @@
     <!-- Footer -->
     <footer>
         <div class="foot-links">
-            <a href="#services">Services</a><a href="#contact">Contact</a><a href="#about-us">About Us</a>
+            <a href="#services">Services</a><a href="contact.html">Contact</a><a href="#about-us">About Us</a>
             <a href="gallery.html">Gallery</a><a href="pipeline.html">How It Works</a><a href="/ecommerce-bi-consulting">E-commerce BI</a>
         </div>
         &copy; 2026 Quantivyx. All rights reserved.
@@ -571,12 +594,6 @@
         var $ = function (id) { return document.getElementById(id); };
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-        /* ====== CONFIG ======
-           Leave FORM_ENDPOINT empty -> the form opens the visitor's email app with everything pre-filled.
-           Paste a Formspree / Cloudflare Worker URL here -> the form posts silently and you get the email directly. */
-        var FORM_ENDPOINT = '';
-        var TO_EMAIL = 'Hernandezanalytics@outlook.com';
 
         /* ====== Header, progress bar, active link ====== */
         var header = $('top'), prog = $('progress'), ticking = false;
@@ -682,51 +699,8 @@
             frame();
         })();
 
-        /* ====== Toast + copy helpers ====== */
-        var tt; function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { t.classList.remove('show'); }, 2200); }
-        function copy(text, ok) {
-            var done = function () { toast(ok || 'Copied to clipboard'); };
-            if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
-            function fallback() { var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('Press and hold to copy'); } document.body.removeChild(ta); }
-        }
-        $('copyEmail').addEventListener('click', function () { copy(TO_EMAIL, 'Email address copied'); });
-
-        /* ====== Contact form ====== */
-        var form = $('contactForm'), card = $('formCard'), lastMailto = '', lastBody = '';
-        function setErr(id, bad) { $(id).closest('.field').classList.toggle('err', bad); return bad; }
-        ['name', 'email', 'message'].forEach(function (id) { $(id).addEventListener('input', function () { $(id).closest('.field').classList.remove('err'); }); });
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            if ($('website').value) return; // honeypot: bots fill this, people can't see it
-            var name = $('name').value.trim(), email = $('email').value.trim(), msg = $('message').value.trim();
-            var bad = setErr('name', name.length < 2);
-            bad = setErr('email', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) || bad;
-            bad = setErr('message', msg.length < 5) || bad;
-            if (bad) { var f = form.querySelector('.err input, .err textarea'); if (f) f.focus(); return; }
-
-            var company = $('company').value.trim(), interest = (form.querySelector('input[name=interest]:checked') || {}).value || '';
-            var subject = 'Quantivyx inquiry from ' + name + (company ? ' (' + company + ')' : '');
-            lastBody = 'Hi Herman,\n\n' + msg + '\n\n— — —\nName: ' + name + '\nEmail: ' + email + (company ? '\nCompany: ' + company : '') + '\nInterested in: ' + interest;
-            lastMailto = 'mailto:' + TO_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lastBody);
-
-            var btn = $('sendBtn'); btn.classList.add('loading'); $('sendLabel').textContent = 'Sending…';
-            function showOk(direct) {
-                btn.classList.remove('loading'); $('sendLabel').textContent = 'Send message';
-                $('okTitle').textContent = direct ? 'Message sent' : 'Message ready';
-                $('okText').innerHTML = direct ? 'Thanks, ' + name.split(' ')[0].replace(/[<>&]/g, '') + ' &mdash; we\'ll reply to ' + email.replace(/[<>&]/g, '') + ' soon.' : 'Your email app should have opened with everything filled in &mdash; just hit send. Nothing happened? Use the buttons below.';
-                $('copyMsg').style.display = direct ? 'none' : ''; $('reopen').style.display = direct ? 'none' : '';
-                card.classList.add('sent'); card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            if (FORM_ENDPOINT) {
-                fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ name: name, email: email, company: company, interest: interest, message: msg, _subject: subject }) })
-                    .then(function (r) { if (!r.ok) throw 0; showOk(true); })
-                    .catch(function () { window.location.href = lastMailto; showOk(false); });
-            } else { window.location.href = lastMailto; setTimeout(function () { showOk(false); }, 450); }
-        });
-        $('copyMsg').addEventListener('click', function () { copy(TO_EMAIL + '\n\n' + lastBody, 'Message copied — paste it into any email'); });
-        $('reopen').addEventListener('click', function (e) { e.preventDefault(); if (lastMailto) window.location.href = lastMailto; });
     })();
     </script>
+    <script src="lead-form.js" defer></script>
 </body>
 </html>
