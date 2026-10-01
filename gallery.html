@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#090d16">
     <title>Gallery | Quantivyx BI - Data Architecture & Executive Intelligence</title>
     <style>
-        /* ============ Quantivyx palette (unchanged from home page) ============ */
+        /* ============ Quantivyx palette (same as the home page) ============ */
         :root {
             --primary-bg: #090d16;
             --card-bg: #111827;
@@ -24,54 +24,37 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background-color: var(--primary-bg); }
 
         body {
             color: var(--text-main);
             line-height: 1.6;
             background-color: var(--primary-bg);
             overflow-x: hidden;
+            overflow-x: clip; /* clip keeps position: sticky working */
             min-height: 100vh;
-            padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom));
         }
         body.lb-open { overflow: hidden; }
 
-        /* ============ Ambient background: aurora + grid (pure CSS, GPU-cheap) ============ */
+        /* ============ Ambient background: aurora and grid ============ */
         .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-        .ambient::before, .ambient::after {
-            content: ""; position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%;
-            filter: blur(90px); opacity: .5; will-change: transform;
-        }
-        .ambient::before {
-            background: radial-gradient(circle, rgba(0,242,254,.40), transparent 65%);
-            top: -25vmax; left: -20vmax; animation: drift1 22s ease-in-out infinite alternate;
-        }
-        .ambient::after {
-            background: radial-gradient(circle, rgba(157,78,221,.42), transparent 65%);
-            bottom: -30vmax; right: -25vmax; animation: drift2 26s ease-in-out infinite alternate;
-        }
-        .grid-overlay {
-            position: absolute; inset: 0;
-            background-image:
-                linear-gradient(rgba(0,242,254,.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,242,254,.05) 1px, transparent 1px);
+        .ambient::before, .ambient::after { content: ""; position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%; filter: blur(90px); opacity: .5; will-change: transform; }
+        .ambient::before { background: radial-gradient(circle, rgba(0,242,254,.40), transparent 65%); top: -25vmax; left: -20vmax; animation: drift1 22s ease-in-out infinite alternate; }
+        .ambient::after { background: radial-gradient(circle, rgba(157,78,221,.42), transparent 65%); bottom: -30vmax; right: -25vmax; animation: drift2 26s ease-in-out infinite alternate; }
+        .grid-overlay { position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(0,242,254,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,242,254,.05) 1px, transparent 1px);
             background-size: 56px 56px;
-            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%);
-                    mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%);
-        }
+            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%); }
         @keyframes drift1 { to { transform: translate3d(18vmax, 14vmax, 0) scale(1.15); } }
         @keyframes drift2 { to { transform: translate3d(-16vmax, -12vmax, 0) scale(1.1); } }
 
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 300; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); box-shadow: 0 0 12px var(--accent-neon); }
+
         /* ============ Header ============ */
-        header {
-            background-color: rgba(9, 13, 22, 0.72);
-            padding: 1rem var(--gutter);
-            padding-top: calc(1rem + env(safe-area-inset-top));
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid var(--line);
-            -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-        }
+        header { padding: 1rem var(--gutter); padding-top: calc(1rem + env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--line); }
+        header::before { content: ""; position: absolute; inset: 0; z-index: 0; background-color: rgba(9, 13, 22, 0.72); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+        header > * { position: relative; z-index: 1; }
         .logo { color: var(--text-main); font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; }
         .logo span { color: var(--accent-neon); text-shadow: 0 0 10px rgba(0,242,254,.5); }
         nav { display: flex; align-items: center; gap: clamp(.9rem, 3vw, 2rem); }
@@ -81,64 +64,25 @@
         /* ============ Hero ============ */
         .content { padding: clamp(3rem, 8vw, 5.5rem) var(--gutter) 1rem; text-align: center; }
 
-        .eyebrow {
-            display: inline-flex; align-items: center; gap: .55rem;
-            padding: .4rem 1rem; border-radius: 999px;
-            border: 1px solid var(--line); background: var(--glass);
-            color: var(--accent-neon); font-size: .78rem; font-weight: 600;
-            letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1.5rem;
-            -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-        }
+        .eyebrow { display: inline-flex; align-items: center; gap: .55rem; padding: .4rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--glass); color: var(--accent-neon); font-size: .78rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1.5rem; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
         .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-neon); box-shadow: 0 0 10px var(--accent-neon); animation: pulse 2s infinite; }
         @keyframes pulse { 50% { opacity: .35; transform: scale(.7); } }
 
-        .section-title {
-            font-size: clamp(2.1rem, 7vw, 3.8rem);
-            line-height: 1.08; margin-bottom: 1.4rem; font-weight: 800; letter-spacing: -1px;
-            background: linear-gradient(135deg, #ffffff 35%, var(--accent-neon));
-            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .section-title span {
-            background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple));
-            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .section-desc { max-width: 820px; margin: 0 auto 2.2rem; color: var(--text-muted); font-size: clamp(1rem, 2.6vw, 1.15rem); line-height: 1.8; }
+        .section-title { font-size: clamp(2.1rem, 7vw, 3.8rem); line-height: 1.08; margin-bottom: 1.4rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, #ffffff 35%, var(--accent-neon)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-title span { background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-desc { max-width: 820px; margin: 0 auto 1.6rem; color: var(--text-muted); font-size: clamp(1rem, 2.6vw, 1.15rem); line-height: 1.8; }
         .section-desc strong { color: var(--accent-neon); }
 
-        .hero-stats { display: flex; justify-content: center; gap: clamp(.6rem, 2vw, 1rem); flex-wrap: wrap; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
-        .stat {
-            padding: .75rem 1.3rem; border-radius: 14px; background: var(--glass);
-            border: 1px solid var(--line-soft); min-width: 120px;
-            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-        }
-        .stat b { display: block; font-size: 1.5rem; color: var(--text-main); line-height: 1.2; }
-        .stat small { color: var(--text-muted); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+        .sample-note { display: inline-flex; align-items: flex-start; gap: .65rem; max-width: 720px; text-align: left; margin: 0 auto clamp(2.2rem, 5vw, 3.4rem); padding: .8rem 1.1rem; border-radius: 14px; background: rgba(157,78,221,.12); border: 1px solid rgba(157,78,221,.35); color: var(--text-main); font-size: .92rem; line-height: 1.5; }
+        .sample-note svg { width: 20px; height: 20px; flex: none; margin-top: 1px; color: var(--accent-purple); }
 
         /* ============ Showcase layout ============ */
-        .showcase {
-            max-width: 1280px; margin: 0 auto;
-            display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
-            gap: clamp(1rem, 2.5vw, 2rem); align-items: stretch; text-align: left;
-        }
+        .showcase { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: clamp(1rem, 2.5vw, 2rem); align-items: stretch; text-align: left; }
 
-        /* Dashboard viewer */
         .viewer { perspective: 1400px; }
-        .frame {
-            position: relative; border-radius: var(--radius); overflow: hidden;
-            background: var(--card-bg); border: 1px solid var(--line);
-            box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.02), 0 0 70px rgba(0,242,254,.10);
-            transform-style: preserve-3d; transition: transform .25s ease-out, box-shadow .4s;
-        }
-        .frame::before { /* animated neon edge */
-            content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 5;
-            background: linear-gradient(135deg, rgba(0,242,254,.7), transparent 35%, transparent 65%, rgba(157,78,221,.7));
-            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; opacity: .8;
-        }
-        .chrome {
-            display: flex; align-items: center; gap: .45rem; padding: .7rem 1rem;
-            background: rgba(5,7,13,.85); border-bottom: 1px solid var(--line-soft);
-        }
+        .frame { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--card-bg); border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.02), 0 0 70px rgba(0,242,254,.10); transform-style: preserve-3d; transition: transform .25s ease-out, box-shadow .4s; }
+        .frame::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 5; background: linear-gradient(135deg, rgba(0,242,254,.7), transparent 35%, transparent 65%, rgba(157,78,221,.7)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .8; }
+        .chrome { display: flex; align-items: center; gap: .45rem; padding: .7rem 1rem; background: rgba(5,7,13,.85); border-bottom: 1px solid var(--line-soft); }
         .chrome i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.16); }
         .chrome i:nth-child(1) { background: #ff5f57; } .chrome i:nth-child(2) { background: #febc2e; } .chrome i:nth-child(3) { background: #28c840; }
         .chrome em { margin-left: auto; font-style: normal; font-size: .72rem; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; }
@@ -148,92 +92,107 @@
         .slide { min-width: 100%; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; }
         .slide img { width: 100%; height: 100%; object-fit: contain; display: block; -webkit-user-drag: none; user-select: none; }
 
-        .expand-btn {
-            position: absolute; right: 14px; bottom: 14px; z-index: 6;
-            display: inline-flex; align-items: center; gap: .5rem;
-            padding: .6rem 1rem; border-radius: 999px; border: 1px solid rgba(0,242,254,.4);
-            background: rgba(9,13,22,.82); color: var(--text-main); font-size: .85rem; font-weight: 600;
-            cursor: pointer; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-            transition: all .25s; min-height: 44px;
-        }
+        .expand-btn { position: absolute; right: 14px; bottom: 14px; z-index: 6; display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1rem; border-radius: 999px; border: 1px solid rgba(0,242,254,.4); background: rgba(9,13,22,.82); color: var(--text-main); font-size: .85rem; font-weight: 600; cursor: pointer; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: all .25s; min-height: 44px; }
         .expand-btn:hover { color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 18px rgba(0,242,254,.35); }
         .expand-btn svg { width: 16px; height: 16px; }
 
-        .arrow {
-            position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
-            width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
-            background: rgba(9,13,22,.8); color: var(--text-main); border: 1px solid rgba(0,242,254,.3);
-            font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
-            transition: all .2s; user-select: none; -webkit-tap-highlight-color: transparent;
-        }
+        .arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; background: rgba(9,13,22,.8); color: var(--text-main); border: 1px solid rgba(0,242,254,.3); font-size: 1.3rem; display: flex; align-items: center; justify-content: center; transition: all .2s; user-select: none; -webkit-tap-highlight-color: transparent; }
         .arrow:hover { color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 16px rgba(0,242,254,.4); transform: translateY(-50%) scale(1.06); }
         .prev-arrow { left: 14px; } .next-arrow { right: 14px; }
 
-        /* Info panel */
-        .panel {
-            position: relative; display: flex; flex-direction: column; padding: clamp(1.4rem, 3vw, 2.2rem);
-            border-radius: var(--radius); background: var(--glass-strong); border: 1px solid var(--line);
-            -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
-            box-shadow: 0 20px 50px rgba(0,0,0,.45); overflow: hidden;
-        }
-        .panel::after { content: ""; position: absolute; width: 260px; height: 260px; right: -90px; top: -90px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(157,78,221,.28), transparent 70%); pointer-events: none; }
-        .counter { font-size: .8rem; letter-spacing: .2em; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; }
-        .counter b { color: var(--accent-neon); font-size: 1.6rem; letter-spacing: 0; margin-right: .15rem; }
+        .panel { position: relative; display: flex; flex-direction: column; padding: clamp(1.4rem, 3vw, 2.2rem); border-radius: var(--radius); background: var(--glass-strong); border: 1px solid var(--line); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: 0 20px 50px rgba(0,0,0,.45); overflow: hidden; }
+        .panel::after { content: ""; position: absolute; width: 260px; height: 260px; right: -90px; top: -90px; border-radius: 50%; background: radial-gradient(circle, rgba(157,78,221,.28), transparent 70%); pointer-events: none; }
+        .counter { font-size: .8rem; letter-spacing: .2em; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; }
+        .counter b { color: var(--accent-neon); font-size: 1.6rem; letter-spacing: 0; margin: 0 .15rem 0 .35rem; }
         .panel-body { transition: opacity .3s ease, transform .3s ease; }
         .panel-body.swap { opacity: 0; transform: translateY(8px); }
         .panel h3 { font-size: clamp(1.35rem, 3.4vw, 1.9rem); line-height: 1.2; color: var(--accent-neon); margin-bottom: .9rem; text-shadow: 0 0 22px rgba(0,242,254,.25); }
         .panel p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.75; }
         .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.3rem; }
-        .tag { padding: .3rem .8rem; border-radius: 999px; font-size: .74rem; font-weight: 600; letter-spacing: .06em;
-            color: var(--text-main); background: rgba(157,78,221,.16); border: 1px solid rgba(157,78,221,.4); }
+        .tag { padding: .3rem .8rem; border-radius: 999px; font-size: .74rem; font-weight: 600; letter-spacing: .06em; color: var(--text-main); background: rgba(157,78,221,.16); border: 1px solid rgba(157,78,221,.4); }
         .panel-actions { margin-top: auto; padding-top: 1.6rem; display: flex; gap: .7rem; flex-wrap: wrap; }
-        .btn {
-            flex: 1 1 140px; min-height: 48px; padding: .8rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: .95rem;
-            cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-            transition: all .25s; -webkit-tap-highlight-color: transparent;
-        }
+        .btn { flex: 1 1 140px; min-height: 48px; padding: .8rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: .95rem; cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; transition: all .25s; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden; }
+        .btn svg { width: 18px; height: 18px; flex: none; }
         .btn-primary { color: #05070d; border: 0; background: linear-gradient(135deg, var(--accent-neon), #6dd5fa); box-shadow: 0 8px 26px rgba(0,242,254,.28); }
+        .btn-primary::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); transition: left .6s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(0,242,254,.45); }
+        .btn-primary:hover::after { left: 130%; }
         .btn-ghost { color: var(--text-main); background: transparent; border: 1px solid var(--line); }
         .btn-ghost:hover { border-color: var(--accent-neon); color: var(--accent-neon); }
 
         .progress { height: 3px; border-radius: 3px; background: rgba(255,255,255,.08); margin-top: 1.4rem; overflow: hidden; }
         .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); box-shadow: 0 0 10px var(--accent-neon); transition: width .6s cubic-bezier(.22,.8,.22,1); }
 
-        /* Thumbnail rail */
         .rail { max-width: 1280px; margin: clamp(1rem, 2.5vw, 1.8rem) auto 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(.5rem, 1.5vw, 1rem); }
-        .thumb {
-            position: relative; border-radius: 14px; overflow: hidden; cursor: pointer; padding: 0;
-            background: #05070d; border: 1px solid var(--line-soft); aspect-ratio: 16 / 10;
-            opacity: .55; transition: all .3s; -webkit-tap-highlight-color: transparent;
-        }
+        .thumb { position: relative; border-radius: 14px; overflow: hidden; cursor: pointer; padding: 0; background: #05070d; border: 1px solid var(--line-soft); aspect-ratio: 16 / 10; opacity: .55; transition: all .3s; -webkit-tap-highlight-color: transparent; }
         .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .thumb::after { content: attr(data-n); position: absolute; left: 8px; top: 6px; font-size: .72rem; font-weight: 700; color: var(--text-main); text-shadow: 0 1px 6px #000; }
         .thumb:hover { opacity: .9; transform: translateY(-3px); }
         .thumb.active { opacity: 1; border-color: var(--accent-neon); box-shadow: 0 0 22px rgba(0,242,254,.35); }
 
-        /* CTA */
-        .cta {
-            max-width: 1280px; margin: clamp(3rem, 7vw, 5rem) auto 0; text-align: center;
-            padding: clamp(2rem, 5vw, 3.5rem) clamp(1.2rem, 4vw, 3rem); border-radius: 24px; position: relative; overflow: hidden;
-            background: linear-gradient(135deg, rgba(0,242,254,.10), rgba(157,78,221,.14)); border: 1px solid var(--line);
-            -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-        }
+        /* ============ Exploded layers section (scroll driven) ============ */
+        .anatomy { position: relative; height: 340vh; margin: clamp(3.5rem, 8vw, 6rem) calc(var(--gutter) * -1) 0; }
+        .anatomy-stage { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(1rem, 3vw, 3rem); align-items: center; padding: 96px var(--gutter) 24px; max-width: 1400px; margin: 0 auto; text-align: left; }
+        .anatomy-head { grid-column: 1 / -1; text-align: center; position: absolute; top: 88px; left: 0; right: 0; padding: 0 var(--gutter); z-index: 4; pointer-events: none; transition: opacity .4s; }
+        .anatomy-head h2 { font-size: clamp(1.6rem, 4.6vw, 2.8rem); line-height: 1.1; font-weight: 800; letter-spacing: -.5px; color: var(--text-main); margin-bottom: .6rem; }
+        .anatomy-head h2 span { background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .anatomy-head p { color: var(--text-muted); max-width: 640px; margin: 0 auto; font-size: clamp(.92rem, 2.2vw, 1.05rem); }
+
+        .scene { position: relative; height: 100%; min-height: 320px; perspective: 1700px; perspective-origin: 50% 40%; margin-top: 70px; }
+        .stack { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
+        .plate { position: absolute; left: calc(var(--w) / -2); top: calc(var(--w) * -0.3125); width: var(--w); height: calc(var(--w) * 0.625); border-radius: calc(var(--w) * .035); background: linear-gradient(145deg, rgba(20,30,50,.96), rgba(9,13,22,.96)); border: 1px solid rgba(0,242,254,.28); box-shadow: 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28); overflow: hidden; transition: opacity .45s, box-shadow .45s, border-color .45s; will-change: transform; }
+        .plate::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,242,254,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,242,254,.07) 1px, transparent 1px); background-size: calc(var(--w) / 14) calc(var(--w) / 14); pointer-events: none; }
+        .plate.p-model { border-color: rgba(157,78,221,.45); } .plate.p-pipe { border-color: rgba(0,242,254,.4); }
+        .plate.p-dash { border-color: rgba(0,242,254,.55); background: #05070d; }
+        .plate.p-dash::before { display: none; }
+        .plate.p-dash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+        .plate .tagline { position: absolute; left: calc(var(--w) * .035); top: calc(var(--w) * .03); z-index: 2; font-size: calc(var(--w) * .024); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-neon); text-shadow: 0 1px 8px #000; }
+        .plate.p-model .tagline { color: #c58cf0; }
+        .plate.p-dash .tagline { background: rgba(5,7,13,.85); padding: 3px 8px; border-radius: 6px; }
+        .plate svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .plate.dim { opacity: .38; } .plate.live { border-color: var(--accent-neon); box-shadow: 0 0 0 1px rgba(0,242,254,.5), 0 0 60px rgba(0,242,254,.45), 0 30px 60px rgba(0,0,0,.5); }
+        .plate.p-model.live { border-color: #c58cf0; box-shadow: 0 0 0 1px rgba(197,140,240,.5), 0 0 60px rgba(157,78,221,.55), 0 30px 60px rgba(0,0,0,.5); }
+
+        .beam { position: absolute; width: 0; height: var(--span, 0px); border-left: 1px dashed rgba(0,242,254,.55); transform-origin: top left; transform: rotateX(90deg); opacity: 0; pointer-events: none; filter: drop-shadow(0 0 4px rgba(0,242,254,.6)); }
+
+        .flow-dash { stroke-dasharray: 5 6; animation: flow 1.2s linear infinite; }
+        @keyframes flow { to { stroke-dashoffset: -22; } }
+
+        .steps { position: relative; z-index: 5; display: grid; gap: .8rem; align-content: center; margin-top: 70px; }
+        .step { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.2rem; border-radius: 16px; background: var(--glass); border: 1px solid var(--line-soft); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: .45; transform: translateX(14px); transition: all .45s cubic-bezier(.22,.8,.22,1); }
+        .step .n { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: .9rem; color: var(--accent-neon); background: rgba(0,242,254,.1); border: 1px solid var(--line); }
+        .step:nth-child(3) .n { color: #c58cf0; background: rgba(157,78,221,.14); border-color: rgba(157,78,221,.4); }
+        .step h4 { font-size: 1.08rem; color: var(--text-main); margin-bottom: .2rem; line-height: 1.3; }
+        .step p { font-size: .92rem; color: var(--text-muted); line-height: 1.55; }
+        .step.on { opacity: 1; transform: none; border-color: rgba(0,242,254,.5); background: var(--glass-strong); box-shadow: 0 14px 40px rgba(0,242,254,.14); }
+        .step.on h4 { color: var(--accent-neon); }
+        .scroll-hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 6; display: flex; flex-direction: column; align-items: center; gap: .35rem; color: var(--text-muted); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; transition: opacity .4s; pointer-events: none; }
+        .scroll-hint i { width: 22px; height: 36px; border: 1.5px solid var(--text-muted); border-radius: 12px; position: relative; }
+        .scroll-hint i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--accent-neon); animation: wheel 1.6s infinite; }
+        @keyframes wheel { 60% { opacity: 0; transform: translateY(12px); } }
+
+        /* ============ CTA ============ */
+        .cta { max-width: 1280px; margin: clamp(3rem, 7vw, 5rem) auto 0; text-align: center; padding: clamp(2rem, 5vw, 3.5rem) clamp(1.2rem, 4vw, 3rem); border-radius: 24px; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(0,242,254,.10), rgba(157,78,221,.14)); border: 1px solid var(--line); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
         .cta h2 { font-size: clamp(1.5rem, 4.5vw, 2.3rem); margin-bottom: .7rem; font-weight: 800; letter-spacing: -.5px; }
         .cta p { color: var(--text-muted); max-width: 640px; margin: 0 auto 1.6rem; }
-        .cta .btn { flex: 0 1 auto; padding-inline: 2rem; }
+        .cta-actions { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+        .cta .btn { flex: 0 1 auto; padding-inline: 1.8rem; }
 
-        /* ============ Lightbox (pinch / double-tap zoom, pan, swipe) ============ */
-        .lb {
-            position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column;
-            background: rgba(4,6,11,.96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-        }
+        /* Floating call to action */
+        .dock { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 150; transform: translate(-50%, 140%); display: flex; gap: .5rem; padding: .45rem; border-radius: 999px; background: rgba(9,13,22,.88); border: 1px solid var(--line); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 16px 50px rgba(0,0,0,.6), 0 0 40px rgba(0,242,254,.15); transition: transform .5s cubic-bezier(.22,.8,.22,1); }
+        .dock.show { transform: translate(-50%, 0); }
+        .dock a { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 46px; padding: 0 1.3rem; border-radius: 999px; font-weight: 700; font-size: .92rem; text-decoration: none; white-space: nowrap; }
+        .dock .go { color: #05070d; background: linear-gradient(135deg, var(--accent-neon), #6dd5fa); }
+        body.lb-open .dock { transform: translate(-50%, 140%); }
+
+        /* ============ Lightbox ============ */
+        .lb { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; background: rgba(4,6,11,.96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
         .lb.open { display: flex; animation: lbIn .25s ease; }
         @keyframes lbIn { from { opacity: 0; } }
         .lb-bar { display: flex; align-items: center; gap: 1rem; padding: .8rem 1rem; padding-top: calc(.8rem + env(safe-area-inset-top)); border-bottom: 1px solid var(--line-soft); }
         .lb-title { flex: 1; min-width: 0; font-weight: 600; color: var(--accent-neon); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .98rem; }
-        .lb-btn { min-width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(17,24,39,.8); color: var(--text-main); font-size: 1.15rem; cursor: pointer; padding: 0 .8rem; font-weight: 600; }
+        .lb-btn { min-width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(17,24,39,.8); color: var(--text-main); cursor: pointer; padding: 0 .8rem; display: grid; place-items: center; }
+        .lb-btn svg { width: 18px; height: 18px; }
         .lb-btn:hover { color: var(--accent-neon); border-color: var(--accent-neon); }
         .lb-view { position: relative; flex: 1; overflow: hidden; touch-action: none; cursor: grab; }
         .lb-view.dragging { cursor: grabbing; }
@@ -242,37 +201,41 @@
         .lb-nav.prev { left: 12px; } .lb-nav.next { right: 12px; }
         .lb-foot { padding: .8rem 1.2rem calc(.8rem + env(safe-area-inset-bottom)); text-align: center; color: var(--text-muted); font-size: .82rem; border-top: 1px solid var(--line-soft); }
 
-        /* ============ Reveal animation ============ */
         .reveal { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,.8,.22,1); }
         .reveal.in { opacity: 1; transform: none; }
 
-        /* ============ Responsive: this is the fix for the "tiny on mobile" issue ============ */
+        /* ============ Responsive ============ */
         @media (max-width: 960px) {
             .showcase { grid-template-columns: 1fr; }
-            .panel p { font-size: 1rem; }
+            .anatomy-stage { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; padding-top: 84px; padding-bottom: 14px; gap: .4rem; }
+            .anatomy-head { top: 76px; }
+            .scene { margin-top: 84px; min-height: 0; }
+            .steps { margin-top: 0; gap: .5rem; }
+            .step { display: none; transform: none; }
+            .step.on { display: flex; }
+            .scroll-hint { bottom: 8px; }
         }
         @media (max-width: 640px) {
             nav a:nth-child(2) { display: none; }
             .content { padding-left: 0; padding-right: 0; }
-            .content > .eyebrow, .content > .section-title, .content > .section-desc, .content > .hero-stats { margin-left: 16px; margin-right: 16px; }
+            .content > .eyebrow, .content > .section-title, .content > .section-desc { margin-left: 16px; margin-right: 16px; }
+            .sample-note { margin-left: 16px; margin-right: 16px; }
             .showcase, .rail, .cta { padding-left: 12px; padding-right: 12px; }
             .cta { margin-left: 12px; margin-right: 12px; padding-left: 1.2rem; padding-right: 1.2rem; }
+            .anatomy { margin-left: 0; margin-right: 0; }
             .frame { border-radius: 16px; }
             .chrome { padding: .55rem .8rem; }
-            /* taller stage on phones so the dashboard gets real screen estate, not a thin strip */
             .slide { aspect-ratio: 4 / 3; }
             .arrow { width: 42px; height: 42px; }
             .prev-arrow { left: 8px; } .next-arrow { right: 8px; }
             .expand-btn { left: 50%; right: auto; transform: translateX(-50%); bottom: 12px; }
             .rail { grid-template-columns: repeat(5, 62px); overflow-x: auto; padding-bottom: .6rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; justify-content: start; }
             .thumb { scroll-snap-align: start; }
-            .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
-            .stat { min-width: 0; padding: .6rem .4rem; }
-            .stat b { font-size: 1.15rem; }
-            .stat small { font-size: .62rem; letter-spacing: .06em; }
             .btn { flex: 1 1 100%; }
+            .cta .btn { width: 100%; }
             .ambient::before, .ambient::after { filter: blur(60px); }
-            header, .eyebrow, .stat, .panel, .cta { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+            header::before, .eyebrow, .panel, .cta { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+            .dock a.go { padding: 0 1rem; font-size: .88rem; }
         }
         @media (hover: none) { .frame { transform: none !important; } }
         @media (prefers-reduced-motion: reduce) {
@@ -284,6 +247,7 @@
 <body>
 
     <div class="ambient" aria-hidden="true"><div class="grid-overlay"></div></div>
+    <div class="scroll-progress" id="progress" aria-hidden="true"></div>
 
     <!-- Header Navigation -->
     <header>
@@ -297,37 +261,35 @@
 
     <!-- Content Area -->
     <div class="content">
-        <div class="eyebrow reveal"><i></i> Portfolio &middot; Executive Dashboards</div>
+        <div class="eyebrow reveal"><i></i> Portfolio &middot; Sample Dashboards</div>
         <h1 class="section-title reveal">Executive <span>Intelligence Hub</span></h1>
         <p class="section-desc reveal">
-            Most modern businesses don't have a data collection problem&mdash;they have an <strong>insight problem</strong>. Vital growth opportunities remain trapped inside fragmented spreadsheets and disconnected systems. We design bespoke executive dashboards that transform complex, scattered metrics into a centralized source of operational truth, empowering leadership to make proactive decisions with absolute confidence.
+            Most modern businesses don't have a data collection problem. They have an <strong>insight problem</strong>. Vital growth opportunities remain trapped inside fragmented spreadsheets and disconnected systems. We design bespoke executive dashboards that transform complex, scattered metrics into a centralized source of operational truth, empowering leadership to make proactive decisions with absolute confidence.
         </p>
-
-        <div class="hero-stats reveal">
-            <div class="stat"><b id="statCount">5</b><small>Dashboards</small></div>
-            <div class="stat"><b>1</b><small>Source of truth</small></div>
-            <div class="stat"><b>C-Suite</b><small>Ready</small></div>
+        <div class="sample-note reveal" role="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            <span>Every dashboard below is a sample build that shows what is possible. None of them are connected to live client data.</span>
         </div>
 
         <!-- Showcase -->
         <div class="showcase reveal">
             <div class="viewer">
                 <div class="frame" id="frame">
-                    <div class="chrome"><i></i><i></i><i></i><em id="chromeLabel">Dashboard 01</em></div>
+                    <div class="chrome"><i></i><i></i><i></i><em id="chromeLabel">Sample dashboard 01</em></div>
                     <div class="stage" id="stage">
                         <div class="track" id="track"></div>
                         <button class="arrow prev-arrow" id="prevBtn" aria-label="Previous dashboard">&#10094;</button>
                         <button class="arrow next-arrow" id="nextBtn" aria-label="Next dashboard">&#10095;</button>
                         <button class="expand-btn" id="expandBtn" aria-label="Open full screen">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-                            Tap to expand &amp; zoom
+                            Tap to expand and zoom
                         </button>
                     </div>
                 </div>
             </div>
 
             <aside class="panel">
-                <div class="counter"><b id="curNum">01</b> / <span id="totNum">05</span></div>
+                <div class="counter">Sample<b id="curNum">01</b> of <span id="totNum">05</span></div>
                 <div class="panel-body" id="panelBody">
                     <h3 id="infoTitle"></h3>
                     <p id="infoDesc"></p>
@@ -336,29 +298,117 @@
                 <div class="progress"><i id="progressBar"></i></div>
                 <div class="panel-actions">
                     <button class="btn btn-primary" id="panelExpand">View full size</button>
-                    <a class="btn btn-ghost" href="index.html#contact">Build mine &rarr;</a>
+                    <a class="btn btn-ghost" href="index.html#contact">I want one like this</a>
                 </div>
             </aside>
         </div>
 
         <!-- Thumbnails -->
-        <div class="rail reveal" id="rail" role="tablist" aria-label="Dashboards"></div>
+        <div class="rail reveal" id="rail" role="tablist" aria-label="Sample dashboards"></div>
+
+        <!-- Exploded layers: scroll to pull the dashboard apart -->
+        <section class="anatomy" id="anatomy" aria-label="How a dashboard is built">
+            <div class="anatomy-stage" id="anaStage">
+                <div class="anatomy-head" id="anaHead">
+                    <h2>Anatomy of an <span>executive dashboard</span></h2>
+                    <p>Every dashboard sits on top of a stack. Keep scrolling to pull it apart and see what makes the numbers trustworthy.</p>
+                </div>
+
+                <div class="scene" id="scene" aria-hidden="true">
+                    <div class="stack" id="stack">
+                        <div class="beam" data-x="-1" data-y="-1"></div>
+                        <div class="beam" data-x="1" data-y="-1"></div>
+                        <div class="beam" data-x="-1" data-y="1"></div>
+                        <div class="beam" data-x="1" data-y="1"></div>
+
+                        <!-- Layer 1: data sources -->
+                        <div class="plate p-data" data-i="0">
+                            <span class="tagline">01 &middot; Your data</span>
+                            <svg viewBox="0 0 160 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <g stroke="#00f2fe" stroke-opacity=".55" stroke-width=".7">
+                                    <rect x="12" y="24" width="68" height="60" rx="3" fill="rgba(0,242,254,.05)"/>
+                                    <path d="M12 38h68M12 52h68M12 66h68M35 24v60M58 24v60"/>
+                                </g>
+                                <g fill="#00f2fe" fill-opacity=".8"><rect x="15" y="28" width="16" height="4" rx="1"/><rect x="38" y="42" width="14" height="4" rx="1"/><rect x="61" y="56" width="15" height="4" rx="1"/><rect x="15" y="70" width="14" height="4" rx="1"/></g>
+                                <g font-family="Segoe UI, sans-serif" font-size="6.2" font-weight="700" text-anchor="middle">
+                                    <rect x="94" y="26" width="26" height="16" rx="3" fill="rgba(157,78,221,.2)" stroke="#9d4edd" stroke-width=".8"/><text x="107" y="36.5" fill="#d9b3f7">XLSX</text>
+                                    <rect x="124" y="42" width="26" height="16" rx="3" fill="rgba(0,242,254,.12)" stroke="#00f2fe" stroke-width=".8"/><text x="137" y="52.5" fill="#9ffbff">CSV</text>
+                                    <rect x="94" y="58" width="26" height="16" rx="3" fill="rgba(0,242,254,.12)" stroke="#00f2fe" stroke-width=".8"/><text x="107" y="68.5" fill="#9ffbff">SALES</text>
+                                    <rect x="124" y="74" width="26" height="14" rx="3" fill="rgba(157,78,221,.2)" stroke="#9d4edd" stroke-width=".8"/><text x="137" y="84" fill="#d9b3f7">EXPORT</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Layer 2: automated pipeline -->
+                        <div class="plate p-pipe" data-i="1">
+                            <span class="tagline">02 &middot; Automated pipeline</span>
+                            <svg viewBox="0 0 160 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <g stroke="#00f2fe" stroke-width="1.1"><path class="flow-dash" d="M34 32 C58 32 56 50 80 50"/><path class="flow-dash" d="M34 70 C58 70 56 50 80 50"/><path class="flow-dash" d="M80 50 H126"/></g>
+                                <g fill="rgba(9,13,22,.95)" stroke="#00f2fe" stroke-width="1.1"><rect x="14" y="22" width="20" height="20" rx="4"/><rect x="14" y="60" width="20" height="20" rx="4"/><rect x="64" y="36" width="32" height="28" rx="6" stroke="#9d4edd" stroke-width="1.4"/><rect x="126" y="36" width="22" height="28" rx="5"/></g>
+                                <g stroke="#00f2fe" stroke-width="1.1"><path d="M20 28h8M20 32h8M20 36h5"/><path d="M20 66h8M20 70h8M20 74h5"/><path d="M131 44h12M131 50h12M131 56h8"/></g>
+                                <g stroke="#c58cf0" stroke-width="1.4"><circle cx="80" cy="50" r="6"/><path d="M80 44v-4M80 60v-4M74 50h-4M90 50h-4"/></g>
+                            </svg>
+                        </div>
+
+                        <!-- Layer 3: data model -->
+                        <div class="plate p-model" data-i="2">
+                            <span class="tagline">03 &middot; Trusted data model</span>
+                            <svg viewBox="0 0 160 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <g stroke="#9d4edd" stroke-width="1" stroke-opacity=".9"><path d="M80 52 L34 32M80 52 L126 32M80 52 L34 76M80 52 L126 76"/></g>
+                                <g fill="rgba(9,13,22,.96)" stroke-width="1.1">
+                                    <rect x="62" y="38" width="36" height="28" rx="4" stroke="#c58cf0"/>
+                                    <rect x="14" y="22" width="40" height="20" rx="3" stroke="#00f2fe"/><rect x="106" y="22" width="40" height="20" rx="3" stroke="#00f2fe"/>
+                                    <rect x="14" y="66" width="40" height="20" rx="3" stroke="#00f2fe"/><rect x="106" y="66" width="40" height="20" rx="3" stroke="#00f2fe"/>
+                                </g>
+                                <g stroke="#c58cf0" stroke-width=".9"><path d="M66 46h28M66 52h28M66 58h20"/></g>
+                                <g stroke="#00f2fe" stroke-opacity=".8" stroke-width=".9"><path d="M19 30h30M19 36h20"/><path d="M111 30h30M111 36h20"/><path d="M19 74h30M19 80h20"/><path d="M111 74h30M111 80h20"/></g>
+                            </svg>
+                        </div>
+
+                        <!-- Layer 4: the dashboard itself -->
+                        <div class="plate p-dash" data-i="3">
+                            <span class="tagline">04 &middot; Your dashboard</span>
+                            <img id="plateImg" alt="" decoding="async">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="steps" id="steps">
+                    <div class="step" data-i="0"><span class="n">01</span><div><h4>Your data sources</h4><p>Spreadsheets, exports and the tools your business already uses. This is where every project starts.</p></div></div>
+                    <div class="step" data-i="1"><span class="n">02</span><div><h4>An automated pipeline</h4><p>The data is collected, cleaned and combined automatically, so nobody has to compile reports by hand again.</p></div></div>
+                    <div class="step" data-i="2"><span class="n">03</span><div><h4>One trusted data model</h4><p>Each metric is defined once and organized into a single model, so every number means the same thing everywhere.</p></div></div>
+                    <div class="step" data-i="3"><span class="n">04</span><div><h4>The executive dashboard</h4><p>What leadership actually sees. Clear answers to the questions that matter, without digging through spreadsheets.</p></div></div>
+                </div>
+
+                <div class="scroll-hint" id="hint"><i></i>Scroll to explode</div>
+            </div>
+        </section>
 
         <!-- CTA -->
-        <section class="cta reveal">
+        <section class="cta reveal" id="cta">
             <h2>Ready to see <span style="color:var(--accent-neon)">your</span> data like this?</h2>
-            <p>Tell us where your numbers live today. We'll show you what a single, executive-ready view of your business could look like.</p>
-            <a class="btn btn-primary" href="index.html#contact">Start a conversation</a>
+            <p>Tell us where your numbers live today. We will show you what a single, executive-ready view of your business could look like.</p>
+            <div class="cta-actions">
+                <a class="btn btn-primary" href="index.html#contact">Start a conversation
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <a class="btn btn-ghost" id="ctaMail" href="mailto:Hernandezanalytics@outlook.com?subject=Dashboard%20inquiry">Email us</a>
+                <a class="btn btn-ghost" href="tel:210-605-1214">Call 210-605-1214</a>
+            </div>
         </section>
+    </div>
+
+    <!-- Floating call to action -->
+    <div class="dock" id="dock">
+        <a class="go" href="index.html#contact">Start the conversation</a>
     </div>
 
     <!-- Lightbox -->
     <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Dashboard full-size viewer">
         <div class="lb-bar">
             <div class="lb-title" id="lbTitle"></div>
-            <button class="lb-btn" id="lbZoomOut" aria-label="Zoom out">&minus;</button>
-            <button class="lb-btn" id="lbZoomIn" aria-label="Zoom in">+</button>
-            <button class="lb-btn" id="lbClose" aria-label="Close">&#10005;</button>
+            <button class="lb-btn" id="lbZoomOut" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+            <button class="lb-btn" id="lbZoomIn" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button class="lb-btn" id="lbClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
         </div>
         <div class="lb-view" id="lbView">
             <button class="arrow lb-nav prev" id="lbPrev" aria-label="Previous">&#10094;</button>
@@ -369,184 +419,228 @@
     </div>
 
     <script>
-    /* ================== DATA (edit titles/descriptions/images here) ================== */
-    const dashboards = [
-        { img: "Dashboard 1.png", alt: "Quantivyx Enterprise Sales Command Center",
-          title: "Enterprise Sales Command Center", tags: ["Revenue", "Regional", "Forecasting"],
-          desc: "A comprehensive national revenue matrix designed for C-suite decision-makers. This dashboard consolidates multi-regional performance data, year-over-year growth trajectories, and forward-looking projections into a single pane of glass, ensuring leadership instantly identifies high-performing sectors and market trends." },
-        { img: "Dashboard 2.png", alt: "Quantivyx Business Operations KPI Matrix",
-          title: "Corporate Growth & Performance Matrix", tags: ["KPIs", "Acquisition", "Targets"],
-          desc: "An intuitive executive health tracker that evaluates monthly customer acquisitions, target achievements, and active operational scores. Built specifically to eliminate data overload, this presentation leverages contrasting, clean typography to highlight foundational performance benchmarks at a glance." },
-        { img: "Dashboard 3.png", alt: "Quantivyx Operational Performance Summary",
-          title: "Operational Health & Project Monitor", tags: ["Operations", "Pipeline", "Regional Split"],
-          desc: "A streamlined, accessible overview tailored for operations executives. This variation showcases critical pipeline tracking, regional revenue splits, and organizational health metrics using balanced layout structures that prioritize quick mental parsing and zero technical friction." },
-        { img: "Coffee_BI_report.png", alt: "Interstellar Coffee Shop Retail Report",
-          title: "Retail Revenue & Commercial Intelligence", tags: ["Retail", "Seasonality", "Menu Mix"],
-          desc: "A granular point-of-sale overview tracking localized retail activity. This interface showcases how transactional volume, payment preferences, and itemized menu performance can be mapped over a 12-month period to reveal distinct seasonal demand spikes and consumer purchasing habits." },
-        { img: "SuperStore_Dashboard_4.png", alt: "Superstore Executive Sales Report",
-          title: "Executive High-Value Market Dashboard", tags: ["Profit", "Categories", "Dark Mode"],
-          desc: "A dark-mode financial intelligence panel optimized for corporate review. It strips away technical complexity to put multi-million dollar performance metrics front and center, instantly visualizing high-performing states, top-selling product categories, and key regional profit trends over a rolling six-month cycle." }
-    ];
-
-    /* ================== Helpers ================== */
-    const $ = id => document.getElementById(id);
-    const src = f => encodeURI(f);                       // handles the space in "Dashboard 1.png"
-    const pad = n => String(n).padStart(2, '0');
-    const total = dashboards.length;
-    let current = 0;
-
-    /* ================== Build DOM ================== */
-    const track = $('track'), rail = $('rail');
-    dashboards.forEach((d, i) => {
-        const s = document.createElement('div');
-        s.className = 'slide';
-        s.innerHTML = `<img src="${src(d.img)}" alt="${d.alt}" decoding="async" ${i < 2 ? '' : 'loading="lazy"'}>`;
-        track.appendChild(s);
-
-        const t = document.createElement('button');
-        t.className = 'thumb'; t.dataset.n = pad(i + 1);
-        t.setAttribute('role', 'tab'); t.setAttribute('aria-label', d.title);
-        t.innerHTML = `<img src="${src(d.img)}" alt="" loading="lazy" decoding="async">`;
-        t.addEventListener('click', () => go(i));
-        rail.appendChild(t);
-    });
-    $('statCount').textContent = total;
-    $('totNum').textContent = pad(total);
-
-    /* ================== Showcase logic ================== */
-    function render(animate) {
-        const d = dashboards[current];
-        track.style.transform = `translateX(-${current * 100}%)`;
-        $('curNum').textContent = pad(current + 1);
-        $('chromeLabel').textContent = 'Dashboard ' + pad(current + 1);
-        $('progressBar').style.width = ((current + 1) / total * 100) + '%';
-        [...rail.children].forEach((t, i) => {
-            t.classList.toggle('active', i === current);
-            t.setAttribute('aria-selected', i === current);
-        });
-        const body = $('panelBody');
-        const fill = () => {
-            $('infoTitle').textContent = d.title;
-            $('infoDesc').textContent = d.desc;
-            $('infoTags').innerHTML = d.tags.map(t => `<span class="tag">${t}</span>`).join('');
-            body.classList.remove('swap');
-        };
-        if (animate) { body.classList.add('swap'); setTimeout(fill, 220); } else fill();
-        // warm the neighbours so swipes never show a blank frame
-        [current + 1, current - 1].forEach(n => { const k = (n + total) % total; new Image().src = src(dashboards[k].img); });
-        // keep active thumb in view on phones
-        const at = rail.children[current];
-        if (at && rail.scrollWidth > rail.clientWidth) rail.scrollTo({ left: at.offsetLeft - 12, behavior: 'smooth' });
-    }
-    function go(i, animate = true) { current = (i + total) % total; render(animate); if (lb.classList.contains('open')) lbLoad(); }
-    $('prevBtn').addEventListener('click', e => { e.stopPropagation(); go(current - 1); });
-    $('nextBtn').addEventListener('click', e => { e.stopPropagation(); go(current + 1); });
-
-    /* Swipe on the stage (horizontal only, so vertical page scroll still works) */
     (function () {
-        const st = $('stage'); let sx = 0, sy = 0, moved = false, active = false;
-        st.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; active = true; moved = false; }, { passive: true });
-        st.addEventListener('touchend', e => {
-            if (!active) return; active = false;
-            const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-            if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) { moved = true; go(current + (dx < 0 ? 1 : -1)); }
-            st._swiped = moved;
-        }, { passive: true });
-        st.addEventListener('click', () => { if (st._swiped) { st._swiped = false; return; } openLB(); });
-    })();
-    $('expandBtn').addEventListener('click', e => { e.stopPropagation(); openLB(); });
-    $('panelExpand').addEventListener('click', openLB);
+        'use strict';
+        /* ================== DATA (edit titles, descriptions and images here) ================== */
+        var dashboards = [
+            { img: "Dashboard 1.png", alt: "Quantivyx Enterprise Sales Command Center",
+              title: "Enterprise Sales Command Center", tags: ["Revenue", "Regional", "Forecasting"],
+              desc: "A comprehensive national revenue matrix designed for C-suite decision-makers. This dashboard consolidates multi-regional performance data, year-over-year growth trajectories, and forward-looking projections into a single pane of glass, ensuring leadership instantly identifies high-performing sectors and market trends." },
+            { img: "Dashboard 2.png", alt: "Quantivyx Business Operations KPI Matrix",
+              title: "Corporate Growth & Performance Matrix", tags: ["KPIs", "Acquisition", "Targets"],
+              desc: "An intuitive executive health tracker that evaluates monthly customer acquisitions, target achievements, and active operational scores. Built specifically to eliminate data overload, this presentation leverages contrasting, clean typography to highlight foundational performance benchmarks at a glance." },
+            { img: "Dashboard 3.png", alt: "Quantivyx Operational Performance Summary",
+              title: "Operational Health & Project Monitor", tags: ["Operations", "Pipeline", "Regional Split"],
+              desc: "A streamlined, accessible overview tailored for operations executives. This variation showcases critical pipeline tracking, regional revenue splits, and organizational health metrics using balanced layout structures that prioritize quick mental parsing and zero technical friction." },
+            { img: "Coffee_BI_report.png", alt: "Interstellar Coffee Shop Retail Report",
+              title: "Retail Revenue & Commercial Intelligence", tags: ["Retail", "Seasonality", "Menu Mix"],
+              desc: "A granular point-of-sale overview tracking localized retail activity. This interface showcases how transactional volume, payment preferences, and itemized menu performance can be mapped over a 12-month period to reveal distinct seasonal demand spikes and consumer purchasing habits." },
+            { img: "SuperStore_Dashboard_4.png", alt: "Superstore Executive Sales Report",
+              title: "Executive High-Value Market Dashboard", tags: ["Profit", "Categories", "Dark Mode"],
+              desc: "A dark-mode financial intelligence panel optimized for corporate review. It strips away technical complexity to put multi-million dollar performance metrics front and center, instantly visualizing high-performing states, top-selling product categories, and key regional profit trends over a rolling six-month cycle." }
+        ];
 
-    /* Desktop 3D tilt (skipped on touch devices) */
-    (function () {
-        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-        const f = $('frame');
-        f.addEventListener('mousemove', e => {
-            const r = f.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-            f.style.transform = `rotateY(${x * 5}deg) rotateX(${-y * 4}deg)`;
+        var $ = function (id) { return document.getElementById(id); };
+        var src = function (f) { return encodeURI(f); };          // handles the space in "Dashboard 1.png"
+        var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var total = dashboards.length, current = 0;
+
+        /* ================== Build DOM ================== */
+        var track = $('track'), rail = $('rail');
+        dashboards.forEach(function (d, i) {
+            var s = document.createElement('div'); s.className = 'slide';
+            s.innerHTML = '<img src="' + src(d.img) + '" alt="' + d.alt + '" decoding="async" ' + (i < 2 ? '' : 'loading="lazy"') + '>';
+            track.appendChild(s);
+            var t = document.createElement('button');
+            t.className = 'thumb'; t.dataset.n = pad(i + 1); t.setAttribute('role', 'tab'); t.setAttribute('aria-label', d.title);
+            t.innerHTML = '<img src="' + src(d.img) + '" alt="" loading="lazy" decoding="async">';
+            t.addEventListener('click', function () { go(i); });
+            rail.appendChild(t);
         });
-        f.addEventListener('mouseleave', () => f.style.transform = '');
-    })();
+        $('totNum').textContent = pad(total);
 
-    /* ================== Lightbox with zoom & pan ================== */
-    const lb = $('lb'), lbView = $('lbView'), lbImg = $('lbImg');
-    let scale = 1, tx = 0, ty = 0;
-    const pts = new Map(); let pinchD = 0, pinchS = 1, lastTap = 0, startPt = null;
-
-    function applyT() { lbImg.style.transform = `translate(-50%, -50%) translate(${tx}px, ${ty}px) scale(${scale})`; }
-    function clamp() {
-        const w = lbImg.clientWidth * scale, h = lbImg.clientHeight * scale;
-        const mx = Math.max(0, (w - lbView.clientWidth) / 2), my = Math.max(0, (h - lbView.clientHeight) / 2);
-        tx = Math.min(mx, Math.max(-mx, tx)); ty = Math.min(my, Math.max(-my, ty));
-    }
-    function zoomTo(s, cx, cy) {
-        const ns = Math.min(6, Math.max(1, s)), r = lbView.getBoundingClientRect();
-        if (cx != null) { const ox = cx - (r.left + r.width / 2), oy = cy - (r.top + r.height / 2); tx = ox - (ox - tx) * (ns / scale); ty = oy - (oy - ty) * (ns / scale); }
-        scale = ns; if (scale === 1) { tx = 0; ty = 0; } clamp(); applyT();
-    }
-    function lbLoad() {
-        const d = dashboards[current];
-        $('lbTitle').textContent = pad(current + 1) + ' · ' + d.title;
-        lbImg.alt = d.alt; lbImg.src = src(d.img);
-        scale = 1; tx = ty = 0; applyT();
-    }
-    function openLB() { lb.classList.add('open'); document.body.classList.add('lb-open'); lbLoad(); $('lbClose').focus(); }
-    function closeLB() { lb.classList.remove('open'); document.body.classList.remove('lb-open'); }
-    $('lbClose').addEventListener('click', closeLB);
-    $('lbPrev').addEventListener('click', e => { e.stopPropagation(); go(current - 1); });
-    $('lbNext').addEventListener('click', e => { e.stopPropagation(); go(current + 1); });
-    $('lbZoomIn').addEventListener('click', () => zoomTo(scale * 1.5));
-    $('lbZoomOut').addEventListener('click', () => zoomTo(scale / 1.5));
-
-    lbView.addEventListener('wheel', e => { e.preventDefault(); zoomTo(scale * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY); }, { passive: false });
-    lbView.addEventListener('pointerdown', e => {
-        if (e.target.closest('.lb-nav')) return;
-        lbView.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-        startPt = { x: e.clientX, y: e.clientY };
-        if (pts.size === 2) { const [a, b] = [...pts.values()]; pinchD = Math.hypot(a.x - b.x, a.y - b.y); pinchS = scale; }
-        lbView.classList.add('dragging');
-    });
-    lbView.addEventListener('pointermove', e => {
-        if (!pts.has(e.pointerId)) return;
-        const prev = pts.get(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-        if (pts.size === 2) {
-            const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
-            zoomTo(pinchS * d / pinchD, (a.x + b.x) / 2, (a.y + b.y) / 2);
-        } else if (scale > 1) { tx += e.clientX - prev.x; ty += e.clientY - prev.y; clamp(); applyT(); }
-    });
-    function endPtr(e) {
-        if (!pts.has(e.pointerId)) return;
-        pts.delete(e.pointerId); if (!pts.size) lbView.classList.remove('dragging');
-        if (startPt && scale === 1 && pts.size === 0) {
-            const dx = e.clientX - startPt.x, dy = e.clientY - startPt.y;
-            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) { go(current + (dx < 0 ? 1 : -1)); startPt = null; return; }
-            if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {                 // tap → double-tap detection
-                const now = Date.now();
-                if (now - lastTap < 300) zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY);
-                lastTap = now;
-            }
-        } else if (startPt && scale > 1 && pts.size === 0 && Math.abs(e.clientX - startPt.x) < 8 && Math.abs(e.clientY - startPt.y) < 8) {
-            const now = Date.now(); if (now - lastTap < 300) zoomTo(1); lastTap = now;
+        /* ================== Showcase logic ================== */
+        function render(animate) {
+            var d = dashboards[current];
+            track.style.transform = 'translateX(-' + (current * 100) + '%)';
+            $('curNum').textContent = pad(current + 1);
+            $('chromeLabel').textContent = 'Sample dashboard ' + pad(current + 1);
+            $('progressBar').style.width = ((current + 1) / total * 100) + '%';
+            Array.prototype.forEach.call(rail.children, function (t, i) { t.classList.toggle('active', i === current); t.setAttribute('aria-selected', i === current); });
+            var body = $('panelBody');
+            var fill = function () {
+                $('infoTitle').textContent = d.title; $('infoDesc').textContent = d.desc;
+                $('infoTags').innerHTML = d.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+                body.classList.remove('swap');
+            };
+            if (animate) { body.classList.add('swap'); setTimeout(fill, 220); } else fill();
+            [current + 1, current - 1].forEach(function (n) { new Image().src = src(dashboards[(n + total) % total].img); });
+            var at = rail.children[current];
+            if (at && rail.scrollWidth > rail.clientWidth) rail.scrollTo({ left: at.offsetLeft - 12, behavior: 'smooth' });
+            $('plateImg').src = src(d.img); $('plateImg').alt = d.alt;
+            $('ctaMail').href = 'mailto:Hernandezanalytics@outlook.com?subject=' + encodeURIComponent('Dashboard inquiry: ' + d.title);
         }
-    }
-    lbView.addEventListener('pointerup', endPtr); lbView.addEventListener('pointercancel', endPtr);
-    lbView.addEventListener('dblclick', e => zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY));
-    window.addEventListener('resize', () => { if (lb.classList.contains('open')) { clamp(); applyT(); } });
-    document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowRight') go(current + 1);
-        else if (e.key === 'ArrowLeft') go(current - 1);
-        else if (e.key === 'Escape' && lb.classList.contains('open')) closeLB();
-    });
+        function go(i, animate) { current = (i + total) % total; render(animate !== false); if (lb.classList.contains('open')) lbLoad(); }
+        $('prevBtn').addEventListener('click', function (e) { e.stopPropagation(); go(current - 1); });
+        $('nextBtn').addEventListener('click', function (e) { e.stopPropagation(); go(current + 1); });
 
-    /* ================== Scroll reveal ================== */
-    (function () {
-        const els = document.querySelectorAll('.reveal');
-        if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
-        const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12 });
-        els.forEach(e => io.observe(e));
+        (function () {
+            var st = $('stage'), sx = 0, sy = 0, active = false;
+            st.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; active = true; st._swiped = false; }, { passive: true });
+            st.addEventListener('touchend', function (e) {
+                if (!active) return; active = false;
+                var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) { st._swiped = true; go(current + (dx < 0 ? 1 : -1)); }
+            }, { passive: true });
+            st.addEventListener('click', function () { if (st._swiped) { st._swiped = false; return; } openLB(); });
+        })();
+        $('expandBtn').addEventListener('click', function (e) { e.stopPropagation(); openLB(); });
+        $('panelExpand').addEventListener('click', openLB);
+
+        (function () {
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+            var f = $('frame');
+            f.addEventListener('mousemove', function (e) { var r = f.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; f.style.transform = 'rotateY(' + (x * 5) + 'deg) rotateX(' + (-y * 4) + 'deg)'; });
+            f.addEventListener('mouseleave', function () { f.style.transform = ''; });
+        })();
+
+        /* ================== Exploded layers (scroll driven) ================== */
+        (function () {
+            var sec = $('anatomy'), stage = $('anaStage'), scene = $('scene'), stack = $('stack'), hint = $('hint'), head = $('anaHead');
+            var plates = Array.prototype.slice.call(stack.querySelectorAll('.plate'));
+            var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+            var beams = Array.prototype.slice.call(stack.querySelectorAll('.beam'));
+            var W = 400, GAP = 120, N = plates.length, lastKey = '';
+            var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+            var smooth = function (a, b, x) { var t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+            function measure() {
+                var r = scene.getBoundingClientRect(), small = window.innerWidth <= 960;
+                W = Math.max(210, Math.min(small ? r.width * 0.72 : 540, r.width * 0.62, r.height / 1.5));
+                GAP = W * (small ? 0.34 : 0.3);
+                scene.style.setProperty('--w', W + 'px');
+                stack.style.setProperty('--w', W + 'px');
+                plates.forEach(function (p) { p.style.setProperty('--w', W + 'px'); });
+                beams.forEach(function (b) { b.style.left = (parseFloat(b.dataset.x) * W / 2) + 'px'; b.style.top = (parseFloat(b.dataset.y) * W * 0.3125) + 'px'; });
+            }
+
+            function update() {
+                var r = sec.getBoundingClientRect(), range = sec.offsetHeight - window.innerHeight;
+                var p = reduce ? 0.8 : clamp(-r.top / Math.max(1, range), 0, 1);
+                var e = smooth(0.06, 0.5, p);
+                var span = (N - 1) * (GAP * e + 1);
+                var rx = 58 * e, rz = -38 * e;
+                stack.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) translateZ(' + (-span / 2).toFixed(1) + 'px)';
+                plates.forEach(function (pl, i) { pl.style.transform = 'translateZ(' + (i * (GAP * e + 1)).toFixed(1) + 'px)'; });
+                beams.forEach(function (b) { b.style.setProperty('--span', span.toFixed(1) + 'px'); b.style.opacity = (e * 0.9).toFixed(2); });
+
+                var a = p < 0.52 ? -1 : Math.min(N - 1, Math.floor((p - 0.52) / 0.48 * N));
+                if (reduce) a = N - 1;
+                var key = a + '|' + (e > 0.02) + '|' + (p > 0.97);
+                if (key !== lastKey) {
+                    lastKey = key;
+                    plates.forEach(function (pl, i) { pl.classList.toggle('live', a === i); pl.classList.toggle('dim', a !== -1 && a !== i); });
+                    steps.forEach(function (s, i) { s.classList.toggle('on', a === i); });
+                    hint.style.opacity = e > 0.02 ? 0 : 1;
+                }
+                head.style.opacity = a >= 0 && window.innerWidth <= 960 ? 0 : 1;
+            }
+
+            var ticking = false;
+            function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { update(); ticking = false; }); } }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', function () { measure(); update(); });
+            measure(); update();
+            window.addEventListener('load', function () { measure(); update(); });
+        })();
+
+        /* ================== Progress bar and floating call to action ================== */
+        (function () {
+            var prog = $('progress'), dock = $('dock'), cta = $('cta'), ticking = false;
+            function tick() {
+                var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+                prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, y / h) : 0) + ')';
+                var ctaTop = cta.getBoundingClientRect().top;
+                var ar = $('anatomy').getBoundingClientRect(), inAnatomy = ar.top < window.innerHeight * 0.5 && ar.bottom > window.innerHeight * 0.5;
+                dock.classList.toggle('show', y > 700 && ctaTop > window.innerHeight * 0.7 && !inAnatomy);
+                ticking = false;
+            }
+            window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(tick); } }, { passive: true });
+            tick();
+        })();
+
+        /* ================== Lightbox with zoom and pan ================== */
+        var lb = $('lb'), lbView = $('lbView'), lbImg = $('lbImg');
+        var scale = 1, tx = 0, ty = 0, pts = new Map(), pinchD = 0, pinchS = 1, lastTap = 0, startPt = null;
+
+        function applyT() { lbImg.style.transform = 'translate(-50%, -50%) translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')'; }
+        function clampT() {
+            var w = lbImg.clientWidth * scale, h = lbImg.clientHeight * scale;
+            var mx = Math.max(0, (w - lbView.clientWidth) / 2), my = Math.max(0, (h - lbView.clientHeight) / 2);
+            tx = Math.min(mx, Math.max(-mx, tx)); ty = Math.min(my, Math.max(-my, ty));
+        }
+        function zoomTo(s, cx, cy) {
+            var ns = Math.min(6, Math.max(1, s)), r = lbView.getBoundingClientRect();
+            if (cx != null) { var ox = cx - (r.left + r.width / 2), oy = cy - (r.top + r.height / 2); tx = ox - (ox - tx) * (ns / scale); ty = oy - (oy - ty) * (ns / scale); }
+            scale = ns; if (scale === 1) { tx = 0; ty = 0; } clampT(); applyT();
+        }
+        function lbLoad() {
+            var d = dashboards[current];
+            $('lbTitle').textContent = 'Sample ' + pad(current + 1) + ' · ' + d.title;
+            lbImg.alt = d.alt; lbImg.src = src(d.img); scale = 1; tx = ty = 0; applyT();
+        }
+        function openLB() { lb.classList.add('open'); document.body.classList.add('lb-open'); lbLoad(); $('lbClose').focus(); }
+        function closeLB() { lb.classList.remove('open'); document.body.classList.remove('lb-open'); }
+        $('lbClose').addEventListener('click', closeLB);
+        $('lbPrev').addEventListener('click', function (e) { e.stopPropagation(); go(current - 1); });
+        $('lbNext').addEventListener('click', function (e) { e.stopPropagation(); go(current + 1); });
+        $('lbZoomIn').addEventListener('click', function () { zoomTo(scale * 1.5); });
+        $('lbZoomOut').addEventListener('click', function () { zoomTo(scale / 1.5); });
+
+        lbView.addEventListener('wheel', function (e) { e.preventDefault(); zoomTo(scale * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY); }, { passive: false });
+        lbView.addEventListener('pointerdown', function (e) {
+            if (e.target.closest('.lb-nav')) return;
+            lbView.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); startPt = { x: e.clientX, y: e.clientY };
+            if (pts.size === 2) { var v = Array.from(pts.values()); pinchD = Math.hypot(v[0].x - v[1].x, v[0].y - v[1].y); pinchS = scale; }
+            lbView.classList.add('dragging');
+        });
+        lbView.addEventListener('pointermove', function (e) {
+            if (!pts.has(e.pointerId)) return;
+            var prev = pts.get(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+            if (pts.size === 2) { var v = Array.from(pts.values()), d = Math.hypot(v[0].x - v[1].x, v[0].y - v[1].y); zoomTo(pinchS * d / pinchD, (v[0].x + v[1].x) / 2, (v[0].y + v[1].y) / 2); }
+            else if (scale > 1) { tx += e.clientX - prev.x; ty += e.clientY - prev.y; clampT(); applyT(); }
+        });
+        function endPtr(e) {
+            if (!pts.has(e.pointerId)) return;
+            pts.delete(e.pointerId); if (!pts.size) lbView.classList.remove('dragging');
+            if (startPt && scale === 1 && pts.size === 0) {
+                var dx = e.clientX - startPt.x, dy = e.clientY - startPt.y;
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) { go(current + (dx < 0 ? 1 : -1)); startPt = null; return; }
+                if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { var now = Date.now(); if (now - lastTap < 300) zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY); lastTap = now; }
+            } else if (startPt && scale > 1 && pts.size === 0 && Math.abs(e.clientX - startPt.x) < 8 && Math.abs(e.clientY - startPt.y) < 8) {
+                var n2 = Date.now(); if (n2 - lastTap < 300) zoomTo(1); lastTap = n2;
+            }
+        }
+        lbView.addEventListener('pointerup', endPtr); lbView.addEventListener('pointercancel', endPtr);
+        lbView.addEventListener('dblclick', function (e) { zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY); });
+        window.addEventListener('resize', function () { if (lb.classList.contains('open')) { clampT(); applyT(); } });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') go(current + 1);
+            else if (e.key === 'ArrowLeft') go(current - 1);
+            else if (e.key === 'Escape' && lb.classList.contains('open')) closeLB();
+        });
+
+        /* ================== Scroll reveal ================== */
+        (function () {
+            var els = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window) || reduce) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+            var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }); }, { threshold: .12 });
+            els.forEach(function (e) { io.observe(e); });
+        })();
+
+        render(false);
     })();
-
-    render(false);
     </script>
 </body>
 </html>
