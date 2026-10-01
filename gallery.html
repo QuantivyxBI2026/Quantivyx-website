@@ -255,7 +255,7 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="index.html#services">Services</a>
-            <a href="index.html#contact">Contact</a>
+            <a href="contact.html">Contact</a>
         </nav>
     </header>
 
@@ -298,7 +298,7 @@
                 <div class="progress"><i id="progressBar"></i></div>
                 <div class="panel-actions">
                     <button class="btn btn-primary" id="panelExpand">View full size</button>
-                    <a class="btn btn-ghost" href="index.html#contact">I want one like this</a>
+                    <a class="btn btn-ghost" id="wantBtn" href="contact.html">I want one like this</a>
                 </div>
             </aside>
         </div>
@@ -389,17 +389,16 @@
             <h2>Ready to see <span style="color:var(--accent-neon)">your</span> data like this?</h2>
             <p>Tell us where your numbers live today. We will show you what a single, executive-ready view of your business could look like.</p>
             <div class="cta-actions">
-                <a class="btn btn-primary" href="index.html#contact">Start a conversation
+                <a class="btn btn-primary" href="contact.html">Start a conversation
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
                 <a class="btn btn-ghost" id="ctaMail" href="mailto:Hernandezanalytics@outlook.com?subject=Dashboard%20inquiry">Email us</a>
-                <a class="btn btn-ghost" href="tel:210-605-1214">Call 210-605-1214</a>
             </div>
         </section>
     </div>
 
     <!-- Floating call to action -->
     <div class="dock" id="dock">
-        <a class="go" href="index.html#contact">Start the conversation</a>
+        <a class="go" href="contact.html">Start the conversation</a>
     </div>
 
     <!-- Lightbox -->
@@ -479,6 +478,7 @@
             var at = rail.children[current];
             if (at && rail.scrollWidth > rail.clientWidth) rail.scrollTo({ left: at.offsetLeft - 12, behavior: 'smooth' });
             $('plateImg').src = src(d.img); $('plateImg').alt = d.alt;
+            $('wantBtn').href = 'contact.html?sample=' + encodeURIComponent(d.title);
             $('ctaMail').href = 'mailto:Hernandezanalytics@outlook.com?subject=' + encodeURIComponent('Dashboard inquiry: ' + d.title);
         }
         function go(i, animate) { current = (i + total) % total; render(animate !== false); if (lb.classList.contains('open')) lbLoad(); }
