@@ -2,213 +2,292 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#090d16">
     <title>Gallery | Quantivyx BI - Data Architecture & Executive Intelligence</title>
     <style>
-        /* Modern Cyber Professional Color Palette (CLONED FROM HOME PAGE) */
+        /* ============ Quantivyx palette (unchanged from home page) ============ */
         :root {
-            --primary-bg: #090d16;    /* Deep Cyber Obsidian Space */
-            --card-bg: #111827;       /* Sleek Dark Slate / Matte Black */
-            --accent-neon: #00f2fe;   /* High-Tech Electric Cyan */
-            --accent-purple: #9d4edd; /* Matrix / Power BI Purple Shift */
-            --text-main: #f3f4f6;     /* Crisp Silver / White */
-            --text-muted: #9ca3af;    /* Cyber Gray */
+            --primary-bg: #090d16;
+            --card-bg: #111827;
+            --accent-neon: #00f2fe;
+            --accent-purple: #9d4edd;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+
+            --glass: rgba(17, 24, 39, 0.55);
+            --glass-strong: rgba(17, 24, 39, 0.82);
+            --line: rgba(0, 242, 254, 0.16);
+            --line-soft: rgba(255, 255, 255, 0.07);
+            --gutter: clamp(16px, 5vw, 10%);
+            --radius: 20px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
         body {
             color: var(--text-main);
             line-height: 1.6;
             background-color: var(--primary-bg);
-            padding-bottom: 5rem;
             overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: calc(4rem + env(safe-area-inset-bottom));
         }
+        body.lb-open { overflow: hidden; }
 
-        /* Simplified Header (For Gallery Context) */
+        /* ============ Ambient background: aurora + grid (pure CSS, GPU-cheap) ============ */
+        .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .ambient::before, .ambient::after {
+            content: ""; position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%;
+            filter: blur(90px); opacity: .5; will-change: transform;
+        }
+        .ambient::before {
+            background: radial-gradient(circle, rgba(0,242,254,.40), transparent 65%);
+            top: -25vmax; left: -20vmax; animation: drift1 22s ease-in-out infinite alternate;
+        }
+        .ambient::after {
+            background: radial-gradient(circle, rgba(157,78,221,.42), transparent 65%);
+            bottom: -30vmax; right: -25vmax; animation: drift2 26s ease-in-out infinite alternate;
+        }
+        .grid-overlay {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,242,254,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,242,254,.05) 1px, transparent 1px);
+            background-size: 56px 56px;
+            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%);
+                    mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%);
+        }
+        @keyframes drift1 { to { transform: translate3d(18vmax, 14vmax, 0) scale(1.15); } }
+        @keyframes drift2 { to { transform: translate3d(-16vmax, -12vmax, 0) scale(1.1); } }
+
+        /* ============ Header ============ */
         header {
-            background-color: rgba(9, 13, 22, 0.95);
-            padding: 1.5rem 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
-            backdrop-filter: blur(10px);
+            background-color: rgba(9, 13, 22, 0.72);
+            padding: 1rem var(--gutter);
+            padding-top: calc(1rem + env(safe-area-inset-top));
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--line);
+            -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
         }
+        .logo { color: var(--text-main); font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; }
+        .logo span { color: var(--accent-neon); text-shadow: 0 0 10px rgba(0,242,254,.5); }
+        nav { display: flex; align-items: center; gap: clamp(.9rem, 3vw, 2rem); }
+        nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: .95rem; transition: color .3s; padding: .4rem 0; }
+        nav a:hover { color: var(--accent-neon); }
 
-        .logo {
-            color: var(--text-main);
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+        /* ============ Hero ============ */
+        .content { padding: clamp(3rem, 8vw, 5.5rem) var(--gutter) 1rem; text-align: center; }
 
-        .logo span {
-            color: var(--accent-neon);
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: .55rem;
+            padding: .4rem 1rem; border-radius: 999px;
+            border: 1px solid var(--line); background: var(--glass);
+            color: var(--accent-neon); font-size: .78rem; font-weight: 600;
+            letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1.5rem;
+            -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
         }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-neon);
-        }
-
-        /* Main Content Styling */
-        .content {
-            padding: 5rem 10% 2rem 10%;
-            text-align: center;
-        }
+        .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-neon); box-shadow: 0 0 10px var(--accent-neon); animation: pulse 2s infinite; }
+        @keyframes pulse { 50% { opacity: .35; transform: scale(.7); } }
 
         .section-title {
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-main);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffffff 40%, var(--accent-neon));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: clamp(2.1rem, 7vw, 3.8rem);
+            line-height: 1.08; margin-bottom: 1.4rem; font-weight: 800; letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 35%, var(--accent-neon));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-title span {
+            background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-desc { max-width: 820px; margin: 0 auto 2.2rem; color: var(--text-muted); font-size: clamp(1rem, 2.6vw, 1.15rem); line-height: 1.8; }
+        .section-desc strong { color: var(--accent-neon); }
+
+        .hero-stats { display: flex; justify-content: center; gap: clamp(.6rem, 2vw, 1rem); flex-wrap: wrap; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+        .stat {
+            padding: .75rem 1.3rem; border-radius: 14px; background: var(--glass);
+            border: 1px solid var(--line-soft); min-width: 120px;
+            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+        }
+        .stat b { display: block; font-size: 1.5rem; color: var(--text-main); line-height: 1.2; }
+        .stat small { color: var(--text-muted); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+
+        /* ============ Showcase layout ============ */
+        .showcase {
+            max-width: 1280px; margin: 0 auto;
+            display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+            gap: clamp(1rem, 2.5vw, 2rem); align-items: stretch; text-align: left;
         }
 
-        .section-desc {
-            max-width: 850px;
-            margin: 0 auto 4rem auto;
-            color: var(--text-muted);
-            font-size: 1.15rem;
-            line-height: 1.8;
+        /* Dashboard viewer */
+        .viewer { perspective: 1400px; }
+        .frame {
+            position: relative; border-radius: var(--radius); overflow: hidden;
+            background: var(--card-bg); border: 1px solid var(--line);
+            box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.02), 0 0 70px rgba(0,242,254,.10);
+            transform-style: preserve-3d; transition: transform .25s ease-out, box-shadow .4s;
         }
-
-        .section-desc strong {
-            color: var(--accent-neon);
+        .frame::before { /* animated neon edge */
+            content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 5;
+            background: linear-gradient(135deg, rgba(0,242,254,.7), transparent 35%, transparent 65%, rgba(157,78,221,.7));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; opacity: .8;
         }
-
-        /* --- PORTFOLIO SLIDER STYLES --- */
-        .slider-container {
-            position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid rgba(0, 242, 254, 0.15);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+        .chrome {
+            display: flex; align-items: center; gap: .45rem; padding: .7rem 1rem;
+            background: rgba(5,7,13,.85); border-bottom: 1px solid var(--line-soft);
         }
+        .chrome i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.16); }
+        .chrome i:nth-child(1) { background: #ff5f57; } .chrome i:nth-child(2) { background: #febc2e; } .chrome i:nth-child(3) { background: #28c840; }
+        .chrome em { margin-left: auto; font-style: normal; font-size: .72rem; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; }
 
-        .slider-wrapper {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-            width: 100%;
+        .stage { position: relative; overflow: hidden; background: #05070d; touch-action: pan-y; cursor: zoom-in; }
+        .track { display: flex; transition: transform .6s cubic-bezier(.22,.8,.22,1); will-change: transform; }
+        .slide { min-width: 100%; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; }
+        .slide img { width: 100%; height: 100%; object-fit: contain; display: block; -webkit-user-drag: none; user-select: none; }
+
+        .expand-btn {
+            position: absolute; right: 14px; bottom: 14px; z-index: 6;
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .6rem 1rem; border-radius: 999px; border: 1px solid rgba(0,242,254,.4);
+            background: rgba(9,13,22,.82); color: var(--text-main); font-size: .85rem; font-weight: 600;
+            cursor: pointer; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+            transition: all .25s; min-height: 44px;
         }
+        .expand-btn:hover { color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 18px rgba(0,242,254,.35); }
+        .expand-btn svg { width: 16px; height: 16px; }
 
-        .slide {
-            min-width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .slide img {
-            width: 100%;
-            height: auto;
-            max-height: 550px;
-            object-fit: contain;
-            background-color: #05070d;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .slide-info {
-            padding: 2.5rem;
-            background-color: var(--card-bg);
-            text-align: left;
-        }
-
-        .slide-info h3 {
-            font-size: 1.6rem;
-            color: var(--accent-neon);
-            margin-bottom: 0.5rem;
-        }
-
-        .slide-info p {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-
-        /* Navigation Arrows */
         .arrow {
-            position: absolute;
-            top: 40%;
-            transform: translateY(-50%);
-            background: rgba(9, 13, 22, 0.85);
-            color: var(--text-main);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            z-index: 10;
-            user-select: none;
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
+            width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
+            background: rgba(9,13,22,.8); color: var(--text-main); border: 1px solid rgba(0,242,254,.3);
+            font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
+            transition: all .2s; user-select: none; -webkit-tap-highlight-color: transparent;
         }
+        .arrow:hover { color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 16px rgba(0,242,254,.4); transform: translateY(-50%) scale(1.06); }
+        .prev-arrow { left: 14px; } .next-arrow { right: 14px; }
 
-        .arrow:hover {
-            color: var(--accent-neon);
-            border-color: var(--accent-neon);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-            transform: translateY(-50%) scale(1.05);
+        /* Info panel */
+        .panel {
+            position: relative; display: flex; flex-direction: column; padding: clamp(1.4rem, 3vw, 2.2rem);
+            border-radius: var(--radius); background: var(--glass-strong); border: 1px solid var(--line);
+            -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+            box-shadow: 0 20px 50px rgba(0,0,0,.45); overflow: hidden;
         }
-
-        .prev-arrow { left: 20px; }
-        .next-arrow { right: 20px; }
-
-        /* Slide Indicator Dots */
-        .dots-container {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-top: 2rem;
+        .panel::after { content: ""; position: absolute; width: 260px; height: 260px; right: -90px; top: -90px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(157,78,221,.28), transparent 70%); pointer-events: none; }
+        .counter { font-size: .8rem; letter-spacing: .2em; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; }
+        .counter b { color: var(--accent-neon); font-size: 1.6rem; letter-spacing: 0; margin-right: .15rem; }
+        .panel-body { transition: opacity .3s ease, transform .3s ease; }
+        .panel-body.swap { opacity: 0; transform: translateY(8px); }
+        .panel h3 { font-size: clamp(1.35rem, 3.4vw, 1.9rem); line-height: 1.2; color: var(--accent-neon); margin-bottom: .9rem; text-shadow: 0 0 22px rgba(0,242,254,.25); }
+        .panel p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.75; }
+        .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.3rem; }
+        .tag { padding: .3rem .8rem; border-radius: 999px; font-size: .74rem; font-weight: 600; letter-spacing: .06em;
+            color: var(--text-main); background: rgba(157,78,221,.16); border: 1px solid rgba(157,78,221,.4); }
+        .panel-actions { margin-top: auto; padding-top: 1.6rem; display: flex; gap: .7rem; flex-wrap: wrap; }
+        .btn {
+            flex: 1 1 140px; min-height: 48px; padding: .8rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: .95rem;
+            cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+            transition: all .25s; -webkit-tap-highlight-color: transparent;
         }
+        .btn-primary { color: #05070d; border: 0; background: linear-gradient(135deg, var(--accent-neon), #6dd5fa); box-shadow: 0 8px 26px rgba(0,242,254,.28); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(0,242,254,.45); }
+        .btn-ghost { color: var(--text-main); background: transparent; border: 1px solid var(--line); }
+        .btn-ghost:hover { border-color: var(--accent-neon); color: var(--accent-neon); }
 
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s;
+        .progress { height: 3px; border-radius: 3px; background: rgba(255,255,255,.08); margin-top: 1.4rem; overflow: hidden; }
+        .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); box-shadow: 0 0 10px var(--accent-neon); transition: width .6s cubic-bezier(.22,.8,.22,1); }
+
+        /* Thumbnail rail */
+        .rail { max-width: 1280px; margin: clamp(1rem, 2.5vw, 1.8rem) auto 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(.5rem, 1.5vw, 1rem); }
+        .thumb {
+            position: relative; border-radius: 14px; overflow: hidden; cursor: pointer; padding: 0;
+            background: #05070d; border: 1px solid var(--line-soft); aspect-ratio: 16 / 10;
+            opacity: .55; transition: all .3s; -webkit-tap-highlight-color: transparent;
         }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .thumb::after { content: attr(data-n); position: absolute; left: 8px; top: 6px; font-size: .72rem; font-weight: 700; color: var(--text-main); text-shadow: 0 1px 6px #000; }
+        .thumb:hover { opacity: .9; transform: translateY(-3px); }
+        .thumb.active { opacity: 1; border-color: var(--accent-neon); box-shadow: 0 0 22px rgba(0,242,254,.35); }
 
-        .dot.active {
-            background: var(--accent-neon);
-            box-shadow: 0 0 8px var(--accent-neon);
-            width: 28px;
-            border-radius: 6px;
+        /* CTA */
+        .cta {
+            max-width: 1280px; margin: clamp(3rem, 7vw, 5rem) auto 0; text-align: center;
+            padding: clamp(2rem, 5vw, 3.5rem) clamp(1.2rem, 4vw, 3rem); border-radius: 24px; position: relative; overflow: hidden;
+            background: linear-gradient(135deg, rgba(0,242,254,.10), rgba(157,78,221,.14)); border: 1px solid var(--line);
+            -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+        }
+        .cta h2 { font-size: clamp(1.5rem, 4.5vw, 2.3rem); margin-bottom: .7rem; font-weight: 800; letter-spacing: -.5px; }
+        .cta p { color: var(--text-muted); max-width: 640px; margin: 0 auto 1.6rem; }
+        .cta .btn { flex: 0 1 auto; padding-inline: 2rem; }
+
+        /* ============ Lightbox (pinch / double-tap zoom, pan, swipe) ============ */
+        .lb {
+            position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column;
+            background: rgba(4,6,11,.96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+        }
+        .lb.open { display: flex; animation: lbIn .25s ease; }
+        @keyframes lbIn { from { opacity: 0; } }
+        .lb-bar { display: flex; align-items: center; gap: 1rem; padding: .8rem 1rem; padding-top: calc(.8rem + env(safe-area-inset-top)); border-bottom: 1px solid var(--line-soft); }
+        .lb-title { flex: 1; min-width: 0; font-weight: 600; color: var(--accent-neon); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .98rem; }
+        .lb-btn { min-width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(17,24,39,.8); color: var(--text-main); font-size: 1.15rem; cursor: pointer; padding: 0 .8rem; font-weight: 600; }
+        .lb-btn:hover { color: var(--accent-neon); border-color: var(--accent-neon); }
+        .lb-view { position: relative; flex: 1; overflow: hidden; touch-action: none; cursor: grab; }
+        .lb-view.dragging { cursor: grabbing; }
+        .lb-view img { position: absolute; left: 50%; top: 50%; max-width: 100%; max-height: 100%; transform-origin: center; user-select: none; -webkit-user-drag: none; will-change: transform; }
+        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; }
+        .lb-nav.prev { left: 12px; } .lb-nav.next { right: 12px; }
+        .lb-foot { padding: .8rem 1.2rem calc(.8rem + env(safe-area-inset-bottom)); text-align: center; color: var(--text-muted); font-size: .82rem; border-top: 1px solid var(--line-soft); }
+
+        /* ============ Reveal animation ============ */
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,.8,.22,1); }
+        .reveal.in { opacity: 1; transform: none; }
+
+        /* ============ Responsive: this is the fix for the "tiny on mobile" issue ============ */
+        @media (max-width: 960px) {
+            .showcase { grid-template-columns: 1fr; }
+            .panel p { font-size: 1rem; }
+        }
+        @media (max-width: 640px) {
+            nav a:nth-child(2) { display: none; }
+            .content { padding-left: 0; padding-right: 0; }
+            .content > .eyebrow, .content > .section-title, .content > .section-desc, .content > .hero-stats { margin-left: 16px; margin-right: 16px; }
+            .showcase, .rail, .cta { padding-left: 12px; padding-right: 12px; }
+            .cta { margin-left: 12px; margin-right: 12px; padding-left: 1.2rem; padding-right: 1.2rem; }
+            .frame { border-radius: 16px; }
+            .chrome { padding: .55rem .8rem; }
+            /* taller stage on phones so the dashboard gets real screen estate, not a thin strip */
+            .slide { aspect-ratio: 4 / 3; }
+            .arrow { width: 42px; height: 42px; }
+            .prev-arrow { left: 8px; } .next-arrow { right: 8px; }
+            .expand-btn { left: 50%; right: auto; transform: translateX(-50%); bottom: 12px; }
+            .rail { grid-template-columns: repeat(5, 62px); overflow-x: auto; padding-bottom: .6rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; justify-content: start; }
+            .thumb { scroll-snap-align: start; }
+            .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+            .stat { min-width: 0; padding: .6rem .4rem; }
+            .stat b { font-size: 1.15rem; }
+            .stat small { font-size: .62rem; letter-spacing: .06em; }
+            .btn { flex: 1 1 100%; }
+            .ambient::before, .ambient::after { filter: blur(60px); }
+            header, .eyebrow, .stat, .panel, .cta { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+        }
+        @media (hover: none) { .frame { transform: none !important; } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+            .reveal { opacity: 1; transform: none; }
         }
     </style>
 </head>
 <body>
 
+    <div class="ambient" aria-hidden="true"><div class="grid-overlay"></div></div>
+
     <!-- Header Navigation -->
     <header>
-        <div class="logo">Quanti<span>vyx</span></div>
+        <a class="logo" href="index.html">Quanti<span>vyx</span></a>
         <nav>
             <a href="index.html">Home</a>
             <a href="index.html#services">Services</a>
@@ -218,109 +297,256 @@
 
     <!-- Content Area -->
     <div class="content">
-        <h1 class="section-title">Executive <span>Intelligence Hub</span></h1>
-        <p class="section-desc">
-            Most modern businesses don't have a data collection problem—they have an <strong>insight problem</strong>. Vital growth opportunities remain trapped inside fragmented spreadsheets and disconnected systems. We design bespoke executive dashboards that transform complex, scattered metrics into a centralized source of operational truth, empowering leadership to make proactive decisions with absolute confidence.
+        <div class="eyebrow reveal"><i></i> Portfolio &middot; Executive Dashboards</div>
+        <h1 class="section-title reveal">Executive <span>Intelligence Hub</span></h1>
+        <p class="section-desc reveal">
+            Most modern businesses don't have a data collection problem&mdash;they have an <strong>insight problem</strong>. Vital growth opportunities remain trapped inside fragmented spreadsheets and disconnected systems. We design bespoke executive dashboards that transform complex, scattered metrics into a centralized source of operational truth, empowering leadership to make proactive decisions with absolute confidence.
         </p>
 
-        <!-- Dynamic Portfolio Carousel Slider -->
-        <div class="slider-container">
-            <button class="arrow prev-arrow" onclick="moveSlide(-1)">&#10094;</button>
-            <button class="arrow next-arrow" onclick="moveSlide(1)">&#10095;</button>
+        <div class="hero-stats reveal">
+            <div class="stat"><b id="statCount">5</b><small>Dashboards</small></div>
+            <div class="stat"><b>1</b><small>Source of truth</small></div>
+            <div class="stat"><b>C-Suite</b><small>Ready</small></div>
+        </div>
 
-            <div class="slider-wrapper" id="sliderWrapper">
-                
-                <!-- Slide 1 -->
-                <div class="slide">
-                    <img src="Dashboard 1.png" alt="Quantivyx Enterprise Sales Command Center">
-                    <div class="slide-info">
-                        <h3>Enterprise Sales Command Center</h3>
-                        <p>A comprehensive national revenue matrix designed for C-suite decision-makers. This dashboard consolidates multi-regional performance data, year-over-year growth trajectories, and forward-looking projections into a single pane of glass, ensuring leadership instantly identifies high-performing sectors and market trends.</p>
+        <!-- Showcase -->
+        <div class="showcase reveal">
+            <div class="viewer">
+                <div class="frame" id="frame">
+                    <div class="chrome"><i></i><i></i><i></i><em id="chromeLabel">Dashboard 01</em></div>
+                    <div class="stage" id="stage">
+                        <div class="track" id="track"></div>
+                        <button class="arrow prev-arrow" id="prevBtn" aria-label="Previous dashboard">&#10094;</button>
+                        <button class="arrow next-arrow" id="nextBtn" aria-label="Next dashboard">&#10095;</button>
+                        <button class="expand-btn" id="expandBtn" aria-label="Open full screen">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            Tap to expand &amp; zoom
+                        </button>
                     </div>
                 </div>
-
-                <!-- Slide 2 -->
-                <div class="slide">
-                    <img src="Dashboard 2.png" alt="Quantivyx Business Operations KPI Matrix">
-                    <div class="slide-info">
-                        <h3>Corporate Growth & Performance Matrix</h3>
-                        <p>An intuitive executive health tracker that evaluates monthly customer acquisitions, target achievements, and active operational scores. Built specifically to eliminate data overload, this presentation leverages contrasting, clean typography to highlight foundational performance benchmarks at a glance.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="slide">
-                    <img src="Dashboard 3.png" alt="Quantivyx Operational Performance Summary">
-                    <div class="slide-info">
-                        <h3>Operational Health & Project Monitor</h3>
-                        <p>A streamlined, accessible overview tailored for operations executives. This variation showcases critical pipeline tracking, regional revenue splits, and organizational health metrics using balanced layout structures that prioritize quick mental parsing and zero technical friction.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 4 -->
-                <div class="slide">
-                    <img src="Coffee_BI_report.png" alt="Interstellar Coffee Shop Retail Report">
-                    <div class="slide-info">
-                        <h3>Retail Revenue & Commercial Intelligence</h3>
-                        <p>A granular point-of-sale overview tracking localized retail activity. This interface showcases how transactional volume, payment preferences, and itemized menu performance can be mapped over a 12-month period to reveal distinct seasonal demand spikes and consumer purchasing habits.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 5 -->
-                <div class="slide">
-                    <img src="SuperStore_Dashboard_4.png" alt="Superstore Executive Sales Report">
-                    <div class="slide-info">
-                        <h3>Executive High-Value Market Dashboard</h3>
-                        <p>A dark-mode financial intelligence panel optimized for corporate review. It strips away technical complexity to put multi-million dollar performance metrics front and center, instantly visualizing high-performing states, top-selling product categories, and key regional profit trends over a rolling six-month cycle.</p>
-                    </div>
-                </div>
-
             </div>
+
+            <aside class="panel">
+                <div class="counter"><b id="curNum">01</b> / <span id="totNum">05</span></div>
+                <div class="panel-body" id="panelBody">
+                    <h3 id="infoTitle"></h3>
+                    <p id="infoDesc"></p>
+                    <div class="tags" id="infoTags"></div>
+                </div>
+                <div class="progress"><i id="progressBar"></i></div>
+                <div class="panel-actions">
+                    <button class="btn btn-primary" id="panelExpand">View full size</button>
+                    <a class="btn btn-ghost" href="index.html#contact">Build mine &rarr;</a>
+                </div>
+            </aside>
         </div>
 
-        <!-- Carousel Pagination Dots -->
-        <div class="dots-container">
-            <div class="dot active" onclick="setSlide(0)"></div>
-            <div class="dot" onclick="setSlide(1)"></div>
-            <div class="dot" onclick="setSlide(2)"></div>
-            <div class="dot" onclick="setSlide(3)"></div>
-            <div class="dot" onclick="setSlide(4)"></div>
-        </div>
+        <!-- Thumbnails -->
+        <div class="rail reveal" id="rail" role="tablist" aria-label="Dashboards"></div>
+
+        <!-- CTA -->
+        <section class="cta reveal">
+            <h2>Ready to see <span style="color:var(--accent-neon)">your</span> data like this?</h2>
+            <p>Tell us where your numbers live today. We'll show you what a single, executive-ready view of your business could look like.</p>
+            <a class="btn btn-primary" href="index.html#contact">Start a conversation</a>
+        </section>
     </div>
 
-    <!-- Interactive Slider Navigation Engine -->
+    <!-- Lightbox -->
+    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Dashboard full-size viewer">
+        <div class="lb-bar">
+            <div class="lb-title" id="lbTitle"></div>
+            <button class="lb-btn" id="lbZoomOut" aria-label="Zoom out">&minus;</button>
+            <button class="lb-btn" id="lbZoomIn" aria-label="Zoom in">+</button>
+            <button class="lb-btn" id="lbClose" aria-label="Close">&#10005;</button>
+        </div>
+        <div class="lb-view" id="lbView">
+            <button class="arrow lb-nav prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+            <button class="arrow lb-nav next" id="lbNext" aria-label="Next">&#10095;</button>
+            <img id="lbImg" alt="" draggable="false">
+        </div>
+        <div class="lb-foot">Pinch or double-tap to zoom &middot; drag to pan &middot; swipe to switch &middot; rotate your phone for the widest view</div>
+    </div>
+
     <script>
-        let currentIndex = 0;
-        const wrapper = document.getElementById('sliderWrapper');
-        const dots = document.querySelectorAll('.dot');
-        const totalSlides = document.querySelectorAll('.slide').length;
+    /* ================== DATA (edit titles/descriptions/images here) ================== */
+    const dashboards = [
+        { img: "Dashboard 1.png", alt: "Quantivyx Enterprise Sales Command Center",
+          title: "Enterprise Sales Command Center", tags: ["Revenue", "Regional", "Forecasting"],
+          desc: "A comprehensive national revenue matrix designed for C-suite decision-makers. This dashboard consolidates multi-regional performance data, year-over-year growth trajectories, and forward-looking projections into a single pane of glass, ensuring leadership instantly identifies high-performing sectors and market trends." },
+        { img: "Dashboard 2.png", alt: "Quantivyx Business Operations KPI Matrix",
+          title: "Corporate Growth & Performance Matrix", tags: ["KPIs", "Acquisition", "Targets"],
+          desc: "An intuitive executive health tracker that evaluates monthly customer acquisitions, target achievements, and active operational scores. Built specifically to eliminate data overload, this presentation leverages contrasting, clean typography to highlight foundational performance benchmarks at a glance." },
+        { img: "Dashboard 3.png", alt: "Quantivyx Operational Performance Summary",
+          title: "Operational Health & Project Monitor", tags: ["Operations", "Pipeline", "Regional Split"],
+          desc: "A streamlined, accessible overview tailored for operations executives. This variation showcases critical pipeline tracking, regional revenue splits, and organizational health metrics using balanced layout structures that prioritize quick mental parsing and zero technical friction." },
+        { img: "Coffee_BI_report.png", alt: "Interstellar Coffee Shop Retail Report",
+          title: "Retail Revenue & Commercial Intelligence", tags: ["Retail", "Seasonality", "Menu Mix"],
+          desc: "A granular point-of-sale overview tracking localized retail activity. This interface showcases how transactional volume, payment preferences, and itemized menu performance can be mapped over a 12-month period to reveal distinct seasonal demand spikes and consumer purchasing habits." },
+        { img: "SuperStore_Dashboard_4.png", alt: "Superstore Executive Sales Report",
+          title: "Executive High-Value Market Dashboard", tags: ["Profit", "Categories", "Dark Mode"],
+          desc: "A dark-mode financial intelligence panel optimized for corporate review. It strips away technical complexity to put multi-million dollar performance metrics front and center, instantly visualizing high-performing states, top-selling product categories, and key regional profit trends over a rolling six-month cycle." }
+    ];
 
-        function updateSlider() {
-            wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-            dots.forEach((dot, idx) => {
-                if(idx === currentIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
+    /* ================== Helpers ================== */
+    const $ = id => document.getElementById(id);
+    const src = f => encodeURI(f);                       // handles the space in "Dashboard 1.png"
+    const pad = n => String(n).padStart(2, '0');
+    const total = dashboards.length;
+    let current = 0;
 
-        function moveSlide(direction) {
-            currentIndex += direction;
-            if (currentIndex >= totalSlides) {
-                currentIndex = 0;
-            } else if (currentIndex < 0) {
-                currentIndex = totalSlides - 1;
+    /* ================== Build DOM ================== */
+    const track = $('track'), rail = $('rail');
+    dashboards.forEach((d, i) => {
+        const s = document.createElement('div');
+        s.className = 'slide';
+        s.innerHTML = `<img src="${src(d.img)}" alt="${d.alt}" decoding="async" ${i < 2 ? '' : 'loading="lazy"'}>`;
+        track.appendChild(s);
+
+        const t = document.createElement('button');
+        t.className = 'thumb'; t.dataset.n = pad(i + 1);
+        t.setAttribute('role', 'tab'); t.setAttribute('aria-label', d.title);
+        t.innerHTML = `<img src="${src(d.img)}" alt="" loading="lazy" decoding="async">`;
+        t.addEventListener('click', () => go(i));
+        rail.appendChild(t);
+    });
+    $('statCount').textContent = total;
+    $('totNum').textContent = pad(total);
+
+    /* ================== Showcase logic ================== */
+    function render(animate) {
+        const d = dashboards[current];
+        track.style.transform = `translateX(-${current * 100}%)`;
+        $('curNum').textContent = pad(current + 1);
+        $('chromeLabel').textContent = 'Dashboard ' + pad(current + 1);
+        $('progressBar').style.width = ((current + 1) / total * 100) + '%';
+        [...rail.children].forEach((t, i) => {
+            t.classList.toggle('active', i === current);
+            t.setAttribute('aria-selected', i === current);
+        });
+        const body = $('panelBody');
+        const fill = () => {
+            $('infoTitle').textContent = d.title;
+            $('infoDesc').textContent = d.desc;
+            $('infoTags').innerHTML = d.tags.map(t => `<span class="tag">${t}</span>`).join('');
+            body.classList.remove('swap');
+        };
+        if (animate) { body.classList.add('swap'); setTimeout(fill, 220); } else fill();
+        // warm the neighbours so swipes never show a blank frame
+        [current + 1, current - 1].forEach(n => { const k = (n + total) % total; new Image().src = src(dashboards[k].img); });
+        // keep active thumb in view on phones
+        const at = rail.children[current];
+        if (at && rail.scrollWidth > rail.clientWidth) rail.scrollTo({ left: at.offsetLeft - 12, behavior: 'smooth' });
+    }
+    function go(i, animate = true) { current = (i + total) % total; render(animate); if (lb.classList.contains('open')) lbLoad(); }
+    $('prevBtn').addEventListener('click', e => { e.stopPropagation(); go(current - 1); });
+    $('nextBtn').addEventListener('click', e => { e.stopPropagation(); go(current + 1); });
+
+    /* Swipe on the stage (horizontal only, so vertical page scroll still works) */
+    (function () {
+        const st = $('stage'); let sx = 0, sy = 0, moved = false, active = false;
+        st.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; active = true; moved = false; }, { passive: true });
+        st.addEventListener('touchend', e => {
+            if (!active) return; active = false;
+            const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+            if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) { moved = true; go(current + (dx < 0 ? 1 : -1)); }
+            st._swiped = moved;
+        }, { passive: true });
+        st.addEventListener('click', () => { if (st._swiped) { st._swiped = false; return; } openLB(); });
+    })();
+    $('expandBtn').addEventListener('click', e => { e.stopPropagation(); openLB(); });
+    $('panelExpand').addEventListener('click', openLB);
+
+    /* Desktop 3D tilt (skipped on touch devices) */
+    (function () {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        const f = $('frame');
+        f.addEventListener('mousemove', e => {
+            const r = f.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+            f.style.transform = `rotateY(${x * 5}deg) rotateX(${-y * 4}deg)`;
+        });
+        f.addEventListener('mouseleave', () => f.style.transform = '');
+    })();
+
+    /* ================== Lightbox with zoom & pan ================== */
+    const lb = $('lb'), lbView = $('lbView'), lbImg = $('lbImg');
+    let scale = 1, tx = 0, ty = 0;
+    const pts = new Map(); let pinchD = 0, pinchS = 1, lastTap = 0, startPt = null;
+
+    function applyT() { lbImg.style.transform = `translate(-50%, -50%) translate(${tx}px, ${ty}px) scale(${scale})`; }
+    function clamp() {
+        const w = lbImg.clientWidth * scale, h = lbImg.clientHeight * scale;
+        const mx = Math.max(0, (w - lbView.clientWidth) / 2), my = Math.max(0, (h - lbView.clientHeight) / 2);
+        tx = Math.min(mx, Math.max(-mx, tx)); ty = Math.min(my, Math.max(-my, ty));
+    }
+    function zoomTo(s, cx, cy) {
+        const ns = Math.min(6, Math.max(1, s)), r = lbView.getBoundingClientRect();
+        if (cx != null) { const ox = cx - (r.left + r.width / 2), oy = cy - (r.top + r.height / 2); tx = ox - (ox - tx) * (ns / scale); ty = oy - (oy - ty) * (ns / scale); }
+        scale = ns; if (scale === 1) { tx = 0; ty = 0; } clamp(); applyT();
+    }
+    function lbLoad() {
+        const d = dashboards[current];
+        $('lbTitle').textContent = pad(current + 1) + ' · ' + d.title;
+        lbImg.alt = d.alt; lbImg.src = src(d.img);
+        scale = 1; tx = ty = 0; applyT();
+    }
+    function openLB() { lb.classList.add('open'); document.body.classList.add('lb-open'); lbLoad(); $('lbClose').focus(); }
+    function closeLB() { lb.classList.remove('open'); document.body.classList.remove('lb-open'); }
+    $('lbClose').addEventListener('click', closeLB);
+    $('lbPrev').addEventListener('click', e => { e.stopPropagation(); go(current - 1); });
+    $('lbNext').addEventListener('click', e => { e.stopPropagation(); go(current + 1); });
+    $('lbZoomIn').addEventListener('click', () => zoomTo(scale * 1.5));
+    $('lbZoomOut').addEventListener('click', () => zoomTo(scale / 1.5));
+
+    lbView.addEventListener('wheel', e => { e.preventDefault(); zoomTo(scale * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY); }, { passive: false });
+    lbView.addEventListener('pointerdown', e => {
+        if (e.target.closest('.lb-nav')) return;
+        lbView.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        startPt = { x: e.clientX, y: e.clientY };
+        if (pts.size === 2) { const [a, b] = [...pts.values()]; pinchD = Math.hypot(a.x - b.x, a.y - b.y); pinchS = scale; }
+        lbView.classList.add('dragging');
+    });
+    lbView.addEventListener('pointermove', e => {
+        if (!pts.has(e.pointerId)) return;
+        const prev = pts.get(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pts.size === 2) {
+            const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
+            zoomTo(pinchS * d / pinchD, (a.x + b.x) / 2, (a.y + b.y) / 2);
+        } else if (scale > 1) { tx += e.clientX - prev.x; ty += e.clientY - prev.y; clamp(); applyT(); }
+    });
+    function endPtr(e) {
+        if (!pts.has(e.pointerId)) return;
+        pts.delete(e.pointerId); if (!pts.size) lbView.classList.remove('dragging');
+        if (startPt && scale === 1 && pts.size === 0) {
+            const dx = e.clientX - startPt.x, dy = e.clientY - startPt.y;
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) { go(current + (dx < 0 ? 1 : -1)); startPt = null; return; }
+            if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {                 // tap → double-tap detection
+                const now = Date.now();
+                if (now - lastTap < 300) zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY);
+                lastTap = now;
             }
-            updateSlider();
+        } else if (startPt && scale > 1 && pts.size === 0 && Math.abs(e.clientX - startPt.x) < 8 && Math.abs(e.clientY - startPt.y) < 8) {
+            const now = Date.now(); if (now - lastTap < 300) zoomTo(1); lastTap = now;
         }
+    }
+    lbView.addEventListener('pointerup', endPtr); lbView.addEventListener('pointercancel', endPtr);
+    lbView.addEventListener('dblclick', e => zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY));
+    window.addEventListener('resize', () => { if (lb.classList.contains('open')) { clamp(); applyT(); } });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') go(current + 1);
+        else if (e.key === 'ArrowLeft') go(current - 1);
+        else if (e.key === 'Escape' && lb.classList.contains('open')) closeLB();
+    });
 
-        function setSlide(index) {
-            currentIndex = index;
-            updateSlider();
-        }
+    /* ================== Scroll reveal ================== */
+    (function () {
+        const els = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
+        const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12 });
+        els.forEach(e => io.observe(e));
+    })();
+
+    render(false);
     </script>
-    
 </body>
 </html>
