@@ -152,6 +152,30 @@
         }
         .hero h1 .shine { display: block; background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple), var(--accent-neon)); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shine 6s linear infinite; }
         @keyframes shine { to { background-position: 200% 0; } }
+
+        /* ===== Cyber headline: letters drop in and decode ===== */
+        .hero h1.cyber { background: none; -webkit-text-fill-color: initial; filter: none; position: relative; }
+        .hero h1.cyber .cxl { display: block; white-space: normal; }
+        .hero h1.cyber .cxw { display: inline-block; white-space: nowrap; margin-right: .26em; }
+        .hero h1.cyber .cxc { display: inline-block; opacity: 0; transform: translateY(-1.6em) scaleY(1.6); filter: blur(8px); will-change: transform, opacity; }
+        .hero h1.cyber .cxc.in { animation: chDrop .62s cubic-bezier(.2,.9,.25,1.15) forwards; }
+        .hero h1.cyber .cxc.scr { color: var(--accent-neon) !important; text-shadow: 0 0 14px var(--accent-neon); }
+        @keyframes chDrop { 0% { opacity: 0; transform: translateY(-1.6em) scaleY(1.6); filter: blur(8px); } 55% { opacity: 1; filter: blur(0); } 78% { transform: translateY(.07em) scaleY(.94); } 100% { opacity: 1; transform: none; filter: blur(0); } }
+        .hero h1.cyber.done .cxl2 .cxc { text-shadow: 0 0 22px rgba(0,242,254,.28); }
+        .hero h1.cyber .cxscan { position: absolute; left: -2%; right: -2%; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-neon), transparent); box-shadow: 0 0 18px var(--accent-neon); opacity: 0; pointer-events: none; }
+        .hero h1.cyber.scanning .cxscan { animation: scanDown 1.1s ease-in-out forwards; }
+        @keyframes scanDown { 0% { top: 0; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+        .hero h1.cyber.glitch .cxl2 { animation: glitch .32s steps(2) 1; }
+        @keyframes glitch { 0% { transform: translate(0); text-shadow: 2px 0 var(--accent-purple), -2px 0 var(--accent-neon); } 25% { transform: translate(-3px, 1px); } 50% { transform: translate(3px, -1px); text-shadow: -3px 0 var(--accent-purple), 3px 0 var(--accent-neon); } 75% { transform: translate(-1px, 0); } 100% { transform: none; text-shadow: none; } }
+        .boot { font-family: 'Consolas', 'SFMono-Regular', Menlo, monospace; font-size: .8rem; color: var(--accent-neon); letter-spacing: .08em; margin-bottom: 1.1rem; min-height: 1.3em; opacity: .9; }
+        .boot::after { content: "_"; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .hero-inner::before, .hero-inner::after { content: ""; position: absolute; width: 34px; height: 34px; border: 2px solid rgba(0,242,254,.55); pointer-events: none; opacity: 0; animation: hudIn .8s .3s forwards; }
+        .hero-inner::before { top: -18px; left: -14px; border-right: 0; border-bottom: 0; }
+        .hero-inner::after { bottom: -18px; right: -14px; border-left: 0; border-top: 0; border-color: rgba(157,78,221,.65); }
+        @keyframes hudIn { to { opacity: 1; } }
+        @media (max-width: 900px) { .boot { text-align: center; } .hero-inner::before, .hero-inner::after { display: none; } }
+        @media (prefers-reduced-motion: reduce) { .hero h1.cyber .cxc { opacity: 1; transform: none; filter: none; animation: none !important; } .hero h1.cyber .cxscan { display: none; } }
         .hero p.lead { font-size: clamp(1.02rem, 2.4vw, 1.25rem); max-width: 640px; margin-bottom: 2.2rem; color: var(--text-main); text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
         .cta-row { display: flex; gap: .9rem; flex-wrap: wrap; }
         .trust { margin-top: 2.2rem; display: flex; gap: 1.4rem; flex-wrap: wrap; color: var(--text-muted); font-size: .85rem; }
@@ -199,7 +223,7 @@
         .float-chip svg { width: 16px; height: 16px; color: var(--accent-neon); }
         .float-chip.c1 { left: 6%; top: -22px; } .float-chip.c2 { right: 5%; bottom: -26px; animation-delay: -3s; border-color: var(--glass-border-purple); } .float-chip.c2 svg { color: var(--accent-purple); }
         @keyframes floaty { 50% { transform: translateY(-10px); } }
-        .mock-note { text-align: center; margin-top: 3rem; font-size: .7rem; color: var(--text-muted); letter-spacing: .06em; }
+        .mock-note { text-align: left; margin-top: 3.4rem; padding-left: .4rem; font-size: .7rem; color: var(--text-muted); letter-spacing: .06em; }
 
         /* ================= Shared section styles ================= */
         .section-title { font-size: clamp(1.7rem, 4.6vw, 2.6rem); margin-bottom: 3.2rem; color: var(--text-main); letter-spacing: 0.5px; text-shadow: 0 2px 16px rgba(0,0,0,0.5); text-align: center; line-height: 1.15; }
@@ -389,8 +413,9 @@
         <canvas id="net" aria-hidden="true"></canvas>
         <div class="hero-inner">
             <div class="hero-copy">
+                <div class="boot" id="boot" aria-hidden="true"></div>
                 <div class="eyebrow reveal"><i></i> Business insights, automated</div>
-                <h1 class="reveal" style="--d:80ms">Business Insights. <span class="shine">Fully Automated.</span></h1>
+                <h1 class="reveal" id="cyberH1" style="--d:80ms">Business Insights. <span class="shine">Fully Automated.</span></h1>
                 <p class="lead reveal" style="--d:160ms">Quantivyx turns the information already sitting in your business, like spreadsheets, sales reports and folders full of exports, into clear numbers that update on their own. Less time putting reports together. More time running your company.</p>
                 <div class="cta-row reveal" style="--d:240ms">
                     <a href="#contact" class="btn">Start the Conversation
@@ -702,5 +727,68 @@
     })();
     </script>
     <script src="lead-form.js" defer></script>
+
+<script>
+/* Cyber headline: letters drop in, scramble, then lock to the real text */
+(function () {
+    var h = document.getElementById('cyberH1'), boot = document.getElementById('boot');
+    if (!h) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var lines = [{ t: 'Business Insights.', cls: 'cxl1' }, { t: 'Fully Automated.', cls: 'cxl2' }];
+    var label = lines.map(function (l) { return l.t; }).join(' ');
+    var GL = '01<>/\\{}[]#$%&*+=?ABCDEFXYZ';
+    function lerp(a, b, t) { return Math.round(a + (b - a) * t); }
+    function grad(t) { return 'rgb(' + lerp(0, 157, t) + ',' + lerp(242, 78, t) + ',' + lerp(254, 221, t) + ')'; }
+    h.setAttribute('aria-label', label);
+    h.classList.add('cyber');
+    h.innerHTML = '';
+    var chars = [], total = lines.reduce(function (n, l) { return n + l.t.length; }, 0), idx = 0;
+    lines.forEach(function (l) {
+        var ln = document.createElement('span'); ln.className = 'cxl ' + l.cls; ln.setAttribute('aria-hidden', 'true');
+        l.t.split(' ').forEach(function (word, wi, arr) {
+            var w = document.createElement('span'); w.className = 'cxw';
+            word.split('').forEach(function (c, ci) {
+                var s = document.createElement('span'); s.className = 'cxc'; s.textContent = c; s.dataset.c = c;
+                s.style.color = l.cls === 'cxl2' ? grad(idx2(l, wi, arr, ci)) : '#f3f4f6';
+                function idx2() { var before = arr.slice(0, wi).join(' ').length + (wi ? 1 : 0); return (before + ci) / Math.max(1, l.t.length - 1); }
+                w.appendChild(s); chars.push(s);
+            });
+            ln.appendChild(w);
+        });
+        h.appendChild(ln);
+    });
+    var scan = document.createElement('span'); scan.className = 'cxscan'; h.appendChild(scan);
+
+    if (reduce) { chars.forEach(function (c) { c.style.opacity = 1; c.style.transform = 'none'; c.style.filter = 'none'; }); if (boot) boot.textContent = '> QUANTIVYX_BI online'; return; }
+
+    function decode(el, delay) {
+        var real = el.dataset.c; if (real === '.' ) { el.textContent = real; return; }
+        var n = 0, max = 7 + Math.floor(Math.random() * 5);
+        el.classList.add('scr');
+        var iv = setInterval(function () {
+            n++;
+            if (n >= max) { clearInterval(iv); el.textContent = real; el.classList.remove('scr'); return; }
+            el.textContent = GL.charAt(Math.floor(Math.random() * GL.length));
+        }, 45);
+    }
+    function start() {
+        chars.forEach(function (el, i) {
+            var d = i * 38 + (i > lines[0].t.length - 1 ? 260 : 0);
+            el.style.animationDelay = d + 'ms';
+            el.classList.add('in');
+            if (el.dataset.c !== ' ') { el.textContent = GL.charAt(Math.floor(Math.random() * GL.length)); setTimeout(function () { decode(el); }, d + 140); }
+        });
+        var end = total * 38 + 260 + 900;
+        setTimeout(function () { h.classList.add('scanning'); }, end - 500);
+        setTimeout(function () { h.classList.add('glitch'); }, end + 200);
+        setTimeout(function () { h.classList.add('done'); }, end + 600);
+    }
+    /* boot line typing */
+    var msg = '> INITIALIZING QUANTIVYX_BI ... SOURCES CONNECTED ... REPORTS AUTOMATED', bi = 0;
+    function type() { if (!boot) return; boot.textContent = msg.slice(0, ++bi); if (bi < msg.length) setTimeout(type, 22); }
+    type();
+    setTimeout(start, 350);
+})();
+</script>
 </body>
 </html>
