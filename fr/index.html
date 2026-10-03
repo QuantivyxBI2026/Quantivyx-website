@@ -2,144 +2,662 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantivyx BI - Architecture de Données & Intelligence Exécutive</title>
-    
-    <!-- SEO Language Linking -->
-    <link rel="alternate" hreflang="en" href="https://quantivyxbi.com/" />
-    <link rel="alternate" hreflang="fr" href="https://quantivyxbi.com/fr/" />
-    <link rel="alternate" hreflang="x-default" href="https://quantivyxbi.com/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#090d16">
+    <meta name="description" content="Exemples de tableaux de bord exécutifs et coulisses de leur conception chez Quantivyx : données automatisées, un modèle fiable, une vue claire pour la direction.">
+    <link rel="canonical" href="https://quantivyxbi.com/fr/gallery">
+    <link rel="alternate" hreflang="en" href="https://quantivyxbi.com/gallery">
+    <link rel="alternate" hreflang="fr" href="https://quantivyxbi.com/fr/gallery">
+    <link rel="alternate" hreflang="es" href="https://quantivyxbi.com/es/gallery">
+    <link rel="alternate" hreflang="x-default" href="https://quantivyxbi.com/gallery">
+    <title>Galerie | Quantivyx BI - Architecture de données et intelligence décisionnelle</title>
     <style>
-        /* Modern Cyber Professional Color Palette */
+        /* ============ Quantivyx palette (same as the home page) ============ */
         :root {
-            --primary-bg: #090d16;    /* Deep Cyber Obsidian Space */
-            --card-bg: #111827;       /* Sleek Dark Slate / Matte Black */
-            --accent-neon: #00f2fe;   /* High-Tech Electric Cyan */
-            --accent-purple: #9d4edd; /* Matrix / Power BI Purple Shift */
-            --text-main: #f3f4f6;     /* Crisp Silver / White */
-            --text-muted: #9ca3af;    /* Cyber Gray */
+            --primary-bg: #090d16;
+            --card-bg: #111827;
+            --accent-neon: #00f2fe;
+            --accent-purple: #9d4edd;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+
+            --glass: rgba(17, 24, 39, 0.55);
+            --glass-strong: rgba(17, 24, 39, 0.82);
+            --line: rgba(0, 242, 254, 0.16);
+            --line-soft: rgba(255, 255, 255, 0.07);
+            --gutter: clamp(16px, 5vw, 10%);
+            --radius: 20px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background-color: var(--primary-bg); }
 
         body {
             color: var(--text-main);
             line-height: 1.6;
             background-color: var(--primary-bg);
             overflow-x: hidden;
+            overflow-x: clip; /* clip keeps position: sticky working */
+            min-height: 100vh;
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+        }
+        body.lb-open { overflow: hidden; }
+
+        /* ============ Ambient background: aurora and grid ============ */
+        .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .ambient::before, .ambient::after { content: ""; position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%; filter: blur(90px); opacity: .5; will-change: transform; }
+        .ambient::before { background: radial-gradient(circle, rgba(0,242,254,.40), transparent 65%); top: -25vmax; left: -20vmax; animation: drift1 22s ease-in-out infinite alternate; }
+        .ambient::after { background: radial-gradient(circle, rgba(157,78,221,.42), transparent 65%); bottom: -30vmax; right: -25vmax; animation: drift2 26s ease-in-out infinite alternate; }
+        .grid-overlay { position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(0,242,254,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,242,254,.05) 1px, transparent 1px);
+            background-size: 56px 56px;
+            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 72%); }
+        @keyframes drift1 { to { transform: translate3d(18vmax, 14vmax, 0) scale(1.15); } }
+        @keyframes drift2 { to { transform: translate3d(-16vmax, -12vmax, 0) scale(1.1); } }
+
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 300; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); box-shadow: 0 0 12px var(--accent-neon); }
+
+        /* ============ Header ============ */
+        header { padding: 1rem var(--gutter); padding-top: calc(1rem + env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--line); }
+        header::before { content: ""; position: absolute; inset: 0; z-index: 0; background-color: rgba(9, 13, 22, 0.72); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+        header > * { position: relative; z-index: 1; }
+        .logo { color: var(--text-main); font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; }
+        .logo span { color: var(--accent-neon); text-shadow: 0 0 10px rgba(0,242,254,.5); }
+        nav { display: flex; align-items: center; gap: clamp(.9rem, 3vw, 2rem); }
+        nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: .95rem; transition: color .3s; padding: .4rem 0; }
+        nav a:hover { color: var(--accent-neon); }
+
+        /* ============ Hero ============ */
+        .content { padding: clamp(3rem, 8vw, 5.5rem) var(--gutter) 1rem; text-align: center; }
+
+        .eyebrow { display: inline-flex; align-items: center; gap: .55rem; padding: .4rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--glass); color: var(--accent-neon); font-size: .78rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1.5rem; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+        .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-neon); box-shadow: 0 0 10px var(--accent-neon); animation: pulse 2s infinite; }
+        @keyframes pulse { 50% { opacity: .35; transform: scale(.7); } }
+
+        .section-title { font-size: clamp(2.1rem, 7vw, 3.8rem); line-height: 1.08; margin-bottom: 1.4rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, #ffffff 35%, var(--accent-neon)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-title span { background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-desc { max-width: 820px; margin: 0 auto 1.6rem; color: var(--text-muted); font-size: clamp(1rem, 2.6vw, 1.15rem); line-height: 1.8; }
+        .section-desc strong { color: var(--accent-neon); }
+
+        .sample-note { display: inline-flex; align-items: flex-start; gap: .65rem; max-width: 720px; text-align: left; margin: 0 auto clamp(2.2rem, 5vw, 3.4rem); padding: .8rem 1.1rem; border-radius: 14px; background: rgba(157,78,221,.12); border: 1px solid rgba(157,78,221,.35); color: var(--text-main); font-size: .92rem; line-height: 1.5; }
+        .sample-note svg { width: 20px; height: 20px; flex: none; margin-top: 1px; color: var(--accent-purple); }
+
+        /* ============ Showcase layout ============ */
+        .showcase { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: clamp(1rem, 2.5vw, 2rem); align-items: stretch; text-align: left; }
+
+        .viewer { perspective: 1400px; }
+        .frame { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--card-bg); border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.02), 0 0 70px rgba(0,242,254,.10); transform-style: preserve-3d; transition: transform .25s ease-out, box-shadow .4s; }
+        .frame::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 5; background: linear-gradient(135deg, rgba(0,242,254,.7), transparent 35%, transparent 65%, rgba(157,78,221,.7)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .8; }
+        .chrome { display: flex; align-items: center; gap: .45rem; padding: .7rem 1rem; background: rgba(5,7,13,.85); border-bottom: 1px solid var(--line-soft); }
+        .chrome i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.16); }
+        .chrome i:nth-child(1) { background: #ff5f57; } .chrome i:nth-child(2) { background: #febc2e; } .chrome i:nth-child(3) { background: #28c840; }
+        .chrome em { margin-left: auto; font-style: normal; font-size: .72rem; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; }
+
+        .stage { position: relative; overflow: hidden; background: #05070d; touch-action: pan-y; cursor: zoom-in; }
+        .track { display: flex; transition: transform .6s cubic-bezier(.22,.8,.22,1); will-change: transform; }
+        .slide { min-width: 100%; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; }
+        .slide img { width: 100%; height: 100%; object-fit: contain; display: block; -webkit-user-drag: none; user-select: none; }
+
+        .expand-btn { position: absolute; right: 14px; bottom: 14px; z-index: 6; display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1rem; border-radius: 999px; border: 1px solid rgba(0,242,254,.4); background: rgba(9,13,22,.82); color: var(--text-main); font-size: .85rem; font-weight: 600; cursor: pointer; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: all .25s; min-height: 44px; }
+        .expand-btn:hover { color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 18px rgba(0,242,254,.35); }
+        .expand-btn svg { width: 16px; height: 16px; }
+
+        .arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; background: rgba(9,13,22,.8); color: var(--text-main); border: 1px solid rgba(0,242,254,.3); font-size: 1.3rem; display: flex; align-items: center; justify-content: center; transition: all .2s; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .arrow:hover { color: var(--accent-neon); border-color: var(--accent-neon); box-shadow: 0 0 16px rgba(0,242,254,.4); transform: translateY(-50%) scale(1.06); }
+        .prev-arrow { left: 14px; } .next-arrow { right: 14px; }
+
+        .panel { position: relative; display: flex; flex-direction: column; padding: clamp(1.4rem, 3vw, 2.2rem); border-radius: var(--radius); background: var(--glass-strong); border: 1px solid var(--line); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: 0 20px 50px rgba(0,0,0,.45); overflow: hidden; }
+        .panel::after { content: ""; position: absolute; width: 260px; height: 260px; right: -90px; top: -90px; border-radius: 50%; background: radial-gradient(circle, rgba(157,78,221,.28), transparent 70%); pointer-events: none; }
+        .counter { font-size: .8rem; letter-spacing: .2em; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; }
+        .counter b { color: var(--accent-neon); font-size: 1.6rem; letter-spacing: 0; margin: 0 .15rem 0 .35rem; }
+        .panel-body { transition: opacity .3s ease, transform .3s ease; }
+        .panel-body.swap { opacity: 0; transform: translateY(8px); }
+        .panel h3 { font-size: clamp(1.35rem, 3.4vw, 1.9rem); line-height: 1.2; color: var(--accent-neon); margin-bottom: .9rem; text-shadow: 0 0 22px rgba(0,242,254,.25); }
+        .panel p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.75; }
+        .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.3rem; }
+        .tag { padding: .3rem .8rem; border-radius: 999px; font-size: .74rem; font-weight: 600; letter-spacing: .06em; color: var(--text-main); background: rgba(157,78,221,.16); border: 1px solid rgba(157,78,221,.4); }
+        .panel-actions { margin-top: auto; padding-top: 1.6rem; display: flex; gap: .7rem; flex-wrap: wrap; }
+        .btn { flex: 1 1 140px; min-height: 48px; padding: .8rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: .95rem; cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; transition: all .25s; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden; }
+        .btn svg { width: 18px; height: 18px; flex: none; }
+        .btn-primary { color: #05070d; border: 0; background: linear-gradient(135deg, var(--accent-neon), #6dd5fa); box-shadow: 0 8px 26px rgba(0,242,254,.28); }
+        .btn-primary::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); transition: left .6s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(0,242,254,.45); }
+        .btn-primary:hover::after { left: 130%; }
+        .btn-ghost { color: var(--text-main); background: transparent; border: 1px solid var(--line); }
+        .btn-ghost:hover { border-color: var(--accent-neon); color: var(--accent-neon); }
+
+        .progress { height: 3px; border-radius: 3px; background: rgba(255,255,255,.08); margin-top: 1.4rem; overflow: hidden; }
+        .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); box-shadow: 0 0 10px var(--accent-neon); transition: width .6s cubic-bezier(.22,.8,.22,1); }
+
+        .rail { max-width: 1280px; margin: clamp(1rem, 2.5vw, 1.8rem) auto 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(.5rem, 1.5vw, 1rem); }
+        .thumb { position: relative; border-radius: 14px; overflow: hidden; cursor: pointer; padding: 0; background: #05070d; border: 1px solid var(--line-soft); aspect-ratio: 16 / 10; opacity: .55; transition: all .3s; -webkit-tap-highlight-color: transparent; }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .thumb::after { content: attr(data-n); position: absolute; left: 8px; top: 6px; font-size: .72rem; font-weight: 700; color: var(--text-main); text-shadow: 0 1px 6px #000; }
+        .thumb:hover { opacity: .9; transform: translateY(-3px); }
+        .thumb.active { opacity: 1; border-color: var(--accent-neon); box-shadow: 0 0 22px rgba(0,242,254,.35); }
+
+        /* ============ Exploded layers section (scroll driven) ============ */
+        .anatomy { position: relative; height: 340vh; margin: clamp(3.5rem, 8vw, 6rem) calc(var(--gutter) * -1) 0; }
+        .anatomy-stage { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(1rem, 3vw, 3rem); align-items: center; padding: 96px var(--gutter) 24px; max-width: 1400px; margin: 0 auto; text-align: left; }
+        .anatomy-head { grid-column: 1 / -1; text-align: center; position: absolute; top: 88px; left: 0; right: 0; padding: 0 var(--gutter); z-index: 4; pointer-events: none; transition: opacity .4s; }
+        .anatomy-head h2 { font-size: clamp(1.6rem, 4.6vw, 2.8rem); line-height: 1.1; font-weight: 800; letter-spacing: -.5px; color: var(--text-main); margin-bottom: .6rem; }
+        .anatomy-head h2 span { background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .anatomy-head p { color: var(--text-muted); max-width: 640px; margin: 0 auto; font-size: clamp(.92rem, 2.2vw, 1.05rem); }
+
+        .scene { position: relative; height: 100%; min-height: 320px; perspective: 1700px; perspective-origin: 50% 40%; margin-top: 70px; }
+        .stack { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
+        .plate { position: absolute; left: calc(var(--w) / -2); top: calc(var(--w) * -0.3125); width: var(--w); height: calc(var(--w) * 0.625); border-radius: calc(var(--w) * .035); background: linear-gradient(145deg, rgba(20,30,50,.96), rgba(9,13,22,.96)); border: 1px solid rgba(0,242,254,.28); box-shadow: 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28); overflow: hidden; transition: opacity .45s, box-shadow .45s, border-color .45s; will-change: transform; }
+        .plate::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,242,254,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,242,254,.07) 1px, transparent 1px); background-size: calc(var(--w) / 14) calc(var(--w) / 14); pointer-events: none; }
+        .plate.p-model { border-color: rgba(157,78,221,.45); } .plate.p-pipe { border-color: rgba(0,242,254,.4); }
+        .plate.p-dash { border-color: rgba(0,242,254,.55); background: #05070d; }
+        .plate.p-dash::before { display: none; }
+        .plate.p-dash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+        .plate .tagline { position: absolute; left: calc(var(--w) * .035); top: calc(var(--w) * .03); z-index: 2; font-size: calc(var(--w) * .024); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-neon); text-shadow: 0 1px 8px #000; }
+        .plate.p-model .tagline { color: #c58cf0; }
+        .plate.p-dash .tagline { background: rgba(5,7,13,.85); padding: 3px 8px; border-radius: 6px; }
+        .plate svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .plate.dim { opacity: .38; } .plate.live { border-color: var(--accent-neon); box-shadow: 0 0 0 1px rgba(0,242,254,.5), 0 0 60px rgba(0,242,254,.45), 0 30px 60px rgba(0,0,0,.5); }
+        .plate.p-model.live { border-color: #c58cf0; box-shadow: 0 0 0 1px rgba(197,140,240,.5), 0 0 60px rgba(157,78,221,.55), 0 30px 60px rgba(0,0,0,.5); }
+
+        .beam { position: absolute; width: 0; height: var(--span, 0px); border-left: 1px dashed rgba(0,242,254,.55); transform-origin: top left; transform: rotateX(90deg); opacity: 0; pointer-events: none; filter: drop-shadow(0 0 4px rgba(0,242,254,.6)); }
+
+        .flow-dash { stroke-dasharray: 5 6; animation: flow 1.2s linear infinite; }
+        @keyframes flow { to { stroke-dashoffset: -22; } }
+
+        .steps { position: relative; z-index: 5; display: grid; gap: .8rem; align-content: center; margin-top: 70px; }
+        .step { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.2rem; border-radius: 16px; background: var(--glass); border: 1px solid var(--line-soft); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: .45; transform: translateX(14px); transition: all .45s cubic-bezier(.22,.8,.22,1); }
+        .step .n { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: .9rem; color: var(--accent-neon); background: rgba(0,242,254,.1); border: 1px solid var(--line); }
+        .step:nth-child(3) .n { color: #c58cf0; background: rgba(157,78,221,.14); border-color: rgba(157,78,221,.4); }
+        .step h4 { font-size: 1.08rem; color: var(--text-main); margin-bottom: .2rem; line-height: 1.3; }
+        .step p { font-size: .92rem; color: var(--text-muted); line-height: 1.55; }
+        .step.on { opacity: 1; transform: none; border-color: rgba(0,242,254,.5); background: var(--glass-strong); box-shadow: 0 14px 40px rgba(0,242,254,.14); }
+        .step.on h4 { color: var(--accent-neon); }
+        .scroll-hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 6; display: flex; flex-direction: column; align-items: center; gap: .35rem; color: var(--text-muted); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; transition: opacity .4s; pointer-events: none; }
+        .scroll-hint i { width: 22px; height: 36px; border: 1.5px solid var(--text-muted); border-radius: 12px; position: relative; }
+        .scroll-hint i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--accent-neon); animation: wheel 1.6s infinite; }
+        @keyframes wheel { 60% { opacity: 0; transform: translateY(12px); } }
+
+        /* ============ CTA ============ */
+        .cta { max-width: 1280px; margin: clamp(3rem, 7vw, 5rem) auto 0; text-align: center; padding: clamp(2rem, 5vw, 3.5rem) clamp(1.2rem, 4vw, 3rem); border-radius: 24px; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(0,242,254,.10), rgba(157,78,221,.14)); border: 1px solid var(--line); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+        .cta h2 { font-size: clamp(1.5rem, 4.5vw, 2.3rem); margin-bottom: .7rem; font-weight: 800; letter-spacing: -.5px; }
+        .cta p { color: var(--text-muted); max-width: 640px; margin: 0 auto 1.6rem; }
+        .cta-actions { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+        .cta .btn { flex: 0 1 auto; padding-inline: 1.8rem; }
+
+        /* Floating call to action */
+        .dock { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 150; transform: translate(-50%, 140%); display: flex; gap: .5rem; padding: .45rem; border-radius: 999px; background: rgba(9,13,22,.88); border: 1px solid var(--line); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 16px 50px rgba(0,0,0,.6), 0 0 40px rgba(0,242,254,.15); transition: transform .5s cubic-bezier(.22,.8,.22,1); }
+        .dock.show { transform: translate(-50%, 0); }
+        .dock a { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 46px; padding: 0 1.3rem; border-radius: 999px; font-weight: 700; font-size: .92rem; text-decoration: none; white-space: nowrap; }
+        .dock .go { color: #05070d; background: linear-gradient(135deg, var(--accent-neon), #6dd5fa); }
+        body.lb-open .dock { transform: translate(-50%, 140%); }
+
+        /* ============ Lightbox ============ */
+        .lb { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; background: rgba(4,6,11,.96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+        .lb.open { display: flex; animation: lbIn .25s ease; }
+        @keyframes lbIn { from { opacity: 0; } }
+        .lb-bar { display: flex; align-items: center; gap: 1rem; padding: .8rem 1rem; padding-top: calc(.8rem + env(safe-area-inset-top)); border-bottom: 1px solid var(--line-soft); }
+        .lb-title { flex: 1; min-width: 0; font-weight: 600; color: var(--accent-neon); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .98rem; }
+        .lb-btn { min-width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(17,24,39,.8); color: var(--text-main); cursor: pointer; padding: 0 .8rem; display: grid; place-items: center; }
+        .lb-btn svg { width: 18px; height: 18px; }
+        .lb-btn:hover { color: var(--accent-neon); border-color: var(--accent-neon); }
+        .lb-view { position: relative; flex: 1; overflow: hidden; touch-action: none; cursor: grab; }
+        .lb-view.dragging { cursor: grabbing; }
+        .lb-view img { position: absolute; left: 50%; top: 50%; max-width: 100%; max-height: 100%; transform-origin: center; user-select: none; -webkit-user-drag: none; will-change: transform; }
+        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; }
+        .lb-nav.prev { left: 12px; } .lb-nav.next { right: 12px; }
+        .lb-foot { padding: .8rem 1.2rem calc(.8rem + env(safe-area-inset-bottom)); text-align: center; color: var(--text-muted); font-size: .82rem; border-top: 1px solid var(--line-soft); }
+
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,.8,.22,1); }
+        .reveal.in { opacity: 1; transform: none; }
+
+        /* ============ Responsive ============ */
+        @media (max-width: 960px) {
+            .showcase { grid-template-columns: minmax(0, 1fr); }
+            .anatomy-stage { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; padding-top: 84px; padding-bottom: 14px; gap: .4rem; }
+            .anatomy-head { top: 76px; }
+            .scene { margin-top: 84px; min-height: 0; }
+            .steps { margin-top: 0; gap: .5rem; }
+            .step { display: none; transform: none; }
+            .step.on { display: flex; }
+            .scroll-hint { bottom: 8px; }
+        }
+        @media (max-width: 640px) {
+            nav > a:nth-child(2) { display: none; }
+            .content { padding-left: 0; padding-right: 0; }
+            .content > .eyebrow, .content > .section-title, .content > .section-desc { margin-left: 16px; margin-right: 16px; }
+            .sample-note { margin-left: 16px; margin-right: 16px; }
+            .showcase, .rail, .cta { padding-left: 12px; padding-right: 12px; }
+            .cta { margin-left: 12px; margin-right: 12px; padding-left: 1.2rem; padding-right: 1.2rem; }
+            .anatomy { margin-left: 0; margin-right: 0; }
+            .frame { border-radius: 16px; }
+            .chrome { padding: .55rem .8rem; }
+            .slide { aspect-ratio: 4 / 3; }
+            .arrow { width: 42px; height: 42px; }
+            .prev-arrow { left: 8px; } .next-arrow { right: 8px; }
+            .expand-btn { left: 50%; right: auto; transform: translateX(-50%); bottom: 12px; }
+            .rail { grid-template-columns: repeat(5, 62px); overflow-x: auto; padding-bottom: .6rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; justify-content: start; }
+            .thumb { scroll-snap-align: start; }
+            .btn { flex: 1 1 100%; }
+            .cta .btn { width: 100%; }
+            .ambient::before, .ambient::after { filter: blur(60px); }
+            header::before, .eyebrow, .panel, .cta { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+            .dock a.go { padding: 0 1rem; font-size: .88rem; }
+        }
+        @media (hover: none) { .frame { transform: none !important; } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+            .reveal { opacity: 1; transform: none; }
         }
 
-        /* Header Navigation */
-        header {
-            background-color: rgba(9, 13, 22, 0.95);
-            padding: 1.5rem 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
-            backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            color: var(--text-main);
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .logo span {
-            color: var(--accent-neon);
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
-        }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-neon);
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 8rem 10% 6rem 10%;
-            text-align: center;
-            background: linear-gradient(rgba(9, 13, 22, 0.85), rgba(9, 13, 22, 0.95)), url('../Wallpaper.png') no-repeat center center/cover;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.1);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffffff 40%, var(--accent-neon));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            max-width: 750px;
-            margin: 0 auto 2.5rem auto;
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            line-height: 1.8;
-        }
-
-        .btn-primary {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-neon), #00c6ff);
-            color: var(--primary-bg);
-            padding: 0.9rem 2.2rem;
-            font-size: 1.05rem;
-            font-weight: 700;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.7);
-        }
+        /* ===== Language switcher ===== */
+        .lang-sw { display: inline-flex; align-items: center; gap: .35rem; margin-left: .3rem; }
+        .lang-sw a { font-size: .74rem; font-weight: 700; letter-spacing: .1em; padding: .28rem .6rem; border-radius: 8px; border: 1px solid var(--glass-border, var(--line)); color: var(--text-muted); text-decoration: none; transition: color .25s, border-color .25s, background .25s; }
+        .lang-sw a::after { display: none !important; }
+        .lang-sw a:hover { color: var(--accent-neon); border-color: var(--accent-neon); }
+        .lang-sw a.cur { color: #090d16; background: var(--accent-neon); border-color: var(--accent-neon); }
+        @media (max-width: 640px) { nav > a:nth-child(1) { display: none; } nav { gap: .7rem; } .lang-sw { margin-left: 0; gap: .25rem; } .lang-sw a { padding: .25rem .5rem; font-size: .7rem; } }
+        .chrome em { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     </style>
 </head>
 <body>
 
+    <div class="ambient" aria-hidden="true"><div class="grid-overlay"></div></div>
+    <div class="scroll-progress" id="progress" aria-hidden="true"></div>
+
     <!-- Header Navigation -->
     <header>
-        <div class="logo">Quanti<span>vyx</span></div>
+        <a class="logo" href="index.html">Quanti<span>vyx</span></a>
         <nav>
-            <a href="#services">Services</a>
-            <a href="#contact">Contact</a>
-            <a href="gallery.html">Galerie</a>
-            <a href="../index.html" style="color: var(--accent-neon); font-weight: 700;">English</a>
+            <a href="index.html">Accueil</a>
+            <a href="index.html#services">Services</a>
+            <a href="/contact.html">Contact</a>
+        
+            <div class="lang-sw" role="group" aria-label="Language"><a href="/gallery" hreflang="en" lang="en" title="English">EN</a><a href="/fr/gallery" hreflang="fr" lang="fr" class="cur" aria-current="true" title="Français">FR</a><a href="/es/gallery" hreflang="es" lang="es" title="Español">ES</a></div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Infrastructure de Données & Intelligence Exécutive</h1>
-        <p>Chez Quantivyx, nous transformons les systèmes complexes en stratégies claires et exploitables. De l'intégration de flux de données aux architectures de visualisation sur mesure, nous construisons la pile technologique qui alimente vos décisions.</p>
-        <a href="#contact" class="btn-primary">Lancer le Projet</a>
-    </section>
+    <!-- Content Area -->
+    <div class="content">
+        <div class="eyebrow reveal"><i></i> Portfolio &middot; Tableaux de bord d’exemple</div>
+        <h1 class="section-title reveal">Le centre de <span>pilotage exécutif</span></h1>
+        <p class="section-desc reveal">
+            La plupart des entreprises modernes n’ont pas un problème de collecte de données. Elles ont un <strong>problème de compréhension</strong>. Des opportunités de croissance essentielles restent enfermées dans des feuilles de calcul éparpillées et des systèmes déconnectés. Nous concevons des tableaux de bord exécutifs sur mesure qui transforment des indicateurs complexes et dispersés en une source centralisée de vérité opérationnelle, afin que la direction prenne des décisions proactives en toute confiance.
+        </p>
+        <div class="sample-note reveal" role="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            <span>Chaque tableau de bord ci-dessous est un exemple qui montre ce qui est possible. Aucun n’est relié à des données clients réelles.</span>
+        </div>
 
-    <!-- Add the rest of your home page layout sections below as needed -->
+        <!-- Showcase -->
+        <div class="showcase reveal">
+            <div class="viewer">
+                <div class="frame" id="frame">
+                    <div class="chrome"><i></i><i></i><i></i><em id="chromeLabel">Tableau de bord d’exemple 01</em></div>
+                    <div class="stage" id="stage">
+                        <div class="track" id="track"></div>
+                        <button class="arrow prev-arrow" id="prevBtn" aria-label="Tableau de bord précédent">&#10094;</button>
+                        <button class="arrow next-arrow" id="nextBtn" aria-label="Tableau de bord suivant">&#10095;</button>
+                        <button class="expand-btn" id="expandBtn" aria-label="Ouvrir en plein écran">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            Touchez pour agrandir et zoomer
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <aside class="panel">
+                <div class="counter">Exemple<b id="curNum">01</b> sur <span id="totNum">05</span></div>
+                <div class="panel-body" id="panelBody">
+                    <h3 id="infoTitle"></h3>
+                    <p id="infoDesc"></p>
+                    <div class="tags" id="infoTags"></div>
+                </div>
+                <div class="progress"><i id="progressBar"></i></div>
+                <div class="panel-actions">
+                    <button class="btn btn-primary" id="panelExpand">Voir en plein format</button>
+                    <a class="btn btn-ghost" id="wantBtn" href="/contact.html">J’en veux un comme celui-ci</a>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="rail reveal" id="rail" role="tablist" aria-label="Tableaux de bord d’exemple"></div>
+
+        <!-- Exploded layers: scroll to pull the dashboard apart -->
+        <section class="anatomy" id="anatomy" aria-label="Comment un tableau de bord est construit">
+            <div class="anatomy-stage" id="anaStage">
+                <div class="anatomy-head" id="anaHead">
+                    <h2>Anatomie d’un <span>tableau de bord exécutif</span></h2>
+                    <p>Chaque tableau de bord repose sur un empilement de couches. Continuez à défiler pour le décomposer et voir ce qui rend les chiffres fiables.</p>
+                </div>
+
+                <div class="scene" id="scene" aria-hidden="true">
+                    <div class="stack" id="stack">
+                        <div class="beam" data-x="-1" data-y="-1"></div>
+                        <div class="beam" data-x="1" data-y="-1"></div>
+                        <div class="beam" data-x="-1" data-y="1"></div>
+                        <div class="beam" data-x="1" data-y="1"></div>
+
+                        <!-- Layer 1: data sources -->
+                        <div class="plate p-data" data-i="0">
+                            <span class="tagline">01 &middot; Vos données</span>
+                            <svg viewBox="0 0 160 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <g stroke="#00f2fe" stroke-opacity=".55" stroke-width=".7">
+                                    <rect x="12" y="24" width="68" height="60" rx="3" fill="rgba(0,242,254,.05)"/>
+                                    <path d="M12 38h68M12 52h68M12 66h68M35 24v60M58 24v60"/>
+                                </g>
+                                <g fill="#00f2fe" fill-opacity=".8"><rect x="15" y="28" width="16" height="4" rx="1"/><rect x="38" y="42" width="14" height="4" rx="1"/><rect x="61" y="56" width="15" height="4" rx="1"/><rect x="15" y="70" width="14" height="4" rx="1"/></g>
+                                <g font-family="Segoe UI, sans-serif" font-size="6.2" font-weight="700" text-anchor="middle">
+                                    <rect x="94" y="26" width="26" height="16" rx="3" fill="rgba(157,78,221,.2)" stroke="#9d4edd" stroke-width=".8"/><text x="107" y="36.5" fill="#d9b3f7">XLSX</text>
+                                    <rect x="124" y="42" width="26" height="16" rx="3" fill="rgba(0,242,254,.12)" stroke="#00f2fe" stroke-width=".8"/><text x="137" y="52.5" fill="#9ffbff">CSV</text>
+                                    <rect x="94" y="58" width="26" height="16" rx="3" fill="rgba(0,242,254,.12)" stroke="#00f2fe" stroke-width=".8"/><text x="107" y="68.5" fill="#9ffbff">SALES</text>
+                                    <rect x="124" y="74" width="26" height="14" rx="3" fill="rgba(157,78,221,.2)" stroke="#9d4edd" stroke-width=".8"/><text x="137" y="84" fill="#d9b3f7">EXPORT</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Layer 2: automated pipeline -->
+                        <div class="plate p-pipe" data-i="1">
+                            <span class="tagline">02 &middot; Pipeline automatisé</span>
+                            <svg viewBox="0 0 160 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <g stroke="#00f2fe" stroke-width="1.1"><path class="flow-dash" d="M34 32 C58 32 56 50 80 50"/><path class="flow-dash" d="M34 70 C58 70 56 50 80 50"/><path class="flow-dash" d="M80 50 H126"/></g>
+                                <g fill="rgba(9,13,22,.95)" stroke="#00f2fe" stroke-width="1.1"><rect x="14" y="22" width="20" height="20" rx="4"/><rect x="14" y="60" width="20" height="20" rx="4"/><rect x="64" y="36" width="32" height="28" rx="6" stroke="#9d4edd" stroke-width="1.4"/><rect x="126" y="36" width="22" height="28" rx="5"/></g>
+                                <g stroke="#00f2fe" stroke-width="1.1"><path d="M20 28h8M20 32h8M20 36h5"/><path d="M20 66h8M20 70h8M20 74h5"/><path d="M131 44h12M131 50h12M131 56h8"/></g>
+                                <g stroke="#c58cf0" stroke-width="1.4"><circle cx="80" cy="50" r="6"/><path d="M80 44v-4M80 60v-4M74 50h-4M90 50h-4"/></g>
+                            </svg>
+                        </div>
+
+                        <!-- Layer 3: data model -->
+                        <div class="plate p-model" data-i="2">
+                            <span class="tagline">03 &middot; Modèle de données fiable</span>
+                            <svg viewBox="0 0 160 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <g stroke="#9d4edd" stroke-width="1" stroke-opacity=".9"><path d="M80 52 L34 32M80 52 L126 32M80 52 L34 76M80 52 L126 76"/></g>
+                                <g fill="rgba(9,13,22,.96)" stroke-width="1.1">
+                                    <rect x="62" y="38" width="36" height="28" rx="4" stroke="#c58cf0"/>
+                                    <rect x="14" y="22" width="40" height="20" rx="3" stroke="#00f2fe"/><rect x="106" y="22" width="40" height="20" rx="3" stroke="#00f2fe"/>
+                                    <rect x="14" y="66" width="40" height="20" rx="3" stroke="#00f2fe"/><rect x="106" y="66" width="40" height="20" rx="3" stroke="#00f2fe"/>
+                                </g>
+                                <g stroke="#c58cf0" stroke-width=".9"><path d="M66 46h28M66 52h28M66 58h20"/></g>
+                                <g stroke="#00f2fe" stroke-opacity=".8" stroke-width=".9"><path d="M19 30h30M19 36h20"/><path d="M111 30h30M111 36h20"/><path d="M19 74h30M19 80h20"/><path d="M111 74h30M111 80h20"/></g>
+                            </svg>
+                        </div>
+
+                        <!-- Layer 4: the dashboard itself -->
+                        <div class="plate p-dash" data-i="3">
+                            <span class="tagline">04 &middot; Votre tableau de bord</span>
+                            <img id="plateImg" alt="" decoding="async">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="steps" id="steps">
+                    <div class="step" data-i="0"><span class="n">01</span><div><h4>Vos sources de données</h4><p>Feuilles de calcul, exports et outils que votre entreprise utilise déjà. Tout projet commence ici.</p></div></div>
+                    <div class="step" data-i="1"><span class="n">02</span><div><h4>Un pipeline automatisé</h4><p>Les données sont collectées, nettoyées et combinées automatiquement, pour que plus personne n’ait à compiler des rapports à la main.</p></div></div>
+                    <div class="step" data-i="2"><span class="n">03</span><div><h4>Un modèle de données fiable</h4><p>Chaque indicateur est défini une seule fois et organisé dans un modèle unique, si bien que chaque chiffre a le même sens partout.</p></div></div>
+                    <div class="step" data-i="3"><span class="n">04</span><div><h4>Le tableau de bord exécutif</h4><p>Ce que la direction voit réellement. Des réponses claires aux questions qui comptent, sans fouiller dans des feuilles de calcul.</p></div></div>
+                </div>
+
+                <div class="scroll-hint" id="hint"><i></i>Faites défiler pour décomposer</div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta reveal" id="cta">
+            <h2>Prêt à voir <span style="color:var(--accent-neon)">vos</span> données ainsi ?</h2>
+            <p>Dites-nous où se trouvent vos chiffres aujourd’hui. Nous vous montrerons à quoi pourrait ressembler une vue unique de votre entreprise, prête pour la direction.</p>
+            <div class="cta-actions">
+                <a class="btn btn-primary" href="/contact.html">Démarrer la conversation
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <a class="btn btn-ghost" id="ctaMail" href="mailto:Hernandezanalytics@outlook.com?subject=Dashboard%20inquiry%20(FR)">Écrivez-nous</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating call to action -->
+    <div class="dock" id="dock">
+        <a class="go" href="/contact.html">Démarrer la conversation</a>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Visionneuse plein format du tableau de bord">
+        <div class="lb-bar">
+            <div class="lb-title" id="lbTitle"></div>
+            <button class="lb-btn" id="lbZoomOut" aria-label="Dézoomer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+            <button class="lb-btn" id="lbZoomIn" aria-label="Zoomer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button class="lb-btn" id="lbClose" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="lb-view" id="lbView">
+            <button class="arrow lb-nav prev" id="lbPrev" aria-label="Précédent">&#10094;</button>
+            <button class="arrow lb-nav next" id="lbNext" aria-label="Suivant">&#10095;</button>
+            <img id="lbImg" alt="" draggable="false">
+        </div>
+        <div class="lb-foot">Pincez ou touchez deux fois pour zoomer &middot; faites glisser pour déplacer &middot; balayez pour changer &middot; tournez votre téléphone pour la vue la plus large</div>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+        /* ================== DATA (edit titles, descriptions and images here) ================== */
+        var dashboards = [
+            { img: "Dashboard 1.png", alt: "Quantivyx, centre de commandement des ventes",
+              title: "Centre de commandement des ventes", tags: ["Revenus", "Régional", "Prévisions"],
+              desc: "Une matrice nationale des revenus conçue pour les décideurs de la direction générale. Ce tableau de bord réunit les performances multirégionales, l’évolution d’une année sur l’autre et les projections à venir dans une seule vue, pour que la direction repère immédiatement les secteurs les plus performants et les tendances du marché." },
+            { img: "Dashboard 2.png", alt: "Quantivyx, matrice d’indicateurs des opérations",
+              title: "Matrice de croissance et de performance", tags: ["Indicateurs", "Acquisition", "Objectifs"],
+              desc: "Un suivi de santé de l’entreprise intuitif qui évalue les nouveaux clients mensuels, l’atteinte des objectifs et les scores opérationnels actifs. Conçu pour éviter la surcharge de données, il met en avant les repères de performance essentiels grâce à une typographie nette et contrastée, lisibles d’un seul coup d’œil." },
+            { img: "Dashboard 3.png", alt: "Quantivyx, synthèse de la performance opérationnelle",
+              title: "Santé opérationnelle et suivi de projets", tags: ["Opérations", "Pipeline", "Répartition régionale"],
+              desc: "Une vue d’ensemble simple et accessible, pensée pour les responsables des opérations. Cette variante présente le suivi du pipeline, la répartition des revenus par région et les indicateurs de santé de l’organisation, dans une mise en page équilibrée qui se comprend vite et sans friction technique." },
+            { img: "Coffee_BI_report.png", alt: "Rapport de vente au détail d’un café, Interstellar",
+              title: "Revenus du commerce de détail et intelligence commerciale", tags: ["Commerce de détail", "Saisonnalité", "Mix produits"],
+              desc: "Une vue détaillée du point de vente qui suit l’activité locale. Cette interface montre comment le volume de transactions, les modes de paiement et la performance de chaque article du menu peuvent être cartographiés sur 12 mois pour révéler les pics de demande saisonniers et les habitudes d’achat des clients." },
+            { img: "SuperStore_Dashboard_4.png", alt: "Rapport exécutif des ventes d’un hypermarché",
+              title: "Tableau de bord exécutif des marchés à forte valeur", tags: ["Profit", "Catégories", "Mode sombre"],
+              desc: "Un panneau d’intelligence financière en mode sombre, optimisé pour les revues de direction. Il écarte la complexité technique pour mettre au premier plan des indicateurs de plusieurs millions de dollars, et visualise instantanément les États les plus performants, les catégories de produits les plus vendues et les tendances de profit régionales sur un cycle glissant de six mois." }
+        ];
+
+        var $ = function (id) { return document.getElementById(id); };
+        var src = function (f) { return "/" + encodeURI(f); };          // handles the space in "Dashboard 1.png"
+        var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var total = dashboards.length, current = 0;
+
+        /* ================== Build DOM ================== */
+        var track = $('track'), rail = $('rail');
+        dashboards.forEach(function (d, i) {
+            var s = document.createElement('div'); s.className = 'slide';
+            s.innerHTML = '<img src="' + src(d.img) + '" alt="' + d.alt + '" decoding="async" ' + (i < 2 ? '' : 'loading="lazy"') + '>';
+            track.appendChild(s);
+            var t = document.createElement('button');
+            t.className = 'thumb'; t.dataset.n = pad(i + 1); t.setAttribute('role', 'tab'); t.setAttribute('aria-label', d.title);
+            t.innerHTML = '<img src="' + src(d.img) + '" alt="" loading="lazy" decoding="async">';
+            t.addEventListener('click', function () { go(i); });
+            rail.appendChild(t);
+        });
+        $('totNum').textContent = pad(total);
+
+        /* ================== Showcase logic ================== */
+        function render(animate) {
+            var d = dashboards[current];
+            track.style.transform = 'translateX(-' + (current * 100) + '%)';
+            $('curNum').textContent = pad(current + 1);
+            $('chromeLabel').textContent = 'Tableau de bord d’exemple ' + pad(current + 1);
+            $('progressBar').style.width = ((current + 1) / total * 100) + '%';
+            Array.prototype.forEach.call(rail.children, function (t, i) { t.classList.toggle('active', i === current); t.setAttribute('aria-selected', i === current); });
+            var body = $('panelBody');
+            var fill = function () {
+                $('infoTitle').textContent = d.title; $('infoDesc').textContent = d.desc;
+                $('infoTags').innerHTML = d.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+                body.classList.remove('swap');
+            };
+            if (animate) { body.classList.add('swap'); setTimeout(fill, 220); } else fill();
+            [current + 1, current - 1].forEach(function (n) { new Image().src = src(dashboards[(n + total) % total].img); });
+            var at = rail.children[current];
+            if (at && rail.scrollWidth > rail.clientWidth) rail.scrollTo({ left: at.offsetLeft - 12, behavior: 'smooth' });
+            $('plateImg').src = src(d.img); $('plateImg').alt = d.alt;
+            $('wantBtn').href = '/contact.html?sample=' + encodeURIComponent(d.title);
+            $('ctaMail').href = 'mailto:Hernandezanalytics@outlook.com?subject=' + encodeURIComponent('Dashboard inquiry (FR): ' + d.title);
+        }
+        function go(i, animate) { current = (i + total) % total; render(animate !== false); if (lb.classList.contains('open')) lbLoad(); }
+        $('prevBtn').addEventListener('click', function (e) { e.stopPropagation(); go(current - 1); });
+        $('nextBtn').addEventListener('click', function (e) { e.stopPropagation(); go(current + 1); });
+
+        (function () {
+            var st = $('stage'), sx = 0, sy = 0, active = false;
+            st.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; active = true; st._swiped = false; }, { passive: true });
+            st.addEventListener('touchend', function (e) {
+                if (!active) return; active = false;
+                var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) { st._swiped = true; go(current + (dx < 0 ? 1 : -1)); }
+            }, { passive: true });
+            st.addEventListener('click', function () { if (st._swiped) { st._swiped = false; return; } openLB(); });
+        })();
+        $('expandBtn').addEventListener('click', function (e) { e.stopPropagation(); openLB(); });
+        $('panelExpand').addEventListener('click', openLB);
+
+        (function () {
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+            var f = $('frame');
+            f.addEventListener('mousemove', function (e) { var r = f.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; f.style.transform = 'rotateY(' + (x * 5) + 'deg) rotateX(' + (-y * 4) + 'deg)'; });
+            f.addEventListener('mouseleave', function () { f.style.transform = ''; });
+        })();
+
+        /* ================== Exploded layers (scroll driven) ================== */
+        (function () {
+            var sec = $('anatomy'), stage = $('anaStage'), scene = $('scene'), stack = $('stack'), hint = $('hint'), head = $('anaHead');
+            var plates = Array.prototype.slice.call(stack.querySelectorAll('.plate'));
+            var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+            var beams = Array.prototype.slice.call(stack.querySelectorAll('.beam'));
+            var W = 400, GAP = 120, N = plates.length, lastKey = '';
+            var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+            var smooth = function (a, b, x) { var t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+            function measure() {
+                var r = scene.getBoundingClientRect(), small = window.innerWidth <= 960;
+                W = Math.max(210, Math.min(small ? r.width * 0.72 : 540, r.width * 0.62, r.height / 1.5));
+                GAP = W * (small ? 0.34 : 0.3);
+                scene.style.setProperty('--w', W + 'px');
+                stack.style.setProperty('--w', W + 'px');
+                plates.forEach(function (p) { p.style.setProperty('--w', W + 'px'); });
+                beams.forEach(function (b) { b.style.left = (parseFloat(b.dataset.x) * W / 2) + 'px'; b.style.top = (parseFloat(b.dataset.y) * W * 0.3125) + 'px'; });
+            }
+
+            function update() {
+                var r = sec.getBoundingClientRect(), range = sec.offsetHeight - window.innerHeight;
+                var p = reduce ? 0.8 : clamp(-r.top / Math.max(1, range), 0, 1);
+                var e = smooth(0.06, 0.5, p);
+                var span = (N - 1) * (GAP * e + 1);
+                var rx = 58 * e, rz = -38 * e;
+                stack.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) translateZ(' + (-span / 2).toFixed(1) + 'px)';
+                plates.forEach(function (pl, i) { pl.style.transform = 'translateZ(' + (i * (GAP * e + 1)).toFixed(1) + 'px)'; });
+                beams.forEach(function (b) { b.style.setProperty('--span', span.toFixed(1) + 'px'); b.style.opacity = (e * 0.9).toFixed(2); });
+
+                var a = p < 0.52 ? -1 : Math.min(N - 1, Math.floor((p - 0.52) / 0.48 * N));
+                if (reduce) a = N - 1;
+                var key = a + '|' + (e > 0.02) + '|' + (p > 0.97);
+                if (key !== lastKey) {
+                    lastKey = key;
+                    plates.forEach(function (pl, i) { pl.classList.toggle('live', a === i); pl.classList.toggle('dim', a !== -1 && a !== i); });
+                    steps.forEach(function (s, i) { s.classList.toggle('on', a === i); });
+                    hint.style.opacity = e > 0.02 ? 0 : 1;
+                }
+                head.style.opacity = a >= 0 && window.innerWidth <= 960 ? 0 : 1;
+            }
+
+            var ticking = false;
+            function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { update(); ticking = false; }); } }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', function () { measure(); update(); });
+            measure(); update();
+            window.addEventListener('load', function () { measure(); update(); });
+        })();
+
+        /* ================== Progress bar and floating call to action ================== */
+        (function () {
+            var prog = $('progress'), dock = $('dock'), cta = $('cta'), ticking = false;
+            function tick() {
+                var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+                prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, y / h) : 0) + ')';
+                var ctaTop = cta.getBoundingClientRect().top;
+                var ar = $('anatomy').getBoundingClientRect(), inAnatomy = ar.top < window.innerHeight * 0.5 && ar.bottom > window.innerHeight * 0.5;
+                dock.classList.toggle('show', y > 700 && ctaTop > window.innerHeight * 0.7 && !inAnatomy);
+                ticking = false;
+            }
+            window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(tick); } }, { passive: true });
+            tick();
+        })();
+
+        /* ================== Lightbox with zoom and pan ================== */
+        var lb = $('lb'), lbView = $('lbView'), lbImg = $('lbImg');
+        var scale = 1, tx = 0, ty = 0, pts = new Map(), pinchD = 0, pinchS = 1, lastTap = 0, startPt = null;
+
+        function applyT() { lbImg.style.transform = 'translate(-50%, -50%) translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')'; }
+        function clampT() {
+            var w = lbImg.clientWidth * scale, h = lbImg.clientHeight * scale;
+            var mx = Math.max(0, (w - lbView.clientWidth) / 2), my = Math.max(0, (h - lbView.clientHeight) / 2);
+            tx = Math.min(mx, Math.max(-mx, tx)); ty = Math.min(my, Math.max(-my, ty));
+        }
+        function zoomTo(s, cx, cy) {
+            var ns = Math.min(6, Math.max(1, s)), r = lbView.getBoundingClientRect();
+            if (cx != null) { var ox = cx - (r.left + r.width / 2), oy = cy - (r.top + r.height / 2); tx = ox - (ox - tx) * (ns / scale); ty = oy - (oy - ty) * (ns / scale); }
+            scale = ns; if (scale === 1) { tx = 0; ty = 0; } clampT(); applyT();
+        }
+        function lbLoad() {
+            var d = dashboards[current];
+            $('lbTitle').textContent = 'Exemple ' + pad(current + 1) + ' · ' + d.title;
+            lbImg.alt = d.alt; lbImg.src = src(d.img); scale = 1; tx = ty = 0; applyT();
+        }
+        function openLB() { lb.classList.add('open'); document.body.classList.add('lb-open'); lbLoad(); $('lbClose').focus(); }
+        function closeLB() { lb.classList.remove('open'); document.body.classList.remove('lb-open'); }
+        $('lbClose').addEventListener('click', closeLB);
+        $('lbPrev').addEventListener('click', function (e) { e.stopPropagation(); go(current - 1); });
+        $('lbNext').addEventListener('click', function (e) { e.stopPropagation(); go(current + 1); });
+        $('lbZoomIn').addEventListener('click', function () { zoomTo(scale * 1.5); });
+        $('lbZoomOut').addEventListener('click', function () { zoomTo(scale / 1.5); });
+
+        lbView.addEventListener('wheel', function (e) { e.preventDefault(); zoomTo(scale * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY); }, { passive: false });
+        lbView.addEventListener('pointerdown', function (e) {
+            if (e.target.closest('.lb-nav')) return;
+            lbView.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); startPt = { x: e.clientX, y: e.clientY };
+            if (pts.size === 2) { var v = Array.from(pts.values()); pinchD = Math.hypot(v[0].x - v[1].x, v[0].y - v[1].y); pinchS = scale; }
+            lbView.classList.add('dragging');
+        });
+        lbView.addEventListener('pointermove', function (e) {
+            if (!pts.has(e.pointerId)) return;
+            var prev = pts.get(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+            if (pts.size === 2) { var v = Array.from(pts.values()), d = Math.hypot(v[0].x - v[1].x, v[0].y - v[1].y); zoomTo(pinchS * d / pinchD, (v[0].x + v[1].x) / 2, (v[0].y + v[1].y) / 2); }
+            else if (scale > 1) { tx += e.clientX - prev.x; ty += e.clientY - prev.y; clampT(); applyT(); }
+        });
+        function endPtr(e) {
+            if (!pts.has(e.pointerId)) return;
+            pts.delete(e.pointerId); if (!pts.size) lbView.classList.remove('dragging');
+            if (startPt && scale === 1 && pts.size === 0) {
+                var dx = e.clientX - startPt.x, dy = e.clientY - startPt.y;
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) { go(current + (dx < 0 ? 1 : -1)); startPt = null; return; }
+                if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { var now = Date.now(); if (now - lastTap < 300) zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY); lastTap = now; }
+            } else if (startPt && scale > 1 && pts.size === 0 && Math.abs(e.clientX - startPt.x) < 8 && Math.abs(e.clientY - startPt.y) < 8) {
+                var n2 = Date.now(); if (n2 - lastTap < 300) zoomTo(1); lastTap = n2;
+            }
+        }
+        lbView.addEventListener('pointerup', endPtr); lbView.addEventListener('pointercancel', endPtr);
+        lbView.addEventListener('dblclick', function (e) { zoomTo(scale > 1 ? 1 : 2.6, e.clientX, e.clientY); });
+        window.addEventListener('resize', function () { if (lb.classList.contains('open')) { clampT(); applyT(); } });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') go(current + 1);
+            else if (e.key === 'ArrowLeft') go(current - 1);
+            else if (e.key === 'Escape' && lb.classList.contains('open')) closeLB();
+        });
+
+        /* ================== Scroll reveal ================== */
+        (function () {
+            var els = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window) || reduce) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+            var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }); }, { threshold: .12 });
+            els.forEach(function (e) { io.observe(e); });
+        })();
+
+        render(false);
+    })();
+    </script>
 </body>
 </html>
