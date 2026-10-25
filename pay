@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#090d16">
+    <title>Payments | Quantivyx</title>
+    <meta name="description" content="How to pay a Quantivyx invoice. Payment details are sent with every invoice.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://quantivyxbi.com/pay.html">
+
+    <style>
+        :root {
+            --primary-bg: #090d16;
+            --card-bg: #111827;
+            --accent-neon: #00f2fe;
+            --accent-purple: #9d4edd;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+
+            --glass-fill: rgba(17, 24, 39, 0.55);
+            --glass-fill-strong: rgba(9, 13, 22, 0.72);
+            --glass-border: rgba(0, 242, 254, 0.16);
+            --glass-border-purple: rgba(157, 78, 221, 0.22);
+            --line-soft: rgba(255, 255, 255, 0.07);
+            --gutter: clamp(18px, 6vw, 10%);
+            --radius: 18px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        html { scroll-behavior: smooth; scroll-padding-top: 84px; -webkit-text-size-adjust: 100%; background-color: var(--primary-bg); }
+        body { color: var(--text-main); line-height: 1.6; background: transparent; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; }
+        body.menu-open { overflow: hidden; }
+        main { flex: 1; }
+
+        .wallpaper {
+            position: fixed; inset: 0; z-index: -3; pointer-events: none;
+            background-color: var(--primary-bg);
+            background-image:
+                linear-gradient(180deg, rgba(9,13,22,0.86) 0%, rgba(9,13,22,0.80) 40%, rgba(6,9,16,0.92) 100%),
+                url('Wallpaper.png');
+            background-size: cover; background-position: center top; background-repeat: no-repeat;
+        }
+        .aurora { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+        .aurora::before, .aurora::after { content: ""; position: absolute; width: 65vmax; height: 65vmax; border-radius: 50%; filter: blur(100px); opacity: .38; will-change: transform; }
+        .aurora::before { background: radial-gradient(circle, rgba(0,242,254,.42), transparent 65%); top: -22vmax; left: -22vmax; animation: drift1 24s ease-in-out infinite alternate; }
+        .aurora::after { background: radial-gradient(circle, rgba(157,78,221,.45), transparent 65%); bottom: -28vmax; right: -24vmax; animation: drift2 28s ease-in-out infinite alternate; }
+        @keyframes drift1 { to { transform: translate3d(16vmax, 12vmax, 0) scale(1.15); } }
+        @keyframes drift2 { to { transform: translate3d(-14vmax, -10vmax, 0) scale(1.1); } }
+
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 300; transform-origin: 0 50%; transform: scaleX(0);
+            background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); box-shadow: 0 0 12px var(--accent-neon); }
+
+        /* ================= Header & Navigation ================= */
+        header {
+            padding: 1.2rem var(--gutter); padding-top: calc(1.2rem + env(safe-area-inset-top));
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 200;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+            transition: padding .3s, background-color .3s;
+        }
+        header::before { content: ""; position: absolute; inset: 0; z-index: 0; background-color: rgba(9, 13, 22, 0.55); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: background-color .3s; }
+        header.scrolled { padding-top: calc(.7rem + env(safe-area-inset-top)); padding-bottom: .7rem; }
+        header.scrolled::before { background-color: rgba(9, 13, 22, 0.85); }
+        .logo, .menu-btn { position: relative; z-index: 3; }
+        .logo { color: var(--text-main); font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; text-decoration: none; }
+        .logo span { color: var(--accent-neon); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+
+        nav { display: flex; align-items: center; gap: clamp(1rem, 2vw, 2rem); position: relative; z-index: 2; }
+        nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: color 0.3s; position: relative; padding: .3rem 0; }
+        nav a::after { content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 100%; transform: scaleX(0); transform-origin: left; background: var(--accent-neon); box-shadow: 0 0 8px var(--accent-neon); transition: transform .3s; }
+        nav a:hover { color: var(--accent-neon); }
+        nav a:hover::after { transform: scaleX(1); }
+
+        .menu-btn { display: none; width: 46px; height: 46px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--glass-fill); cursor: pointer; position: relative; -webkit-tap-highlight-color: transparent; }
+        .menu-btn span { position: absolute; left: 12px; right: 12px; height: 2px; background: var(--text-main); border-radius: 2px; transition: transform .3s, opacity .2s, top .3s; }
+        .menu-btn span:nth-child(1) { top: 16px; } .menu-btn span:nth-child(2) { top: 22px; } .menu-btn span:nth-child(3) { top: 28px; }
+        .menu-btn[aria-expanded="true"] span:nth-child(1) { top: 22px; transform: rotate(45deg); }
+        .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+        .menu-btn[aria-expanded="true"] span:nth-child(3) { top: 22px; transform: rotate(-45deg); }
+
+        /* ================= Buttons ================= */
+        .btn {
+            background: linear-gradient(135deg, #00cdac, var(--accent-neon)); color: #090d16;
+            padding: 0.95rem 2.2rem; text-decoration: none; border-radius: 10px; font-weight: 700; letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3); border: 0; cursor: pointer; font-size: 1rem; min-height: 50px; position: relative; overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); transition: left .6s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0, 242, 254, 0.55); }
+        .btn:hover::after { left: 130%; }
+        .btn-ghost { background: rgba(17, 24, 39, .5); color: var(--text-main); border: 1px solid var(--accent-neon); box-shadow: 0 4px 15px rgba(0, 242, 254, 0.12); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+        .btn-ghost:hover { background: rgba(0, 242, 254, 0.13); box-shadow: 0 6px 22px rgba(0, 242, 254, 0.3); }
+        .cta-row { display: flex; gap: .9rem; flex-wrap: wrap; justify-content: center; }
+
+        /* ================= Page hero ================= */
+        .page-hero { padding: clamp(3.5rem, 8vw, 6rem) var(--gutter) clamp(2rem, 5vw, 3.5rem); text-align: center; background: radial-gradient(circle at top right, rgba(157, 78, 221, 0.16), transparent 55%); }
+        .eyebrow { display: inline-flex; align-items: center; gap: .55rem; padding: .42rem 1rem; border-radius: 999px; border: 1px solid var(--glass-border); background: var(--glass-fill); color: var(--accent-neon); font-size: .76rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1.4rem; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+        .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-neon); box-shadow: 0 0 10px var(--accent-neon); animation: pulse 2s infinite; }
+        @keyframes pulse { 50% { opacity: .35; transform: scale(.7); } }
+        .page-hero h1 { font-size: clamp(2.1rem, 5.6vw, 3.8rem); line-height: 1.08; margin-bottom: 1.2rem; font-weight: 800; letter-spacing: -1px; color: var(--text-main); text-shadow: 0 2px 16px rgba(0,0,0,0.5); }
+        .page-hero h1 span { background: linear-gradient(90deg, var(--accent-neon), var(--accent-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-hero p.lead { font-size: clamp(1.02rem, 2.4vw, 1.2rem); max-width: 640px; margin: 0 auto; color: var(--text-main); text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+
+        /* ================= Shared section styles ================= */
+        .section-title { font-size: clamp(1.6rem, 4.2vw, 2.3rem); margin-bottom: 2.4rem; color: var(--text-main); letter-spacing: 0.5px; text-shadow: 0 2px 16px rgba(0,0,0,0.5); text-align: center; line-height: 1.15; }
+        .section-title span { color: var(--accent-purple); text-shadow: 0 0 28px rgba(157,78,221,.45); }
+
+        /* ================= Payment methods ================= */
+        .methods { padding: clamp(2rem, 5vw, 3.5rem) var(--gutter) 0; }
+        .methods-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(1rem, 2.5vw, 1.6rem); }
+        .method-card { position: relative; text-align: left; overflow: hidden; background: var(--glass-fill); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); padding: 2.2rem 1.8rem; border-radius: var(--radius); border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.35); transition: transform .3s, border-color .3s, box-shadow .3s; }
+        .method-card:hover { transform: translateY(-5px); border-color: rgba(0, 242, 254, 0.45); box-shadow: 0 16px 44px rgba(0, 242, 254, 0.14); }
+        .ico { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 1.3rem; background: linear-gradient(135deg, rgba(0,242,254,.16), rgba(157,78,221,.2)); border: 1px solid var(--glass-border); box-shadow: 0 0 26px rgba(0,242,254,.14); }
+        .ico svg { width: 28px; height: 28px; color: var(--accent-neon); }
+        .method-card h3 { font-size: 1.3rem; margin-bottom: .7rem; color: var(--accent-neon); line-height: 1.25; }
+        .method-card p { color: var(--text-muted); font-size: .98rem; }
+
+        /* ================= Steps ================= */
+        .steps { padding: clamp(3rem, 7vw, 5rem) var(--gutter) 0; }
+        .steps-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(1rem, 2.5vw, 1.6rem); }
+        .step-card { position: relative; text-align: left; padding: 1.6rem 1.5rem; border-radius: var(--radius); background: var(--glass-fill); border: 1px solid var(--line-soft); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: transform .3s, border-color .3s; }
+        .step-card:hover { transform: translateY(-4px); border-color: var(--glass-border-purple); }
+        .step-card b { display: block; font-size: .8rem; letter-spacing: .2em; color: var(--accent-purple); margin-bottom: .7rem; }
+        .step-card p { color: var(--text-main); font-size: 1.05rem; line-height: 1.55; }
+
+        /* ================= Notice ================= */
+        .notice-wrap { padding: clamp(3rem, 7vw, 5rem) var(--gutter) clamp(3.5rem, 8vw, 6rem); }
+        .notice { max-width: 1100px; margin: 0 auto; background: var(--glass-fill-strong); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); padding: clamp(1.5rem, 4vw, 2.6rem); border-radius: 20px; border: 1px solid var(--glass-border-purple); box-shadow: 0 10px 30px rgba(0,0,0,0.4); text-align: center; }
+        .notice h3 { font-size: 1.4rem; margin-bottom: .8rem; color: var(--text-main); }
+        .notice p { color: var(--text-muted); max-width: 640px; margin: 0 auto 1.6rem; }
+        .notice a.mail { color: var(--accent-neon); text-decoration: none; }
+        .notice a.mail:hover { text-decoration: underline; }
+
+        /* ================= Footer ================= */
+        footer { background-color: rgba(5, 7, 13, 0.85); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: #6b7280; text-align: center; padding: 2.5rem var(--gutter) calc(2.5rem + env(safe-area-inset-bottom)); font-size: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .foot-links { display: flex; justify-content: center; gap: 1.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .foot-links a { color: var(--text-muted); text-decoration: none; font-size: .88rem; transition: color .3s; }
+        .foot-links a:hover, .foot-links a.current { color: var(--accent-neon); }
+
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,.8,.22,1); transition-delay: var(--d, 0ms); }
+        .reveal.in { opacity: 1; transform: none; }
+
+        /* ================= Responsive ================= */
+        @media (max-width: 860px) {
+            .menu-btn { display: block; }
+            nav { position: fixed; inset: 0 0 0 0; top: 0; padding: calc(88px + env(safe-area-inset-top)) 8% 2rem; flex-direction: column; align-items: stretch; gap: .3rem; background: rgba(6, 9, 16, .96); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); transform: translateY(-102%); visibility: hidden; transition: transform .45s cubic-bezier(.22,.8,.22,1), visibility 0s .45s; z-index: 2; }
+            nav a { font-size: 1.35rem; padding: 1rem .2rem; border-bottom: 1px solid var(--line-soft); color: var(--text-main); }
+            nav a::after { display: none; }
+            body.menu-open nav { transform: none; visibility: visible; transition-delay: 0s; }
+        }
+        @media (max-width: 640px) {
+            .logo { font-size: 1.5rem; }
+            .btn { width: 100%; } .cta-row { width: 100%; }
+            .aurora::before, .aurora::after { filter: blur(70px); }
+            header::before, .method-card, .notice { -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wallpaper" aria-hidden="true"></div>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="scroll-progress" id="progress" aria-hidden="true"></div>
+
+    <!-- Header Navigation -->
+    <header id="top">
+        <a class="logo" href="index.html" aria-label="Quantivyx home">Quanti<span>vyx</span></a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+        <nav id="nav">
+            <a href="index.html#services">Services</a>
+            <a href="contact.html">Contact</a>
+            <a href="index.html#about-us">About Us</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="pipeline.html">How It Works</a>
+            <a href="/ecommerce-bi-consulting">E-commerce BI</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Page intro -->
+        <section class="page-hero">
+            <div class="eyebrow reveal"><i></i> Client payments</div>
+            <h1 class="reveal" style="--d:80ms">Pay Your <span>Invoice</span></h1>
+            <p class="lead reveal" style="--d:160ms">We keep payment simple. Every invoice includes the amount, the due date and the exact payment details, so there is nothing to look up.</p>
+        </section>
+
+        <!-- Payment methods -->
+        <section class="methods" aria-labelledby="methods-title">
+            <h2 class="section-title reveal" id="methods-title">Ways to <span>Pay</span></h2>
+            <div class="methods-grid">
+
+                <div class="method-card reveal">
+                    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6 15h4"/></svg></div>
+                    <h3>Stripe</h3>
+                    <p>Secure online payment through Stripe.</p>
+                </div>
+
+                <div class="method-card reveal" style="--d:120ms">
+                    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg></div>
+                    <h3>ACH &amp; Wire Transfer</h3>
+                    <p>Pay directly from your bank. The bank details come with your invoice.</p>
+                </div>
+
+                <div class="method-card reveal" style="--d:240ms">
+                    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+                    <h3>Wise Business</h3>
+                    <p>Settle international invoices through Wise Business. The details come with your invoice.</p>
+                </div>
+
+                <div class="method-card reveal" style="--d:360ms">
+                    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
+                    <h3>Venmo Business</h3>
+                    <p>For US clients. Pay our Venmo Business profile, linked on your invoice.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Steps -->
+        <section class="steps" aria-labelledby="steps-title">
+            <h2 class="section-title reveal" id="steps-title">How It <span>Works</span></h2>
+            <div class="steps-grid">
+                <div class="step-card reveal"><b>01</b><p>You receive an invoice. It lists the amount, the due date and the payment details.</p></div>
+                <div class="step-card reveal" style="--d:100ms"><b>02</b><p>Choose the method above that suits you best.</p></div>
+                <div class="step-card reveal" style="--d:200ms"><b>03</b><p>Use the invoice number as the payment reference, so your payment is matched to the right invoice.</p></div>
+            </div>
+        </section>
+
+        <!-- Security note and questions -->
+        <section class="notice-wrap">
+            <div class="notice reveal">
+                <h3>Questions about an invoice?</h3>
+                <p>Payment details are only ever sent with an invoice. If anyone asks you to pay a different account, please confirm with us by email before sending anything. You can reach us at <a class="mail" href="mailto:Hernandezanalytics@outlook.com">Hernandezanalytics@outlook.com</a>.</p>
+                <div class="cta-row">
+                    <a href="contact.html" class="btn">Contact Us</a>
+                    <a href="index.html" class="btn btn-ghost">Back to Home</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="foot-links">
+            <a href="index.html#services">Services</a><a href="contact.html">Contact</a><a href="index.html#about-us">About Us</a>
+            <a href="gallery.html">Gallery</a><a href="pipeline.html">How It Works</a><a href="/ecommerce-bi-consulting">E-commerce BI</a><a href="pay.html" class="current">Payments</a>
+        </div>
+        &copy; 2026 Quantivyx. All rights reserved.
+    </footer>
+
+    <script>
+    (function () {
+        'use strict';
+        var $ = function (id) { return document.getElementById(id); };
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* Header, progress bar */
+        var header = $('top'), prog = $('progress'), ticking = false;
+        function onScroll() {
+            var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+            header.classList.toggle('scrolled', y > 24);
+            prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, y / h) : 0) + ')';
+            ticking = false;
+        }
+        window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+        onScroll();
+
+        /* Mobile menu */
+        var menuBtn = $('menuBtn');
+        function setMenu(open) { document.body.classList.toggle('menu-open', open); menuBtn.setAttribute('aria-expanded', open); }
+        menuBtn.addEventListener('click', function () { setMenu(!document.body.classList.contains('menu-open')); });
+        document.querySelectorAll('#nav a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+
+        /* Scroll reveal */
+        var rv = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window && !reduce) {
+            var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }); }, { threshold: .12 });
+            rv.forEach(function (e) { io.observe(e); });
+        } else rv.forEach(function (e) { e.classList.add('in'); });
+    })();
+    </script>
+</body>
+</html>
