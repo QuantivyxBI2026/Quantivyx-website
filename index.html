@@ -258,7 +258,7 @@
         .service-card h3 { font-size: 1.4rem; margin-bottom: 1rem; color: var(--accent-neon); line-height: 1.25; }
         .service-card p { color: var(--text-muted); font-size: 0.98rem; }
 
-        /* ================= Contact & Payments ================= */
+        /* ================= Contact ================= */
         .contact-payment-container { background: linear-gradient(180deg, rgba(9,13,22,0.35) 0%, rgba(6,9,16,0.55) 100%); padding: clamp(3.5rem, 8vw, 6.5rem) var(--gutter); border-top: 1px solid rgba(157, 78, 221, 0.15); }
         .contact-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
         .info-box h2 { font-size: clamp(1.8rem, 4.6vw, 2.8rem); line-height: 1.12; margin-bottom: 1.3rem; color: var(--text-main); text-shadow: 0 2px 16px rgba(0,0,0,0.5); letter-spacing: -.5px; }
@@ -319,15 +319,6 @@
         .success p { color: var(--text-muted); margin-bottom: 1.4rem; }
         .success .btn { margin: .3rem; }
 
-        /* Payments */
-        .payment-box { max-width: 1280px; margin: clamp(2.5rem, 6vw, 4rem) auto 0; background: var(--glass-fill-strong); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); padding: clamp(1.5rem, 4vw, 2.6rem); border-radius: 20px; border: 1px solid var(--glass-border-purple); box-shadow: 0 10px 30px rgba(0,0,0,0.4); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 2rem; align-items: center; }
-        .payment-box h3 { font-size: 1.5rem; margin-bottom: .8rem; color: var(--text-main); }
-        .payment-box p { color: var(--text-muted); }
-        .badge-container { display: flex; flex-wrap: wrap; gap: .8rem; }
-        .badge { display: inline-flex; align-items: center; gap: .6rem; background-color: rgba(9, 13, 22, 0.5); color: var(--text-main); padding: 0.7rem 1.2rem; border-radius: 12px; font-weight: 600; font-size: 0.92rem; border: 1px solid rgba(255, 255, 255, 0.1); transition: background-color 0.3s, border-color 0.3s, transform .25s; }
-        .badge svg { width: 18px; height: 18px; color: var(--accent-neon); flex: none; }
-        .badge:hover { background-color: rgba(157, 78, 221, 0.15); border-color: var(--accent-purple); transform: translateY(-2px); }
-
         /* ================= About ================= */
         .about-section { padding: clamp(3.5rem, 8vw, 6.5rem) var(--gutter); background: var(--glass-fill); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid rgba(0, 242, 254, 0.1); }
         .about-section .section-title { margin-bottom: 3rem; }
@@ -360,7 +351,6 @@
             .cta-row, .trust { justify-content: center; }
             .mock-wrap { max-width: 640px; margin: 1rem auto 0; width: 100%; }
             .contact-grid { grid-template-columns: 1fr; }
-            .payment-box { grid-template-columns: 1fr; }
         }
         @media (max-width: 860px) {
             .menu-btn { display: block; }
@@ -378,7 +368,7 @@
             .btn { width: 100%; } .cta-row { width: 100%; }
             .founder-img { width: 200px; height: 200px; }
             .aurora::before, .aurora::after { filter: blur(70px); }
-            header::before, .service-card, .form-card, .payment-box, .about-section { -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); }
+            header::before, .service-card, .form-card, .about-section { -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); }
         }
         @media (hover: none) { .mock { transform: none !important; } }
         @media (prefers-reduced-motion: reduce) {
@@ -501,7 +491,7 @@
         </div>
     </section>
 
-    <!-- Contact & Payments Area -->
+    <!-- Contact Area -->
     <div id="contact" class="contact-payment-container">
         <div class="contact-grid">
 
@@ -564,20 +554,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="payment-box reveal">
-            <div>
-                <h3>Easy Ways to Pay</h3>
-                <p>We keep payment simple. Choose whichever method is most convenient for you.</p>
-            </div>
-            <div class="badge-container">
-                <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Wise Business Settlement</span>
-                <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg>ACH &amp; Wire Transfer</span>
-                <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>Venmo Business</span>
-                <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6 15h4"/></svg>Stripe Network</span>
-                <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.5-1.5-2.8-1.5-1.6 0-2.7.8-2.7 2 0 3 5.6 1.5 5.6 4.4 0 1.2-1.2 2-2.9 2-1.3 0-2.4-.6-2.9-1.6M12 6v1.7M12 16.3V18"/></svg>CashApp Mobile</span>
-            </div>
-        </div>
     </div>
 
     <!-- About Us Section -->
@@ -606,7 +582,7 @@
     <footer>
         <div class="foot-links">
             <a href="#services">Services</a><a href="contact.html">Contact</a><a href="#about-us">About Us</a>
-            <a href="gallery.html">Gallery</a><a href="pipeline.html">How It Works</a><a href="/ecommerce-bi-consulting">E-commerce BI</a>
+            <a href="gallery.html">Gallery</a><a href="pipeline.html">How It Works</a><a href="/ecommerce-bi-consulting">E-commerce BI</a><a href="pay.html">Payments</a>
         </div>
         &copy; 2026 Quantivyx. All rights reserved.
     </footer>
